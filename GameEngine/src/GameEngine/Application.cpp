@@ -1,5 +1,5 @@
 #include "Application.h"
-#include <stdio.h>
+#include "Log.h"
 
 namespace GameEngine {
 
@@ -10,7 +10,8 @@ namespace GameEngine {
 	}
 
 	void Application::Run() {
-		printf("Welcome to my game engine!\n");
+		Log::Init();
+		GE_CORE_INFO("Starting Game Engine...");
 
 		while (true) {}
 	}
