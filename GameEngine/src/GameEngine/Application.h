@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core.h"
+#include "Events/Event.h"
 
 namespace GameEngine {
 
@@ -11,6 +12,8 @@ namespace GameEngine {
 		virtual ~Application();
 
 		void Run();
+
+		void OnEvent(Event& e);
 	};
 
 	// To be defined in Client
