@@ -43,10 +43,6 @@ namespace GameEngine {
 
 	void WindowsWindow::OnUpdate()
 	{
-		// Set color to magenta for now
-		glClearColor(1, 0, 1, 1);
-		glClear(GL_COLOR_BUFFER_BIT);
-
 		glfwPollEvents();
 		glfwSwapBuffers(m_window);
 	}

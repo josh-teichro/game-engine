@@ -5,6 +5,9 @@
 
 namespace GameEngine {
 
+	/**
+	* Props needed to create a Window.
+	*/
 	struct WindowProps {
 		std::string title;
 		unsigned int width;
@@ -16,6 +19,9 @@ namespace GameEngine {
 			title(title), width(width), height(height) {}
 	};
 
+	/**
+	* Window abstraction. To be defined per platform.
+	*/
 	class GE_API Window {
 	public:
 		using Event = int; // TODO: change to actual event class

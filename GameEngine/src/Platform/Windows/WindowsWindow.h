@@ -6,6 +6,9 @@
 
 namespace GameEngine {
 
+	/**
+	* Windows Window.
+	*/
 	class WindowsWindow : public Window
 	{
 	public:

@@ -1,12 +1,16 @@
 #pragma once
 
-#include <memory>
 #include "Core.h"
+
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
 
 
 namespace GameEngine {
+
+	/**
+	* Logging abstraction.
+	*/
 	class GE_API Log
 	{
 	public:
@@ -19,9 +23,10 @@ namespace GameEngine {
 		static std::shared_ptr<spdlog::logger> s_CoreLogger;
 		static std::shared_ptr<spdlog::logger> s_ClientLogger;
 	};
+
 }
 
-
+// Logging macros
 #define GE_CORE_TRACE(...)   GameEngine::Log::GetCoreLogger()->trace(__VA_ARGS__)
 #define GE_CORE_INFO(...)    GameEngine::Log::GetCoreLogger()->info(__VA_ARGS__)
 #define GE_CORE_WARN(...)    GameEngine::Log::GetCoreLogger()->warn(__VA_ARGS__)
