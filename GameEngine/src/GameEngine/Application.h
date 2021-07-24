@@ -22,7 +22,13 @@ namespace GameEngine {
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);
 
+		inline Window& GetWindow() { return *m_window; }
+
+		inline static Application& Get() { return *s_instance; }
+
 	private:
+		static Application* s_instance;
+
 		std::unique_ptr<Window> m_window;
 		bool m_isRunning = true;
 

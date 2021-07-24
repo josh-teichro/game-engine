@@ -2,15 +2,22 @@
 
 #include "Application.h"
 #include "Log.h"
+#include "ImGui/ImGuiLayer.h"
 
+// TODO: remove
 #include <glad/glad.h>
 
 namespace GameEngine {
+
+	Application* Application::s_instance = nullptr;
 
 	/**
 	* Create and initialize an Application.
 	*/
 	Application::Application() {
+		GE_CORE_ASSERT(!s_instance, "Application already exists!");
+		s_instance = this;
+
 		Log::Init();
 		m_window = std::unique_ptr<Window>(Window::Create());
 	}
@@ -27,8 +34,11 @@ namespace GameEngine {
 	void Application::Run() {
 		GE_CORE_INFO("Starting Game Engine...");
 
+		PushOverlay(new ImGuiLayer());
+
 		while (m_isRunning) {
 			// Set color to magenta for now
+			// TODO: remove
 			glClearColor(1, 0, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
@@ -60,6 +70,7 @@ namespace GameEngine {
 	void Application::PushLayer(Layer* layer)
 	{
 		m_layerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 
 	/**
@@ -69,6 +80,7 @@ namespace GameEngine {
 	void Application::PushOverlay(Layer* overlay)
 	{
 		m_layerStack.PushOverlay(overlay);
+		overlay->OnAttach();
 	}
 
 }
