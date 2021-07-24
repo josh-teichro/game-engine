@@ -2,6 +2,8 @@
 #include "gepch.h"
 #include "WindowsWindow.h"
 
+#include <glad/glad.h>
+
 namespace GameEngine {
 
 	static bool s_GLFWInitialized = false;
@@ -37,6 +39,11 @@ namespace GameEngine {
 
 		m_window = glfwCreateWindow((int)m_data.width, (int)m_data.height, m_data.title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_window);
+
+		// init Glad
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		GE_CORE_ASSERT(status, "Failed to initialize Glad!");
+
 		glfwSetWindowUserPointer(m_window, &m_data);
 		SetVSync(true);
 	}
