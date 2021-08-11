@@ -20,7 +20,7 @@ namespace GameEngine {
 		inline unsigned int GetWidth() override { return m_data.width; };
 		inline unsigned int GetHeight() override { return m_data.height; };
 
-		inline void SetEventCallback(EventCallbackFn& callback) override;
+		inline void SetEventCallback(const EventCallbackFn& callback) override;
 		void SetVSync(bool enabled) override;
 		bool IsVSync() override;
 

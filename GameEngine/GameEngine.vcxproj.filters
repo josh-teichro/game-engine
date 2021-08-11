@@ -4,6 +4,9 @@
     <Filter Include="GameEngine">
       <UniqueIdentifier>{D54F7917-C107-BB64-2A0F-94C016E65555}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\Events">
+      <UniqueIdentifier>{193A4684-8550-441A-CEC7-CF3B3A1D15A2}</UniqueIdentifier>
+    </Filter>
     <Filter Include="GameEngine\ImGui">
       <UniqueIdentifier>{BF9035C6-AB89-5418-D4BB-399DC0133424}</UniqueIdentifier>
     </Filter>
@@ -28,6 +31,15 @@
     <ClInclude Include="src\GameEngine\EntryPoint.h">
       <Filter>GameEngine</Filter>
     </ClInclude>
+    <ClInclude Include="src\GameEngine\Events\Event.h">
+      <Filter>GameEngine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameEngine\Events\KeyEvent.h">
+      <Filter>GameEngine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameEngine\Events\MouseEvent.h">
+      <Filter>GameEngine\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\GameEngine\ImGui\ImGuiLayer.h">
       <Filter>GameEngine\ImGui</Filter>
     </ClInclude>
@@ -50,6 +62,8 @@
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\gepch.h" />
+    <ClInclude Include="src\GameEngine\Events\ApplicationEvent.h" />
+    <ClInclude Include="src\GameEngine\Events\EventManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GameEngine\Application.cpp">

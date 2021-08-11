@@ -20,6 +20,7 @@ public:
 	ExampleLayer();
 
 	void OnUpdate() override;
-	void OnEvent() override;
+	bool OnEvent(const GameEngine::Event& e) override;
+	bool OnMouseDown(const GameEngine::MouseDownEvent& e);
 
 };

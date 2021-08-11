@@ -2,11 +2,20 @@
 #include "gepch.h"
 #include "WindowsWindow.h"
 
+#include "GameEngine/Events/MouseEvent.h"
+#include "GameEngine/Events/KeyEvent.h"
+#include "GameEngine/Events/ApplicationEvent.h"
+
 #include <glad/glad.h>
 
 namespace GameEngine {
 
 	static bool s_GLFWInitialized = false;
+
+	static void GLFWErrorCallback(int error, const char* description)
+	{
+		GE_CORE_ERROR("GLFW error ({0}): {1}", error, description);
+	}
 
 	Window* Window::Create(const WindowProps& props) {
 		return new WindowsWindow(props);
@@ -35,6 +44,7 @@ namespace GameEngine {
 
 			GE_CORE_ASSERT(success, "Could not initialize GLFW!");
 			s_GLFWInitialized = true;
+			glfwSetErrorCallback(GLFWErrorCallback);
 		}
 
 		m_window = glfwCreateWindow((int)m_data.width, (int)m_data.height, m_data.title.c_str(), nullptr, nullptr);
@@ -46,6 +56,85 @@ namespace GameEngine {
 
 		glfwSetWindowUserPointer(m_window, &m_data);
 		SetVSync(true);
+
+		// GLFW callbacks
+		glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			WindowCloseEvent e; // TODO: replace with window close event
+			data.eventCallbackFn(e);
+		});
+
+		glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
+			{
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+				data.width = width;
+				data.height = height;
+
+				WindowResizeEvent e(width, height); // TODO: replace with window resize event
+				data.eventCallbackFn(e);
+			});
+
+		glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+			switch (action)
+			{
+				case GLFW_PRESS:
+				{
+					KeyDownEvent e(key, 0);
+					data.eventCallbackFn(e);
+					break;
+				}
+				case GLFW_RELEASE:
+				{
+					KeyUpEvent e(key);
+					data.eventCallbackFn(e);
+					break;
+				}
+				case GLFW_REPEAT:
+				{
+					KeyDownEvent e(key, 1);
+					data.eventCallbackFn(e);
+					break;
+				}
+			}
+		});
+
+		glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods) {
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+			switch (action) 
+			{
+				case GLFW_PRESS:
+				{
+					MouseDownEvent e(0.0f, 0.0f);
+					data.eventCallbackFn(e);
+				}
+				case GLFW_RELEASE:
+				{
+					MouseUpEvent e(0.0f, 0.0f);
+					data.eventCallbackFn(e);
+				}
+			}
+		});
+
+		glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xOffset, double yOffset)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+			MouseScrollEvent e(0.0f, 0.0f, (float)xOffset, (float)yOffset);
+			data.eventCallbackFn(e);
+		});
+
+		glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xPos, double yPos)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+			MouseMoveEvent e((float)xPos, (float)yPos);
+			data.eventCallbackFn(e);
+		});
 	}
 
 	void WindowsWindow::OnUpdate()
@@ -54,7 +143,7 @@ namespace GameEngine {
 		glfwSwapBuffers(m_window);
 	}
 
-	void WindowsWindow::SetEventCallback(EventCallbackFn& callback)
+	void WindowsWindow::SetEventCallback(const EventCallbackFn& callback)
 	{
 		m_data.eventCallbackFn = callback;
 	}

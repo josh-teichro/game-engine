@@ -9,6 +9,8 @@
 
 namespace GameEngine {
 
+#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
+
 	Application* Application::s_instance = nullptr;
 
 	/**
@@ -20,6 +22,8 @@ namespace GameEngine {
 
 		Log::Init();
 		m_window = std::unique_ptr<Window>(Window::Create());
+		//auto fn = std::bind(&Application::OnEvent, this, std::placeholders::_1);
+		m_window->SetEventCallback(std::bind(&Application::EventCallback, this, std::placeholders::_1));
 	}
 
 	/**
@@ -52,16 +56,24 @@ namespace GameEngine {
 	/**
 	* Called on event.
 	*/
-	void Application::OnEvent()
+	void Application::EventCallback(const Event& e)
 	{
-		GE_CORE_INFO("Application::OnEvent");
+		GE_CORE_INFO("Application::OnEvent - {}", e);
+
+		if (EventDispatcher(e).Dispatch<WindowCloseEvent>(std::bind(&Application::OnWindowClose, this, std::placeholders::_1)))
+			return;
 
 		for (auto it = m_layerStack.end(); it != m_layerStack.begin();)
 		{
-			(*--it)->OnEvent();
-
-			// if handled, break
+			if ((*--it)->OnEvent(e))
+				break;
 		}
+	}
+
+	bool Application::OnWindowClose(const WindowCloseEvent& e)
+	{
+		m_isRunning = false;
+		return true;
 	}
 
 	/**

@@ -26,10 +26,16 @@ inline ExampleLayer::ExampleLayer()
 
 inline void ExampleLayer::OnUpdate()
 {
-	GE_INFO("ExampleLayer::Update");
+	//GE_INFO("ExampleLayer::Update");
 }
 
-inline void ExampleLayer::OnEvent()
+bool ExampleLayer::OnEvent(const GameEngine::Event& e)
 {
-	GE_INFO("ExampleLayer::OnEvent");
+	return GameEngine::EventDispatcher(e).Dispatch<GameEngine::MouseDownEvent>(std::bind(&ExampleLayer::OnMouseDown, this, std::placeholders::_1));
+}
+
+bool ExampleLayer::OnMouseDown(const GameEngine::MouseDownEvent& e)
+{
+	GE_INFO("ExampleLayer::OnMouseDown {}", e);
+	return false;
 }

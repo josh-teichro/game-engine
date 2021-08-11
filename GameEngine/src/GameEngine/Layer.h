@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core.h"
+#include "Events/Event.h"
 
 namespace GameEngine {
 
@@ -33,7 +34,7 @@ namespace GameEngine {
 		/**
 		* Event callback. Handle events here.
 		*/
-		virtual void OnEvent() {};
+		virtual bool OnEvent(const Event& e) { return false; };
 
 		/**
 		* Get the Layer name (for debugging).

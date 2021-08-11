@@ -2,6 +2,7 @@
 
 #include "gepch.h"
 #include "GameEngine/Core.h"
+#include "GameEngine/Events/Event.h"
 
 namespace GameEngine {
 
@@ -24,8 +25,7 @@ namespace GameEngine {
 	*/
 	class GE_API Window {
 	public:
-		using Event = int; // TODO: change to actual event class
-		using EventCallbackFn = std::function<void(Event&)>;
+		using EventCallbackFn = std::function<void(const Event&)>;
 
 		virtual ~Window() {};
 
@@ -34,7 +34,7 @@ namespace GameEngine {
 		virtual unsigned int GetWidth() = 0;
 		virtual unsigned int GetHeight() = 0;
 
-		virtual void SetEventCallback(EventCallbackFn& callback) = 0;
+		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void SetVSync(bool enabled) = 0;
 		virtual bool IsVSync() = 0;
 

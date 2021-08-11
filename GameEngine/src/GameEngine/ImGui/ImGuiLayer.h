@@ -13,7 +13,7 @@ namespace GameEngine {
 		void OnAttach() override;
 		void OnDetach() override;
 		void OnUpdate() override;
-		void OnEvent() override;
+		bool OnEvent(const Event& e) override;
 
 	private:
 		float m_time;

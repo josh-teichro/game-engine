@@ -3,13 +3,15 @@
 #include "Core.h"
 #include "Window.h"
 #include "LayerStack.h"
+#include "Events/Event.h"
+#include "Events/EventManager.h"
 
 namespace GameEngine {
 
 	/**
 	* The main Application.
 	*/
-	class GE_API Application
+	class GE_API Application// : public HandlesEvents
 	{
 	public:
 		Application();
@@ -17,7 +19,9 @@ namespace GameEngine {
 
 		void Run();
 
-		void OnEvent();
+		void EventCallback(const Event& e);
+
+		bool OnWindowClose(const WindowCloseEvent& e);
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);

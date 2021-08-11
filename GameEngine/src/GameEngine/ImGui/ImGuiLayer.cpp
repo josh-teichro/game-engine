@@ -97,8 +97,9 @@ namespace GameEngine {
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	void ImGuiLayer::OnEvent()
+	bool ImGuiLayer::OnEvent(const Event& e)
 	{
+		return false;
 	}
 
 }
