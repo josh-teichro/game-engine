@@ -2,6 +2,7 @@
 
 #include "Core.h"
 #include "Events/Event.h"
+#include "Events/HandlesEvents.h"
 
 namespace GameEngine {
 
@@ -10,7 +11,7 @@ namespace GameEngine {
 	* receive events. Layers are rendered in a specific order which determines
 	* which Layer will be rendered or receive events first. 
 	*/
-	class GE_API Layer
+	class GE_API Layer : public HandlesEvents
 	{
 	public:
 		Layer(const std::string& name = "Layer");
@@ -30,11 +31,6 @@ namespace GameEngine {
 		* Called every frame. Draw any objects, etc. here.
 		*/
 		virtual void OnUpdate() {};
-
-		/**
-		* Event callback. Handle events here.
-		*/
-		virtual bool OnEvent(const Event& e) { return false; };
 
 		/**
 		* Get the Layer name (for debugging).

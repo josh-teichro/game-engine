@@ -3,7 +3,6 @@
 #include "ImGuiLayer.h"
 #include "GameEngine/Application.h"
 
-#include "imgui.h"
 #include "Platform/OpenGL/imgui_impl_opengl3.h"
 
 // TODO: remove
@@ -65,6 +64,7 @@ namespace GameEngine {
 
 	void ImGuiLayer::OnDetach()
 	{
+		ImGui_ImplOpenGL3_Shutdown();
 		ImGui::DestroyContext();
 	}
 
@@ -97,7 +97,7 @@ namespace GameEngine {
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	bool ImGuiLayer::OnEvent(const Event& e)
+	bool ImGuiLayer::OnMouseDown(const MouseDownEvent& e)
 	{
 		return false;
 	}

@@ -64,6 +64,7 @@
     <ClInclude Include="src\gepch.h" />
     <ClInclude Include="src\GameEngine\Events\ApplicationEvent.h" />
     <ClInclude Include="src\GameEngine\Events\EventManager.h" />
+    <ClInclude Include="src\GameEngine\Events\HandlesEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GameEngine\Application.cpp">
