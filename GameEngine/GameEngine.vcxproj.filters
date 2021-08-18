@@ -65,6 +65,7 @@
     <ClInclude Include="src\GameEngine\Events\ApplicationEvent.h" />
     <ClInclude Include="src\GameEngine\Events\EventManager.h" />
     <ClInclude Include="src\GameEngine\Events\HandlesEvents.h" />
+    <ClInclude Include="src\GameEngine\Events\KeyCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GameEngine\Application.cpp">

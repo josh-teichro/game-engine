@@ -7,8 +7,6 @@
 
 namespace GameEngine {
 
-#define BIND_EVENT_FN(x) std::bind(&HandlesEvents::x, this, std::placeholders::_1)
-
 	/**
 	* Interface which implements empty callbacks for every Event type and binds
 	* them to the corresponding event. Subclasses of this class need only override
@@ -18,24 +16,28 @@ namespace GameEngine {
 	class GE_API HandlesEvents
 	{
 	public:
-		HandlesEvents() {}
-
 		bool OnEvent(const Event& e)
 		{
-			return EventDispatcher(e).Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose))
-				|| EventDispatcher(e).Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize))
-				|| EventDispatcher(e).Dispatch<KeyDownEvent>(BIND_EVENT_FN(OnKeyDown))
-				|| EventDispatcher(e).Dispatch<KeyUpEvent>(BIND_EVENT_FN(OnKeyUp))
-				|| EventDispatcher(e).Dispatch<MouseMoveEvent>(BIND_EVENT_FN(OnMouseMove))
-				|| EventDispatcher(e).Dispatch<MouseScrollEvent>(BIND_EVENT_FN(OnMouseScroll))
-				|| EventDispatcher(e).Dispatch<MouseDownEvent>(BIND_EVENT_FN(OnMouseDown))
-				|| EventDispatcher(e).Dispatch<MouseUpEvent>(BIND_EVENT_FN(OnMouseUp));
+			switch (e.GetEventType())
+			{
+				case EventType::WindowCloseEvent: return OnWindowClose(*(WindowCloseEvent*)&e);
+				case EventType::WindowResizeEvent: return OnWindowResize(*(WindowResizeEvent*)&e);
+				case EventType::KeyDownEvent: return OnKeyDown(*(KeyDownEvent*)&e);
+				case EventType::KeyUpEvent: return OnKeyUp(*(KeyUpEvent*)&e);
+				case EventType::CharTypedEvent: return OnCharTyped(*(CharTypedEvent*)&e);
+				case EventType::MouseMoveEvent: return OnMouseMove(*(MouseMoveEvent*)&e);
+				case EventType::MouseScrollEvent: return OnMouseScroll(*(MouseScrollEvent*)&e);
+				case EventType::MouseDownEvent: return OnMouseDown(*(MouseDownEvent*)&e);
+				case EventType::MouseUpEvent: return OnMouseUp(*(MouseUpEvent*)&e);
+				default: return false;
+			}
 		}
 
 		virtual bool OnWindowClose(const WindowCloseEvent& e) { return false; }
 		virtual bool OnWindowResize(const WindowResizeEvent& e) { return false; }
 		virtual bool OnKeyDown(const KeyDownEvent& e) { return false; }
 		virtual bool OnKeyUp(const KeyUpEvent& e) { return false; }
+		virtual bool OnCharTyped(const CharTypedEvent& e) { return false; }
 		virtual bool OnMouseMove(const MouseMoveEvent& e) { return false; }
 		virtual bool OnMouseScroll(const MouseScrollEvent& e) { return false; }
 		virtual bool OnMouseDown(const MouseDownEvent& e) { return false; }

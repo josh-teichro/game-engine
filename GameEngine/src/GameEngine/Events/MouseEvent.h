@@ -6,6 +6,14 @@
 
 namespace GameEngine {
 
+	enum GE_API MouseButton {
+		MouseButton_Left = 0,
+		MouseButton_Right,
+		MouseButton_Middle,
+		MouseButton_Unknown,
+		MouseButton_Count
+	};
+
 	class GE_API MouseEvent : public Event {
 	public:
 		const float x, y;
@@ -59,8 +67,10 @@ namespace GameEngine {
 
 	class GE_API MouseDownEvent : public MouseEvent {
 	public:
-		MouseDownEvent(float x, float y) :
-			MouseEvent(x, y) {}
+		const MouseButton button;
+
+		MouseDownEvent(MouseButton button, float x, float y) :
+			MouseEvent(x, y), button(button) {}
 
 		std::string ToString() const override
 		{
@@ -74,8 +84,10 @@ namespace GameEngine {
 
 	class GE_API MouseUpEvent : public MouseEvent {
 	public:
-		MouseUpEvent(float x, float y) :
-			MouseEvent(x, y) {}
+		const MouseButton button;
+
+		MouseUpEvent(MouseButton button, float x, float y) :
+			MouseEvent(x, y), button(button) {}
 
 		std::string ToString() const override
 		{

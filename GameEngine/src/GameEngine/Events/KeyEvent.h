@@ -1,13 +1,14 @@
 #pragma once
 
 #include "gepch.h"
-#include "Event.h";
+#include "Event.h"
+#include "KeyCodes.h"
 
 namespace GameEngine {
 
 	class GE_API KeyEvent : public Event {
 	public:
-		const int keyCode;
+		const KeyCode keyCode;
 
 		std::string ToString() const override
 		{
@@ -15,7 +16,7 @@ namespace GameEngine {
 		}
 
 	protected:
-		KeyEvent(int keyCode) :
+		KeyEvent(KeyCode keyCode) :
 			keyCode(keyCode) {}
 	};
 
@@ -23,14 +24,14 @@ namespace GameEngine {
 	public:
 		const int repeatCount;
 
-		KeyDownEvent(int keyCode, int repeatCount) :
+		KeyDownEvent(KeyCode keyCode, int repeatCount) :
 			KeyEvent(keyCode),
 			repeatCount(repeatCount) {}
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "KeyDownEvent: " << keyCode << " (" << repeatCount << " repeats)";
+			ss << "KeyDownEvent: " << (int)keyCode << " (" << repeatCount << " repeats)";
 			return ss.str();
 		}
 
@@ -40,17 +41,35 @@ namespace GameEngine {
 	class GE_API KeyUpEvent : public KeyEvent
 	{
 	public:
-		KeyUpEvent(int keycode)
+		KeyUpEvent(KeyCode keycode)
 			: KeyEvent(keycode) {}
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "KeyUpEvent: " << keyCode;
+			ss << "KeyUpEvent: " << (int)keyCode;
 			return ss.str();
 		}
 
 		EVENT_CLASS_TYPE(KeyUpEvent)
+	};
+
+	class GE_API CharTypedEvent : public Event
+	{
+	public:
+		unsigned int character;
+
+		CharTypedEvent(int character) :
+			character(character) {}
+
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "CharTypedEvent: " << (int)character;
+			return ss.str();
+		}
+
+		EVENT_CLASS_TYPE(CharTypedEvent)
 	};
 
 }

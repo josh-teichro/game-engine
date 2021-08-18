@@ -14,6 +14,7 @@ namespace GameEngine {
 		WindowResizeEvent,
 		KeyDownEvent,
 		KeyUpEvent,
+		CharTypedEvent,
 		MouseMoveEvent,
 		MouseScrollEvent,
 		MouseDownEvent,

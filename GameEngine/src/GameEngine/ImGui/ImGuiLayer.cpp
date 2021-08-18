@@ -28,35 +28,45 @@ namespace GameEngine {
 
 		ImGui::StyleColorsDark();
 
-		// Setup backend
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		Application& app = Application::Get();
+
+		// Setup backend
 		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
 		// Setup Keyboard mappings 
-		// TODO: replace with our own keycodes
-		io.KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;
-		io.KeyMap[ImGuiKey_LeftArrow] = GLFW_KEY_LEFT;
-		io.KeyMap[ImGuiKey_RightArrow] = GLFW_KEY_RIGHT;
-		io.KeyMap[ImGuiKey_UpArrow] = GLFW_KEY_UP;
-		io.KeyMap[ImGuiKey_DownArrow] = GLFW_KEY_DOWN;
-		io.KeyMap[ImGuiKey_PageUp] = GLFW_KEY_PAGE_UP;
-		io.KeyMap[ImGuiKey_PageDown] = GLFW_KEY_PAGE_DOWN;
-		io.KeyMap[ImGuiKey_Home] = GLFW_KEY_HOME;
-		io.KeyMap[ImGuiKey_End] = GLFW_KEY_END;
-		io.KeyMap[ImGuiKey_Insert] = GLFW_KEY_INSERT;
-		io.KeyMap[ImGuiKey_Delete] = GLFW_KEY_DELETE;
-		io.KeyMap[ImGuiKey_Backspace] = GLFW_KEY_BACKSPACE;
-		io.KeyMap[ImGuiKey_Space] = GLFW_KEY_SPACE;
-		io.KeyMap[ImGuiKey_Enter] = GLFW_KEY_ENTER;
-		io.KeyMap[ImGuiKey_Escape] = GLFW_KEY_ESCAPE;
-		io.KeyMap[ImGuiKey_KeyPadEnter] = GLFW_KEY_KP_ENTER;
-		io.KeyMap[ImGuiKey_A] = GLFW_KEY_A;
-		io.KeyMap[ImGuiKey_C] = GLFW_KEY_C;
-		io.KeyMap[ImGuiKey_V] = GLFW_KEY_V;
-		io.KeyMap[ImGuiKey_X] = GLFW_KEY_X;
-		io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
-		io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
+		io.KeyMap[ImGuiKey_Tab] = (int)KeyCode::Tab;
+		io.KeyMap[ImGuiKey_LeftArrow] = (int)KeyCode::LeftArrow;
+		io.KeyMap[ImGuiKey_RightArrow] = (int)KeyCode::RightArrow;
+		io.KeyMap[ImGuiKey_UpArrow] = (int)KeyCode::UpArrow;
+		io.KeyMap[ImGuiKey_DownArrow] = (int)KeyCode::DownArrow;
+		io.KeyMap[ImGuiKey_PageUp] = (int)KeyCode::PageUp;
+		io.KeyMap[ImGuiKey_PageDown] = (int)KeyCode::PageDown;
+		io.KeyMap[ImGuiKey_Home] = (int)KeyCode::Home;
+		io.KeyMap[ImGuiKey_End] = (int)KeyCode::End;
+		io.KeyMap[ImGuiKey_Insert] = (int)KeyCode::Insert;
+		io.KeyMap[ImGuiKey_Delete] = (int)KeyCode::Delete;
+		io.KeyMap[ImGuiKey_Backspace] = (int)KeyCode::Backspace;
+		io.KeyMap[ImGuiKey_Space] = (int)KeyCode::Space;
+		io.KeyMap[ImGuiKey_Enter] = (int)KeyCode::Enter;
+		io.KeyMap[ImGuiKey_Escape] = (int)KeyCode::Escape;
+		io.KeyMap[ImGuiKey_KeyPadEnter] = (int)KeyCode::KeyPadEnter;
+		io.KeyMap[ImGuiKey_A] = (int)KeyCode::A;
+		io.KeyMap[ImGuiKey_C] = (int)KeyCode::C;
+		io.KeyMap[ImGuiKey_V] = (int)KeyCode::V;
+		io.KeyMap[ImGuiKey_X] = (int)KeyCode::X;
+		io.KeyMap[ImGuiKey_Y] = (int)KeyCode::Y;
+		io.KeyMap[ImGuiKey_Z] = (int)KeyCode::Z;
+
+		// Set clipboard callbacks
+		io.SetClipboardTextFn = [](void* userData, const char* text) {
+			((Window*)userData)->SetClipboardText(text);
+		};
+		io.GetClipboardTextFn = [](void* userData) {
+			return ((Window*)userData)->GetClipboardText();
+		};
+		io.ClipboardUserData = &app.GetWindow();
 
 		// Use OpenGL
 		ImGui_ImplOpenGL3_Init("#version 410");
@@ -81,6 +91,10 @@ namespace GameEngine {
 		io.DeltaTime = m_time > 0.0 ? (float)(current_time - m_time) : (float)(1.0f / 60.0f);
 		m_time = current_time;
 
+		// Handle events
+		UpdateMousePosAndButtons();
+		UpdateMouseCursor();
+
 		// Begin frame
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui::NewFrame();
@@ -99,7 +113,121 @@ namespace GameEngine {
 
 	bool ImGuiLayer::OnMouseDown(const MouseDownEvent& e)
 	{
+		m_mouseJustPressed[e.button] = true;
 		return false;
+	}
+
+	bool ImGuiLayer::OnKeyDown(const KeyDownEvent& e)
+	{
+		bool handled = false;
+		ImGuiIO& io = ImGui::GetIO();
+		Application& app = Application::Get();
+
+		if ((int)e.keyCode >= 0 && (int)e.keyCode < IM_ARRAYSIZE(io.KeysDown)) {
+			io.KeysDown[(int)e.keyCode] = true;
+			handled = true;
+		}
+
+		io.KeyCtrl = io.KeysDown[(int)KeyCode::LeftCtrl] || io.KeysDown[(int)KeyCode::RightCtrl];
+		io.KeyShift = io.KeysDown[(int)KeyCode::LeftShift] || io.KeysDown[(int)KeyCode::RightShift];
+		io.KeyAlt = io.KeysDown[(int)KeyCode::LeftAlt] || io.KeysDown[(int)KeyCode::RightAlt];
+		io.KeySuper = io.KeysDown[(int)KeyCode::LeftSuper] || io.KeysDown[(int)KeyCode::RightSuper];
+
+		return handled;
+	}
+
+	bool ImGuiLayer::OnKeyUp(const KeyUpEvent& e)
+	{
+		bool handled = false;
+		ImGuiIO& io = ImGui::GetIO();
+		Application& app = Application::Get();
+
+		if ((int)e.keyCode >= 0 && (int)e.keyCode < IM_ARRAYSIZE(io.KeysDown)) {
+			io.KeysDown[(int)e.keyCode] = false;
+			handled = true;
+		}
+
+		// Modifiers are not reliable across systems
+		io.KeyCtrl = io.KeysDown[(int)KeyCode::LeftCtrl] || io.KeysDown[(int)KeyCode::RightCtrl];
+		io.KeyShift = io.KeysDown[(int)KeyCode::LeftShift] || io.KeysDown[(int)KeyCode::RightShift];
+		io.KeyAlt = io.KeysDown[(int)KeyCode::LeftAlt] || io.KeysDown[(int)KeyCode::RightAlt];
+		io.KeySuper = io.KeysDown[(int)KeyCode::LeftSuper] || io.KeysDown[(int)KeyCode::RightSuper];
+
+		return handled;
+	}
+
+	bool ImGuiLayer::OnMouseScroll(const MouseScrollEvent& e)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.MouseWheelH += e.offsetX;
+		io.MouseWheel += e.offsetY;
+		return false;
+	}
+
+	bool ImGuiLayer::OnCharTyped(const CharTypedEvent& e)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.AddInputCharacter(e.character);
+		return false;
+	}
+
+	void ImGuiLayer::UpdateMousePosAndButtons()
+	{
+		// Update buttons
+		ImGuiIO& io = ImGui::GetIO();
+		Application& app = Application::Get();
+		for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
+		{
+			io.MouseDown[i] = m_mouseJustPressed[MapMouseButton(i)] || app.GetWindow().GetMouseButton(MapMouseButton(i));
+			m_mouseJustPressed[MapMouseButton(i)] = false;
+		}
+
+		// Update mouse position
+		// TODO: add check for if window is focused once that functionality is available
+		// NOTE: didn't add functionality to set cursor position from ImGui (apparently rarely used)
+		Window::CursorPos pos = app.GetWindow().GetCursorPos();
+		io.MousePos = ImVec2(pos.x, pos.y);
+	}
+
+	void ImGuiLayer::UpdateMouseCursor()
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		Application& app = Application::Get();
+		Window::MouseCursor cursor = Window::MouseCursor_Arrow;
+
+		if ((io.ConfigFlags & ImGuiConfigFlags_NoMouseCursorChange))
+			return;
+
+		switch (ImGui::GetMouseCursor())
+		{
+			case ImGuiMouseCursor_None: cursor = Window::MouseCursor_None; break;
+			case ImGuiMouseCursor_Arrow: cursor = Window::MouseCursor_Arrow; break;
+			case ImGuiMouseCursor_TextInput: cursor = Window::MouseCursor_TextInput; break;
+			case ImGuiMouseCursor_ResizeAll: cursor = Window::MouseCursor_ResizeAll; break;
+			case ImGuiMouseCursor_ResizeNS: cursor = Window::MouseCursor_ResizeNS; break;
+			case ImGuiMouseCursor_ResizeEW: cursor = Window::MouseCursor_ResizeEW; break;
+			case ImGuiMouseCursor_ResizeNESW: cursor = Window::MouseCursor_ResizeNESW; break;
+			case ImGuiMouseCursor_ResizeNWSE: cursor = Window::MouseCursor_ResizeNWSE; break;
+			case ImGuiMouseCursor_Hand: cursor = Window::MouseCursor_Hand; break;
+			case ImGuiMouseCursor_NotAllowed: cursor = Window::MouseCursor_NotAllowed; break;
+		}
+
+		if (io.MouseDrawCursor) {
+			cursor = Window::MouseCursor_None;
+		}
+
+		app.GetWindow().SetMouseCursor(cursor);
+	}
+
+	inline MouseButton ImGuiLayer::MapMouseButton(int button)
+	{
+		switch (button)
+		{
+			case ImGuiMouseButton_Left: return MouseButton_Left;
+			case ImGuiMouseButton_Right: return MouseButton_Right;
+			case ImGuiMouseButton_Middle: return MouseButton_Middle;
+			default: return MouseButton_Unknown;
+		}
 	}
 
 }

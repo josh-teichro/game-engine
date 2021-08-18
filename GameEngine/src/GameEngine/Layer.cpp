@@ -9,7 +9,7 @@ namespace GameEngine {
 	*
 	* name: name used for debugging
 	*/
-	GameEngine::Layer::Layer(const std::string& name) :
+	Layer::Layer(const std::string& name) :
 		m_debugName(name)
 	{
 	}
@@ -17,7 +17,7 @@ namespace GameEngine {
 	/**
 	* Destroy this Layer.
 	*/
-	GameEngine::Layer::~Layer()
+	Layer::~Layer()
 	{
 	}
 
