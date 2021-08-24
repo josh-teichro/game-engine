@@ -1,5 +1,6 @@
 workspace "GameEngine"
 	architecture "x64"
+	startproject "Sandbox"
 
 	configurations
 	{
@@ -16,14 +17,17 @@ IncludeDir["GLFW"] = "GameEngine/vendor/GLFW/include"
 IncludeDir["Glad"] = "GameEngine/vendor/Glad/include"
 IncludeDir["ImGui"] = "GameEngine/vendor/imgui"
 
-include "GameEngine/vendor/GLFW"
-include "GameEngine/vendor/Glad"
-include "GameEngine/vendor/imgui"
+group "Dependencies"
+	include "GameEngine/vendor/GLFW"
+	include "GameEngine/vendor/Glad"
+	include "GameEngine/vendor/imgui"
+group ""
 
 project "GameEngine"
 	location "GameEngine"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "Off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -56,7 +60,6 @@ project "GameEngine"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "Off"
 		systemversion "latest"
 
 		defines
@@ -68,19 +71,22 @@ project "GameEngine"
 
 		postbuildcommands
 		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
 		}
 
 	filter "configurations:Debug"
 		defines {"GE_DEBUG", "GE_ENABLE_ASSERTS"}
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "GE_RELEASE"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "GE_DIST"
+		runtime "Release"
 		optimize "On"
 
 project "Sandbox"
@@ -120,12 +126,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "GE_DEBUG"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "GE_RELEASE"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "GE_DIST"
+		runtime "Release"
 		optimize "On"
