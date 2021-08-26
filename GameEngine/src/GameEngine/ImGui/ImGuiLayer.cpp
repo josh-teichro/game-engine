@@ -2,6 +2,7 @@
 
 #include "ImGuiLayer.h"
 #include "GameEngine/Application.h"
+#include "GameEngine/Input.h"
 
 #include "Platform/OpenGL/imgui_impl_opengl3.h"
 
@@ -61,12 +62,11 @@ namespace GameEngine {
 
 		// Set clipboard callbacks
 		io.SetClipboardTextFn = [](void* userData, const char* text) {
-			((Window*)userData)->SetClipboardText(text);
+			Input::SetClipBoardText(text);
 		};
 		io.GetClipboardTextFn = [](void* userData) {
-			return ((Window*)userData)->GetClipboardText();
+			return Input::GetClipBoardText();
 		};
-		io.ClipboardUserData = &app.GetWindow();
 
 		// Use OpenGL
 		ImGui_ImplOpenGL3_Init("#version 410");
@@ -178,14 +178,14 @@ namespace GameEngine {
 		Application& app = Application::Get();
 		for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
 		{
-			io.MouseDown[i] = m_mouseJustPressed[MapMouseButton(i)] || app.GetWindow().GetMouseButton(MapMouseButton(i));
+			io.MouseDown[i] = m_mouseJustPressed[MapMouseButton(i)] || Input::GetMouseDown(MapMouseButton(i));
 			m_mouseJustPressed[MapMouseButton(i)] = false;
 		}
 
 		// Update mouse position
 		// TODO: add check for if window is focused once that functionality is available
 		// NOTE: didn't add functionality to set cursor position from ImGui (apparently rarely used)
-		Window::CursorPos pos = app.GetWindow().GetCursorPos();
+		Input::MousePosition pos = Input::GetMousePosition();
 		io.MousePos = ImVec2(pos.x, pos.y);
 	}
 
@@ -193,30 +193,30 @@ namespace GameEngine {
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
-		Window::MouseCursor cursor = Window::MouseCursor_Arrow;
+		Input::MouseCursor cursor = Input::MouseCursor_Arrow;
 
 		if ((io.ConfigFlags & ImGuiConfigFlags_NoMouseCursorChange))
 			return;
 
 		switch (ImGui::GetMouseCursor())
 		{
-			case ImGuiMouseCursor_None: cursor = Window::MouseCursor_None; break;
-			case ImGuiMouseCursor_Arrow: cursor = Window::MouseCursor_Arrow; break;
-			case ImGuiMouseCursor_TextInput: cursor = Window::MouseCursor_TextInput; break;
-			case ImGuiMouseCursor_ResizeAll: cursor = Window::MouseCursor_ResizeAll; break;
-			case ImGuiMouseCursor_ResizeNS: cursor = Window::MouseCursor_ResizeNS; break;
-			case ImGuiMouseCursor_ResizeEW: cursor = Window::MouseCursor_ResizeEW; break;
-			case ImGuiMouseCursor_ResizeNESW: cursor = Window::MouseCursor_ResizeNESW; break;
-			case ImGuiMouseCursor_ResizeNWSE: cursor = Window::MouseCursor_ResizeNWSE; break;
-			case ImGuiMouseCursor_Hand: cursor = Window::MouseCursor_Hand; break;
-			case ImGuiMouseCursor_NotAllowed: cursor = Window::MouseCursor_NotAllowed; break;
+			case ImGuiMouseCursor_None: cursor = Input::MouseCursor_None; break;
+			case ImGuiMouseCursor_Arrow: cursor = Input::MouseCursor_Arrow; break;
+			case ImGuiMouseCursor_TextInput: cursor = Input::MouseCursor_TextInput; break;
+			case ImGuiMouseCursor_ResizeAll: cursor = Input::MouseCursor_ResizeAll; break;
+			case ImGuiMouseCursor_ResizeNS: cursor = Input::MouseCursor_ResizeNS; break;
+			case ImGuiMouseCursor_ResizeEW: cursor = Input::MouseCursor_ResizeEW; break;
+			case ImGuiMouseCursor_ResizeNESW: cursor = Input::MouseCursor_ResizeNESW; break;
+			case ImGuiMouseCursor_ResizeNWSE: cursor = Input::MouseCursor_ResizeNWSE; break;
+			case ImGuiMouseCursor_Hand: cursor = Input::MouseCursor_Hand; break;
+			case ImGuiMouseCursor_NotAllowed: cursor = Input::MouseCursor_NotAllowed; break;
 		}
 
 		if (io.MouseDrawCursor) {
-			cursor = Window::MouseCursor_None;
+			cursor = Input::MouseCursor_None;
 		}
 
-		app.GetWindow().SetMouseCursor(cursor);
+		Input::SetMouseCursor(cursor);
 	}
 
 	inline MouseButton ImGuiLayer::MapMouseButton(int button)

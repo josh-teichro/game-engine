@@ -1,6 +1,10 @@
 #pragma once
 
 #ifdef GE_PLATFORM_WINDOWS
+	#include "Platform/Windows/Defines.h"
+#endif
+
+#ifdef GE_PLATFORM_WINDOWS
 	#ifdef GE_BUILD_DLL
 		#define GE_API __declspec(dllexport)
 	#else

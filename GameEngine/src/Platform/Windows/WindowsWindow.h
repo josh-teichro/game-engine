@@ -16,25 +16,20 @@ namespace GameEngine {
 		WindowsWindow(const WindowProps& props);
 		virtual ~WindowsWindow();
 
-		void OnUpdate() override;
+		virtual void OnUpdate() override;
 
-		inline unsigned int GetWidth() override { return m_data.width; };
-		inline unsigned int GetHeight() override { return m_data.height; };
-		CursorPos GetCursorPos() override;
-		bool GetMouseButton(MouseButton button) override;
-		void SetMouseCursor(MouseCursor cursor) override;
-		const char* GetClipboardText() override;
-		void SetClipboardText(const char* text) override;
+		virtual inline unsigned int GetWidth() override { return m_data.width; };
+		virtual inline unsigned int GetHeight() override { return m_data.height; };
 
-		inline void SetEventCallback(const EventCallbackFn& callback) override;
-		void SetVSync(bool enabled) override;
-		bool IsVSync() override;
+		virtual inline void SetEventCallback(const EventCallbackFn& callback) override;
+		virtual void SetVSync(bool enabled) override;
+		virtual bool IsVSync() override;
+
+		virtual void* GetNativeWindow() const override;
 
 	protected:
 		void Init(const WindowProps& props);
 		void Shutdown();
-
-		KeyCode MapKeyCode(int keycode);
 
 	private:
 		GLFWwindow* m_window;
@@ -45,12 +40,9 @@ namespace GameEngine {
 			bool vSync;
 
 			EventCallbackFn eventCallbackFn;
-			std::function<KeyCode(int keycode)> mapKeyCode;
 		};
 
 		struct WindowData m_data;
-
-		GLFWcursor* m_cursors[MouseCursor_Count];
 	};
 
 }
