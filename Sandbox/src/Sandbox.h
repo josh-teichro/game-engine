@@ -22,5 +22,6 @@ public:
 	void OnUpdate() override;
 
 	bool OnMouseDown(const GameEngine::MouseDownEvent& e) override;
+	bool OnKeyDown(const GameEngine::KeyDownEvent& e) override;
 
 };

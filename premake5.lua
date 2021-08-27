@@ -107,9 +107,6 @@ project "Sandbox"
 	includedirs
 	{
 		"%{IncludeDir.SpdLog}",
-		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.Glad}",
-		"%{IncludeDir.ImGui}",
 		"GameEngine/src"
 	}
 

@@ -92,7 +92,7 @@ namespace GameEngine {
 		m_time = current_time;
 
 		// Handle events
-		UpdateMousePosAndButtons();
+		UpdateMouseButtons();
 		UpdateMouseCursor();
 
 		// Begin frame
@@ -111,21 +111,29 @@ namespace GameEngine {
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
+	bool ImGuiLayer::OnMouseMove(const MouseMoveEvent& e)
+	{
+		// TODO: add check for if window is focused once that functionality is available
+		// NOTE: didn't add functionality to set cursor position from ImGui (apparently rarely used)
+		ImGuiIO& io = ImGui::GetIO();
+		Input::MousePosition pos = Input::GetMousePosition();
+		io.MousePos = ImVec2(pos.x, pos.y);
+		return false;
+	}
+
 	bool ImGuiLayer::OnMouseDown(const MouseDownEvent& e)
 	{
-		m_mouseJustPressed[e.button] = true;
+		m_mouseJustPressed[(int)e.button] = true;
 		return false;
 	}
 
 	bool ImGuiLayer::OnKeyDown(const KeyDownEvent& e)
 	{
-		bool handled = false;
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
 
 		if ((int)e.keyCode >= 0 && (int)e.keyCode < IM_ARRAYSIZE(io.KeysDown)) {
 			io.KeysDown[(int)e.keyCode] = true;
-			handled = true;
 		}
 
 		io.KeyCtrl = io.KeysDown[(int)KeyCode::LeftCtrl] || io.KeysDown[(int)KeyCode::RightCtrl];
@@ -133,18 +141,16 @@ namespace GameEngine {
 		io.KeyAlt = io.KeysDown[(int)KeyCode::LeftAlt] || io.KeysDown[(int)KeyCode::RightAlt];
 		io.KeySuper = io.KeysDown[(int)KeyCode::LeftSuper] || io.KeysDown[(int)KeyCode::RightSuper];
 
-		return handled;
+		return false;
 	}
 
 	bool ImGuiLayer::OnKeyUp(const KeyUpEvent& e)
 	{
-		bool handled = false;
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
 
 		if ((int)e.keyCode >= 0 && (int)e.keyCode < IM_ARRAYSIZE(io.KeysDown)) {
 			io.KeysDown[(int)e.keyCode] = false;
-			handled = true;
 		}
 
 		// Modifiers are not reliable across systems
@@ -153,7 +159,7 @@ namespace GameEngine {
 		io.KeyAlt = io.KeysDown[(int)KeyCode::LeftAlt] || io.KeysDown[(int)KeyCode::RightAlt];
 		io.KeySuper = io.KeysDown[(int)KeyCode::LeftSuper] || io.KeysDown[(int)KeyCode::RightSuper];
 
-		return handled;
+		return false;
 	}
 
 	bool ImGuiLayer::OnMouseScroll(const MouseScrollEvent& e)
@@ -171,22 +177,14 @@ namespace GameEngine {
 		return false;
 	}
 
-	void ImGuiLayer::UpdateMousePosAndButtons()
+	void ImGuiLayer::UpdateMouseButtons()
 	{
-		// Update buttons
 		ImGuiIO& io = ImGui::GetIO();
-		Application& app = Application::Get();
 		for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
 		{
-			io.MouseDown[i] = m_mouseJustPressed[MapMouseButton(i)] || Input::GetMouseDown(MapMouseButton(i));
-			m_mouseJustPressed[MapMouseButton(i)] = false;
+			io.MouseDown[i] = m_mouseJustPressed[(int)MapMouseButton(i)] || Input::GetMouseDown(MapMouseButton(i));
+			m_mouseJustPressed[(int)MapMouseButton(i)] = false;
 		}
-
-		// Update mouse position
-		// TODO: add check for if window is focused once that functionality is available
-		// NOTE: didn't add functionality to set cursor position from ImGui (apparently rarely used)
-		Input::MousePosition pos = Input::GetMousePosition();
-		io.MousePos = ImVec2(pos.x, pos.y);
 	}
 
 	void ImGuiLayer::UpdateMouseCursor()
@@ -223,10 +221,15 @@ namespace GameEngine {
 	{
 		switch (button)
 		{
-			case ImGuiMouseButton_Left: return MouseButton_Left;
-			case ImGuiMouseButton_Right: return MouseButton_Right;
-			case ImGuiMouseButton_Middle: return MouseButton_Middle;
-			default: return MouseButton_Unknown;
+			case ImGuiMouseButton_Left: return MouseButton::Left;
+			case ImGuiMouseButton_Right: return MouseButton::Right;
+			case ImGuiMouseButton_Middle: return MouseButton::Middle;
+			case 3: return MouseButton::Button4;
+			case 4: return MouseButton::Button5;
+			case 5: return MouseButton::Button6;
+			case 6: return MouseButton::Button7;
+			case 7: return MouseButton::Button8;
+			default: return MouseButton::Unknown;
 		}
 	}
 

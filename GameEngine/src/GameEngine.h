@@ -6,6 +6,12 @@
 #include "GameEngine/Layer.h"
 #include "GameEngine/Log.h"
 
+#include "GameEngine/Input.h"
+#include "GameEngine/Events/KeyCodes.h"
+#include "GameEngine/Events/MouseButtonCodes.h"
+
+#include "GameEngine/ImGui/ImGuiLayer.h"
+
 // --- Entry Point --------------------------------
 #include "GameEngine/EntryPoint.h"
 // ------------------------------------------------

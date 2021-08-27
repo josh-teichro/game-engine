@@ -3,16 +3,9 @@
 #include "gepch.h"
 #include "GameEngine/Core.h"
 #include "Event.h"
+#include "MouseButtonCodes.h"
 
 namespace GameEngine {
-
-	enum GE_API MouseButton {
-		MouseButton_Left = 0,
-		MouseButton_Right,
-		MouseButton_Middle,
-		MouseButton_Unknown,
-		MouseButton_Count
-	};
 
 	class GE_API MouseEvent : public Event {
 	public:

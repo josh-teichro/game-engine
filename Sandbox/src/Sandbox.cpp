@@ -34,3 +34,9 @@ bool ExampleLayer::OnMouseDown(const GameEngine::MouseDownEvent& e)
 	GE_INFO("ExampleLayer::OnMouseDown {}", e);
 	return false;
 }
+
+bool ExampleLayer::OnKeyDown(const GameEngine::KeyDownEvent& e)
+{
+	GE_INFO("Key Pressed {}", (char)e.keyCode);
+	return false;
+}

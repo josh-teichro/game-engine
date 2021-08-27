@@ -159,6 +159,7 @@
     <ClInclude Include="src\GameEngine\Events\HandlesEvents.h" />
     <ClInclude Include="src\GameEngine\Events\KeyCodes.h" />
     <ClInclude Include="src\GameEngine\Events\KeyEvent.h" />
+    <ClInclude Include="src\GameEngine\Events\MouseButtonCodes.h" />
     <ClInclude Include="src\GameEngine\Events\MouseEvent.h" />
     <ClInclude Include="src\GameEngine\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\GameEngine\Input.h" />
@@ -167,8 +168,6 @@
     <ClInclude Include="src\GameEngine\Log.h" />
     <ClInclude Include="src\GameEngine\Window.h" />
     <ClInclude Include="src\Platform\OpenGL\imgui_impl_opengl3.h" />
-    <ClInclude Include="src\Platform\Windows\Defines.h" />
-    <ClInclude Include="src\Platform\Windows\GLFWKeyCodes.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\gepch.h" />

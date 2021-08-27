@@ -2,6 +2,8 @@
 
 #include "GameEngine/Input.h";
 
+class GLFWcursor;
+
 namespace GameEngine {
 
 	class GE_API WindowsInput : public Input

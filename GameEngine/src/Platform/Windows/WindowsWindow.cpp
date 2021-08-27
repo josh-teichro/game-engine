@@ -116,18 +116,6 @@ namespace GameEngine {
 		glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-			MouseButton button2 = MouseButton_Unknown;
-
-			switch (button)
-			{
-			case GLFW_MOUSE_BUTTON_LEFT:
-				button2 = MouseButton_Left;
-			case GLFW_MOUSE_BUTTON_RIGHT:
-				button2 = MouseButton_Right;
-			case GLFW_MOUSE_BUTTON_MIDDLE:
-				button2 = MouseButton_Middle;
-			}
-
 			double x, y;
 			glfwGetCursorPos(window, &x, &y);
 
@@ -135,12 +123,12 @@ namespace GameEngine {
 			{
 				case GLFW_PRESS:
 				{
-					MouseDownEvent e(button2, (float)x, (float)y);
+					MouseDownEvent e((MouseButton)button, (float)x, (float)y);
 					data.eventCallbackFn(e);
 				}
 				case GLFW_RELEASE:
 				{
-					MouseUpEvent e(button2, (float)x, (float)y);
+					MouseUpEvent e((MouseButton)button, (float)x, (float)y);
 					data.eventCallbackFn(e);
 				}
 			}

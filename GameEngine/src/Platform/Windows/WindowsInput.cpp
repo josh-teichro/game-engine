@@ -46,18 +46,7 @@ namespace GameEngine {
 	bool WindowsInput::GetMouseDownImpl(MouseButton button) 
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-
-		switch (button)
-		{
-		case MouseButton_Left:
-			return glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
-		case MouseButton_Right:
-			return glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
-		case MouseButton_Middle:
-			return glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS;
-		}
-
-		return false;
+		return glfwGetMouseButton(window, (int)button) == GLFW_PRESS;
 	}
 
 	bool WindowsInput::GetKeyDownImpl(KeyCode keycode) 
