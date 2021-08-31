@@ -5,6 +5,9 @@
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
 
+// glm logging
+#include <glm/gtx/io.hpp>
+
 
 namespace GameEngine {
 
