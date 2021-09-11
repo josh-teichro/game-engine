@@ -14,7 +14,7 @@ namespace GameEngine {
 	/**
 	* Logging abstraction.
 	*/
-	class GE_API Log
+	class Log
 	{
 	public:
 		static void Init();

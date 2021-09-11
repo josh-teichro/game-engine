@@ -11,8 +11,8 @@ namespace GameEngine {
 		ImGuiLayer();
 		~ImGuiLayer();
 
-		void OnAttach() override;
-		void OnDetach() override;
+		virtual void OnAttach() override;
+		virtual void OnDetach() override;
 
 		void BeginFrame();
 		void EndFrame();

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "GameEngine/Input.h";
+#include "GameEngine/Input.h"
 
-class GLFWcursor;
+struct GLFWcursor;
 
 namespace GameEngine {
 
-	class GE_API WindowsInput : public Input
+	class WindowsInput : public Input
 	{
 	public:
 		WindowsInput();

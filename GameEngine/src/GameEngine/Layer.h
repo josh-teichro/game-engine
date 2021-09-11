@@ -11,7 +11,7 @@ namespace GameEngine {
 	* receive events. Layers are rendered in a specific order which determines
 	* which Layer will be rendered or receive events first. 
 	*/
-	class GE_API Layer : public HandlesEvents
+	class Layer : public HandlesEvents
 	{
 	public:
 		Layer(const std::string& name = "Layer");

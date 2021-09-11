@@ -13,7 +13,7 @@ namespace GameEngine {
 	* the function corresponding to the event that they want to subscribe to in 
 	* order to setup the callback for that event.
 	*/
-	class GE_API HandlesEvents
+	class HandlesEvents
 	{
 	public:
 		bool OnEvent(const Event& e)

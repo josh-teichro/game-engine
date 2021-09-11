@@ -12,7 +12,7 @@ namespace GameEngine {
 	/**
 	* The main Application.
 	*/
-	class GE_API Application// : public HandlesEvents
+	class Application// : public HandlesEvents
 	{
 	public:
 		Application();

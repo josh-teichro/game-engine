@@ -89,7 +89,6 @@ namespace GameEngine {
 	void Application::PushLayer(Layer* layer)
 	{
 		m_layerStack.PushLayer(layer);
-		layer->OnAttach();
 	}
 
 	/**
@@ -99,7 +98,6 @@ namespace GameEngine {
 	void Application::PushOverlay(Layer* overlay)
 	{
 		m_layerStack.PushOverlay(overlay);
-		overlay->OnAttach();
 	}
 
 }

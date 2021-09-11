@@ -24,7 +24,7 @@ namespace GameEngine {
 	/**
 	* Window abstraction. To be defined per platform.
 	*/
-	class GE_API Window {
+	class Window {
 	public:
 		using EventCallbackFn = std::function<void(const Event&)>;
 

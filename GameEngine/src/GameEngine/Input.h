@@ -6,7 +6,7 @@
 
 namespace GameEngine {
 
-	class GE_API Input
+	class Input
 	{
 	public:
 		virtual ~Input() {};

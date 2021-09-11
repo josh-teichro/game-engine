@@ -6,7 +6,7 @@
 
 namespace GameEngine {
 
-	class GE_API KeyEvent : public Event {
+	class KeyEvent : public Event {
 	public:
 		const KeyCode keyCode;
 
@@ -20,7 +20,7 @@ namespace GameEngine {
 			keyCode(keyCode) {}
 	};
 
-	class GE_API KeyDownEvent : public KeyEvent {
+	class KeyDownEvent : public KeyEvent {
 	public:
 		const int repeatCount;
 
@@ -38,7 +38,7 @@ namespace GameEngine {
 		EVENT_CLASS_TYPE(KeyDownEvent)
 	};
 
-	class GE_API KeyUpEvent : public KeyEvent
+	class KeyUpEvent : public KeyEvent
 	{
 	public:
 		KeyUpEvent(KeyCode keycode)
@@ -54,7 +54,7 @@ namespace GameEngine {
 		EVENT_CLASS_TYPE(KeyUpEvent)
 	};
 
-	class GE_API CharTypedEvent : public Event
+	class CharTypedEvent : public Event
 	{
 	public:
 		unsigned int character;

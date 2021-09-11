@@ -32,7 +32,7 @@ namespace GameEngine {
 	/**
 	* Event base class.
 	*/
-	class GE_API Event {
+	class Event {
 	public:
 		virtual std::string ToString() const { return "Event"; }
 

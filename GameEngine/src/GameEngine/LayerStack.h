@@ -10,7 +10,7 @@ namespace GameEngine {
 	* rendered in the order that they are pushed onto the LayerStack. 
 	* Events are to be pased down in the opposite order.
 	*/
-	class GE_API LayerStack
+	class LayerStack
 	{
 	private:
 		using _LayerStack = std::vector<Layer*>;
