@@ -4,7 +4,9 @@
 #include "GameEngine/Application.h"
 #include "GameEngine/Input.h"
 
-#include "Platform/OpenGL/imgui_impl_opengl3.h"
+#include "imgui.h"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
 
 // TODO: remove
 #include "GLFW/glfw3.h"
@@ -12,8 +14,7 @@
 namespace GameEngine {
 
 	ImGuiLayer::ImGuiLayer() :
-		Layer("ImGuiLayer"),
-		m_time(0.0f)
+		Layer("ImGuiLayer")
 	{
 	}
 
@@ -26,211 +27,66 @@ namespace GameEngine {
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+		//io.ConfigViewportsNoAutoMerge = true;
+		//io.ConfigViewportsNoTaskBarIcon = true;
 
+		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
 
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+		ImGuiStyle& style = ImGui::GetStyle(); 
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			style.WindowRounding = 0.0f;
+			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+		}
+
+		// Setup Platform/Renderer backends
 		Application& app = Application::Get();
-
-		// Setup backend
-		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
-		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
-
-		// Setup Keyboard mappings 
-		io.KeyMap[ImGuiKey_Tab] = (int)KeyCode::Tab;
-		io.KeyMap[ImGuiKey_LeftArrow] = (int)KeyCode::LeftArrow;
-		io.KeyMap[ImGuiKey_RightArrow] = (int)KeyCode::RightArrow;
-		io.KeyMap[ImGuiKey_UpArrow] = (int)KeyCode::UpArrow;
-		io.KeyMap[ImGuiKey_DownArrow] = (int)KeyCode::DownArrow;
-		io.KeyMap[ImGuiKey_PageUp] = (int)KeyCode::PageUp;
-		io.KeyMap[ImGuiKey_PageDown] = (int)KeyCode::PageDown;
-		io.KeyMap[ImGuiKey_Home] = (int)KeyCode::Home;
-		io.KeyMap[ImGuiKey_End] = (int)KeyCode::End;
-		io.KeyMap[ImGuiKey_Insert] = (int)KeyCode::Insert;
-		io.KeyMap[ImGuiKey_Delete] = (int)KeyCode::Delete;
-		io.KeyMap[ImGuiKey_Backspace] = (int)KeyCode::Backspace;
-		io.KeyMap[ImGuiKey_Space] = (int)KeyCode::Space;
-		io.KeyMap[ImGuiKey_Enter] = (int)KeyCode::Enter;
-		io.KeyMap[ImGuiKey_Escape] = (int)KeyCode::Escape;
-		io.KeyMap[ImGuiKey_KeyPadEnter] = (int)KeyCode::KeyPadEnter;
-		io.KeyMap[ImGuiKey_A] = (int)KeyCode::A;
-		io.KeyMap[ImGuiKey_C] = (int)KeyCode::C;
-		io.KeyMap[ImGuiKey_V] = (int)KeyCode::V;
-		io.KeyMap[ImGuiKey_X] = (int)KeyCode::X;
-		io.KeyMap[ImGuiKey_Y] = (int)KeyCode::Y;
-		io.KeyMap[ImGuiKey_Z] = (int)KeyCode::Z;
-
-		// Set clipboard callbacks
-		io.SetClipboardTextFn = [](void* userData, const char* text) {
-			Input::SetClipBoardText(text);
-		};
-		io.GetClipboardTextFn = [](void* userData) {
-			return Input::GetClipBoardText();
-		};
-
-		// Use OpenGL
+		ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow()), true);
 		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
 	void ImGuiLayer::OnDetach()
 	{
 		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiLayer::OnUpdate()
+	void ImGuiLayer::BeginFrame()
 	{
-		ImGuiIO& io = ImGui::GetIO();
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+	}
+
+	void ImGuiLayer::EndFrame()
+	{
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		Application& app = Application::Get();
 
 		// Set window size
-		Application& app = Application::Get();
 		io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
 
-		// Setup time step
-		double current_time = glfwGetTime();
-		io.DeltaTime = m_time > 0.0 ? (float)(current_time - m_time) : (float)(1.0f / 60.0f);
-		m_time = current_time;
-
-		// Handle events
-		UpdateMouseButtons();
-		UpdateMouseCursor();
-
-		// Begin frame
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui::NewFrame();
-
-		static bool show_demo_window = true;
-
-		if (show_demo_window)
-			ImGui::ShowDemoWindow(&show_demo_window);
-
-		// Draw ImGui stuff here
-
-		// End frame
+		// Render
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	}
 
-	bool ImGuiLayer::OnMouseMove(const MouseMoveEvent& e)
-	{
-		// TODO: add check for if window is focused once that functionality is available
-		// NOTE: didn't add functionality to set cursor position from ImGui (apparently rarely used)
-		ImGuiIO& io = ImGui::GetIO();
-		Input::MousePosition pos = Input::GetMousePosition();
-		io.MousePos = ImVec2(pos.x, pos.y);
-		return false;
-	}
-
-	bool ImGuiLayer::OnMouseDown(const MouseDownEvent& e)
-	{
-		m_mouseJustPressed[(int)e.button] = true;
-		return false;
-	}
-
-	bool ImGuiLayer::OnKeyDown(const KeyDownEvent& e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		Application& app = Application::Get();
-
-		if ((int)e.keyCode >= 0 && (int)e.keyCode < IM_ARRAYSIZE(io.KeysDown)) {
-			io.KeysDown[(int)e.keyCode] = true;
-		}
-
-		io.KeyCtrl = io.KeysDown[(int)KeyCode::LeftCtrl] || io.KeysDown[(int)KeyCode::RightCtrl];
-		io.KeyShift = io.KeysDown[(int)KeyCode::LeftShift] || io.KeysDown[(int)KeyCode::RightShift];
-		io.KeyAlt = io.KeysDown[(int)KeyCode::LeftAlt] || io.KeysDown[(int)KeyCode::RightAlt];
-		io.KeySuper = io.KeysDown[(int)KeyCode::LeftSuper] || io.KeysDown[(int)KeyCode::RightSuper];
-
-		return false;
-	}
-
-	bool ImGuiLayer::OnKeyUp(const KeyUpEvent& e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		Application& app = Application::Get();
-
-		if ((int)e.keyCode >= 0 && (int)e.keyCode < IM_ARRAYSIZE(io.KeysDown)) {
-			io.KeysDown[(int)e.keyCode] = false;
-		}
-
-		// Modifiers are not reliable across systems
-		io.KeyCtrl = io.KeysDown[(int)KeyCode::LeftCtrl] || io.KeysDown[(int)KeyCode::RightCtrl];
-		io.KeyShift = io.KeysDown[(int)KeyCode::LeftShift] || io.KeysDown[(int)KeyCode::RightShift];
-		io.KeyAlt = io.KeysDown[(int)KeyCode::LeftAlt] || io.KeysDown[(int)KeyCode::RightAlt];
-		io.KeySuper = io.KeysDown[(int)KeyCode::LeftSuper] || io.KeysDown[(int)KeyCode::RightSuper];
-
-		return false;
-	}
-
-	bool ImGuiLayer::OnMouseScroll(const MouseScrollEvent& e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.MouseWheelH += e.offsetX;
-		io.MouseWheel += e.offsetY;
-		return false;
-	}
-
-	bool ImGuiLayer::OnCharTyped(const CharTypedEvent& e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.AddInputCharacter(e.character);
-		return false;
-	}
-
-	void ImGuiLayer::UpdateMouseButtons()
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
+		// Update and Render additional Platform Windows
+		// (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
+		//  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
-			io.MouseDown[i] = m_mouseJustPressed[(int)MapMouseButton(i)] || Input::GetMouseDown(MapMouseButton(i));
-			m_mouseJustPressed[(int)MapMouseButton(i)] = false;
+			GLFWwindow* backup_current_context = glfwGetCurrentContext();
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+			glfwMakeContextCurrent(backup_current_context);
 		}
 	}
-
-	void ImGuiLayer::UpdateMouseCursor()
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		Application& app = Application::Get();
-		Input::MouseCursor cursor = Input::MouseCursor_Arrow;
-
-		if ((io.ConfigFlags & ImGuiConfigFlags_NoMouseCursorChange))
-			return;
-
-		switch (ImGui::GetMouseCursor())
-		{
-			case ImGuiMouseCursor_None: cursor = Input::MouseCursor_None; break;
-			case ImGuiMouseCursor_Arrow: cursor = Input::MouseCursor_Arrow; break;
-			case ImGuiMouseCursor_TextInput: cursor = Input::MouseCursor_TextInput; break;
-			case ImGuiMouseCursor_ResizeAll: cursor = Input::MouseCursor_ResizeAll; break;
-			case ImGuiMouseCursor_ResizeNS: cursor = Input::MouseCursor_ResizeNS; break;
-			case ImGuiMouseCursor_ResizeEW: cursor = Input::MouseCursor_ResizeEW; break;
-			case ImGuiMouseCursor_ResizeNESW: cursor = Input::MouseCursor_ResizeNESW; break;
-			case ImGuiMouseCursor_ResizeNWSE: cursor = Input::MouseCursor_ResizeNWSE; break;
-			case ImGuiMouseCursor_Hand: cursor = Input::MouseCursor_Hand; break;
-			case ImGuiMouseCursor_NotAllowed: cursor = Input::MouseCursor_NotAllowed; break;
-		}
-
-		if (io.MouseDrawCursor) {
-			cursor = Input::MouseCursor_None;
-		}
-
-		Input::SetMouseCursor(cursor);
-	}
-
-	inline MouseButton ImGuiLayer::MapMouseButton(int button)
-	{
-		switch (button)
-		{
-			case ImGuiMouseButton_Left: return MouseButton::Left;
-			case ImGuiMouseButton_Right: return MouseButton::Right;
-			case ImGuiMouseButton_Middle: return MouseButton::Middle;
-			case 3: return MouseButton::Button4;
-			case 4: return MouseButton::Button5;
-			case 5: return MouseButton::Button6;
-			case 6: return MouseButton::Button7;
-			case 7: return MouseButton::Button8;
-			default: return MouseButton::Unknown;
-		}
-	}
-
 }

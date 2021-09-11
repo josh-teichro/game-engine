@@ -29,6 +29,10 @@ inline void ExampleLayer::OnUpdate()
 	//GE_INFO("ExampleLayer::Update");
 }
 
+void ExampleLayer::OnImGuiUpdate()
+{
+}
+
 bool ExampleLayer::OnMouseDown(const GameEngine::MouseDownEvent& e)
 {
 	GE_INFO("ExampleLayer::OnMouseDown {}", e);

@@ -29,7 +29,7 @@ namespace GameEngine {
 
 	private:
 		_LayerStack m_layers;
-		_LayerStack::iterator m_layerInsert;
+		unsigned int m_layerInsertIndex;
 	};
 
 }

@@ -5,6 +5,7 @@
 #include "LayerStack.h"
 #include "Events/Event.h"
 #include "Events/EventManager.h"
+#include "ImGui/ImGuiLayer.h"
 
 namespace GameEngine {
 
@@ -37,6 +38,8 @@ namespace GameEngine {
 		bool m_isRunning = true;
 
 		LayerStack m_layerStack;
+
+		ImGuiLayer* m_imGuiLayer;
 
 	};
 

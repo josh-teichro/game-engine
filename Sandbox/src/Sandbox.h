@@ -19,7 +19,8 @@ class ExampleLayer : public GameEngine::Layer
 public:
 	ExampleLayer();
 
-	void OnUpdate() override;
+	virtual void OnUpdate() override;
+	virtual void OnImGuiUpdate() override;
 
 	bool OnMouseDown(const GameEngine::MouseDownEvent& e) override;
 	bool OnKeyDown(const GameEngine::KeyDownEvent& e) override;

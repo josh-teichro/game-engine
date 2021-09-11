@@ -2,10 +2,10 @@
 
 #include "Application.h"
 #include "Log.h"
-#include "ImGui/ImGuiLayer.h"
 
 // TODO: remove
 #include <glad/glad.h>
+#include "imgui.h"
 
 namespace GameEngine {
 
@@ -20,7 +20,6 @@ namespace GameEngine {
 
 		Log::Init();
 		m_window = std::unique_ptr<Window>(Window::Create());
-		//auto fn = std::bind(&Application::OnEvent, this, std::placeholders::_1);
 		m_window->SetEventCallback(std::bind(&Application::EventCallback, this, std::placeholders::_1));
 	}
 
@@ -36,7 +35,8 @@ namespace GameEngine {
 	void Application::Run() {
 		GE_CORE_INFO("Starting Game Engine...");
 
-		PushOverlay(new ImGuiLayer());
+		m_imGuiLayer = new ImGuiLayer();
+		PushOverlay(m_imGuiLayer);
 
 		while (m_isRunning) {
 			// Set color to magenta for now
@@ -44,8 +44,17 @@ namespace GameEngine {
 			glClearColor(1, 0, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			// Update
 			for (Layer* layer : m_layerStack)
 				layer->OnUpdate();
+
+			// ImGui update
+			m_imGuiLayer->BeginFrame();
+			for (Layer* layer : m_layerStack) 
+				layer->OnImGuiUpdate();
+			static bool show = true;
+			ImGui::ShowDemoWindow(&show);
+			m_imGuiLayer->EndFrame();
 
 			m_window->OnUpdate();
 		}

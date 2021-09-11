@@ -112,6 +112,7 @@ project "Sandbox"
 	{
 		"%{IncludeDir.SpdLog}",
 		"%{IncludeDir.GLM}",
+		"%{IncludeDir.ImGui}",
 		"GameEngine/src"
 	}
 

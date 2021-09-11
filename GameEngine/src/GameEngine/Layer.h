@@ -33,6 +33,11 @@ namespace GameEngine {
 		virtual void OnUpdate() {};
 
 		/**
+		* Called every ImGui frame. Render any ImGui components here.
+		*/
+		virtual void OnImGuiUpdate() {};
+
+		/**
 		* Get the Layer name (for debugging).
 		*/
 		inline const std::string& GetName() const { return m_debugName; }
