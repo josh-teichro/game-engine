@@ -2,6 +2,7 @@
 
 #include "GameEngine/Window.h"
 #include "GameEngine/Events/KeyCodes.h"
+#include "GameEngine/Renderer/RenderContext.h"
 
 #include <GLFW/glfw3.h>
 
@@ -33,6 +34,7 @@ namespace GameEngine {
 
 	private:
 		GLFWwindow* m_window;
+		RenderContext* m_context;
 
 		struct WindowData {
 			std::string title;
