@@ -1,46 +1,25 @@
 #pragma once
 
-#include <unordered_map>
-#include <string>
-
-#include "glm/glm.hpp"
-
-/**
-* Stores the source code for a shader after being parsed (see Shader::ParseShader). 
-*/
-struct ShaderProgramSource
+namespace GameEngine
 {
-	std::string vertexSource;
-	std::string fragmentSource;
-};
+	/**
+	* Shader API.
+	*/
+	class Shader
+	{
+	public:
+		virtual void Bind() const = 0;
+		virtual void Unbind() const = 0;
 
-/**
-* OpenGL Shader API.
-*
-* Parses a single shader file into a vertex and fragment shader and passes them on
-* to OpenGL, as well as provides an API.
-*/
-class Shader
-{
-public:
-	Shader(const std::string& filepath);
-	~Shader();
+		virtual void SetUniform1i(const std::string& name, int v) = 0;
+		virtual void SetUniform1f(const std::string& name, float v) = 0;
+		virtual void SetUniform4f(const std::string& name, float v1, float v2, float v3, float v4) = 0;
+		virtual void SetUniformMat4f(const std::string& name, const glm::mat4& matrix) = 0;
+		virtual int GetUniformLocation(const std::string& name) = 0;
 
-	void Bind() const;
-	void Unbind() const;
+		static Shader* Create(const std::string& filepath);
 
-	void SetUniform1i(const std::string& name, int v);
-	void SetUniform1f(const std::string& name, float v);
-	void SetUniform4f(const std::string& name, float v1, float v2, float v3, float v4);
-	void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
-	int GetUniformLocation(const std::string& name);
+	};
 
-private:
-    struct ShaderProgramSource ParseShader(const std::string& filepath);
-    int CompileShader(unsigned int type, const std::string& source);
-
-	unsigned int m_id;
-	std::string m_filepath;
-	std::unordered_map<std::string, int> m_uniformLocationCache;
-};
+}
 

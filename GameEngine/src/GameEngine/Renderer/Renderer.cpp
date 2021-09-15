@@ -32,7 +32,7 @@ namespace GameEngine {
 		unsigned int indices[3] = { 0, 1, 2 };
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-		m_shader = std::make_unique<Shader>("../GameEngine/res/shaders/basic.shader");
+		m_shader.reset(Shader::Create("../GameEngine/res/shaders/basic.shader"));
 	}
 
 	void Renderer::Render() 
