@@ -21,12 +21,18 @@ namespace GameEngine {
 		Log::Init();
 		m_window = std::unique_ptr<Window>(Window::Create());
 		m_window->SetEventCallback(std::bind(&Application::EventCallback, this, std::placeholders::_1));
+
+		m_imGuiLayer = new ImGuiLayer();
+		PushOverlay(m_imGuiLayer);
+
+		m_renderer = new Renderer();
 	}
 
 	/**
 	* Destroy this Applcation.
 	*/
 	Application::~Application() {
+		delete m_renderer;
 	}
 
 	/**
@@ -35,14 +41,9 @@ namespace GameEngine {
 	void Application::Run() {
 		GE_CORE_INFO("Starting Game Engine...");
 
-		m_imGuiLayer = new ImGuiLayer();
-		PushOverlay(m_imGuiLayer);
-
 		while (m_isRunning) {
-			// Set color to magenta for now
-			// TODO: remove
-			glClearColor(1, 0, 1, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+			// Render
+			m_renderer->Render();
 
 			// Update
 			for (Layer* layer : m_layerStack)
@@ -65,8 +66,6 @@ namespace GameEngine {
 	*/
 	void Application::EventCallback(const Event& e)
 	{
-		GE_CORE_INFO("Application::OnEvent - {}", e);
-
 		if (EventDispatcher(e).Dispatch<WindowCloseEvent>(std::bind(&Application::OnWindowClose, this, std::placeholders::_1)))
 			return;
 

@@ -6,6 +6,7 @@
 #include "Events/Event.h"
 #include "Events/EventManager.h"
 #include "ImGui/ImGuiLayer.h"
+#include "Renderer/Renderer.h"
 
 namespace GameEngine {
 
@@ -40,6 +41,8 @@ namespace GameEngine {
 		LayerStack m_layerStack;
 
 		ImGuiLayer* m_imGuiLayer;
+
+		Renderer* m_renderer;
 
 	};
 
