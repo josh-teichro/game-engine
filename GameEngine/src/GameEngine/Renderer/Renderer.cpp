@@ -9,28 +9,23 @@ namespace GameEngine {
 
 	Renderer::Renderer() 
 	{
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
+		m_vertexArray.reset(VertexArray::Create());
 
-		glGenBuffers(1, &m_VertexBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-
-		float vertices[3 * 3] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.0f,  0.5f, 0.0f
+		float vertices[3 * 3 + 3 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.8f, 0.0f, 0.2f, 1.0f,
+			 0.5f, -0.5f, 0.0f, 0.2f, 0.8f, 0.1f, 1.0f,
+			 0.0f,  0.5f, 0.0f, 0.0f, 0.4f, 0.7f, 1.0f
 		};
 
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		m_vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-
-		glGenBuffers(1, &m_IndexBuffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
+		m_vertexArray->AddBuffer(*m_vertexBuffer, {
+			{ ShaderDataType::Vec3, "a_position" },
+			{ ShaderDataType::Vec4, "a_color" }
+		});
 
 		unsigned int indices[3] = { 0, 1, 2 };
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+		m_indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)));
 
 		m_shader.reset(Shader::Create("../GameEngine/res/shaders/basic.shader"));
 	}

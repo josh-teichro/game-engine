@@ -5,7 +5,6 @@
 #include "glm/glm.hpp"
 
 #include <unordered_map>
-#include <string>
 
 namespace GameEngine
 {
@@ -21,9 +20,6 @@ namespace GameEngine
 
 	/**
 	* OpenGL Shader API.
-	*
-	* Parses a single shader file into a vertex and fragment shader and passes them on
-	* to OpenGL, as well as provides an API.
 	*/
 	class OpenGLShader : public Shader
 	{

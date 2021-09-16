@@ -6,6 +6,9 @@ struct GLFWwindow;
 
 namespace GameEngine {
 
+	/**
+	* OpenGL render context.
+	*/
 	class OpenGLContext : public RenderContext {
 	public:
 		OpenGLContext(GLFWwindow* windowHandle);

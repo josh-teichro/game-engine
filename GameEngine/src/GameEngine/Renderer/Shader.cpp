@@ -11,7 +11,7 @@ namespace GameEngine
 		switch (Renderer::GetAPI())
 		{
 		case RenderAPI::OpenGL: return new OpenGLShader(filepath);
-		default: GE_CORE_ASSERT(false, "Render API is currently not supported!"); return nullptr;
+		default: GE_CORE_ASSERT(false, "Render API currently does not support Shader!"); return nullptr;
 		}
 	}
 

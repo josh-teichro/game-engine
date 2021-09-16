@@ -11,11 +11,6 @@
 namespace GameEngine
 {
 
-    /**
-    * Create an OpenGL shader.
-    *
-    * filepath: path to a file which holds both a vertex and a fragment shader
-    */
     OpenGLShader::OpenGLShader(const std::string& filepath) :
         m_filepath(filepath)
     {
@@ -57,65 +52,41 @@ namespace GameEngine
         Bind();
     }
 
-    /**
-    * Destroy this Shdaer.
-    */
     OpenGLShader::~OpenGLShader()
     {
         glDeleteProgram(m_id);
     }
 
-    /**
-    * Use this OpenGLShader.
-    */
     void OpenGLShader::Bind() const
     {
         glUseProgram(m_id);
     }
 
-    /**
-    * Stop using this OpenGLShader.
-    */
     void OpenGLShader::Unbind() const
     {
         glUseProgram(0);
     }
 
-    /**
-    * Set/create a 1D vector (integer) to use in this OpenGLShader.
-    */
     void OpenGLShader::SetUniform1i(const std::string& name, int v)
     {
         glUniform1i(GetUniformLocation(name), v);
     }
 
-    /**
-    * Set/create a 1D vector (float) to use in this OpenGLShader.
-    */
     void OpenGLShader::SetUniform1f(const std::string& name, float v)
     {
         glUniform1f(GetUniformLocation(name), v);
     }
 
-    /**
-    * Set/create a 4D vector (float) to use in this OpenGLShader.
-    */
     void OpenGLShader::SetUniform4f(const std::string& name, float v1, float v2, float v3, float v4)
     {
         glUniform4f(GetUniformLocation(name), v1, v2, v3, v4);
     }
 
-    /**
-    * Set/create a 4x4 matrix (float) to use in this OpenGLShader.
-    */
     void OpenGLShader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix)
     {
         glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
     }
 
-    /**
-    * Get the location id that OpenGL has asigned to the given uniform.
-    */
     int OpenGLShader::GetUniformLocation(const std::string& name)
     {
         if (m_uniformLocationCache.find(name) != m_uniformLocationCache.end()) {
@@ -132,15 +103,6 @@ namespace GameEngine
         return location;
     }
 
-    /**
-    * Parse a shader file.
-    *
-    * File is expected to contain the code for both the vertex and fragment shader.
-    * The vertex shader should begin with the line '@shader vertex', likelwise the
-    * fragment shader with '@shader fragment'.
-    *
-    * filepath: path to the shader
-    */
     ShaderProgramSource OpenGLShader::ParseShader(const std::string& filepath)
     {
         std::ifstream stream(filepath);
@@ -180,12 +142,6 @@ namespace GameEngine
         return { ss[0].str(), ss[1].str() };
     }
 
-    /**
-    * Compile the given shader source code.
-    *
-    * type: type of shader to compile (should be an OpenGL enum)
-    * source: string of source code to compile
-    */
     int OpenGLShader::CompileShader(unsigned int type, const std::string& source)
     {
         unsigned int id = glCreateShader(type);
