@@ -40,6 +40,7 @@ project "GameEngine"
 
 	files
 	{
+		"%{prj.name}/res/**",
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",

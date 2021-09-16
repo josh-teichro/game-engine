@@ -6,4 +6,6 @@ Archive/
 
 # Files
 *.user
-*.ini
+*.sln
+*.vcxproj
+*.vcxproj.filters
