@@ -86,12 +86,12 @@ namespace GameEngine
 	// VertexBuffer ----------------------------------------------------
 	// -----------------------------------------------------------------
 
-	VertexBuffer* VertexBuffer::Create(const void* data, unsigned int size)
+	std::shared_ptr<VertexBuffer> VertexBuffer::Create(const void* data, unsigned int size, const VertexBufferLayout& layout)
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RenderAPI::OpenGL: return new OpenGLVertexBuffer(data, size);
-		default: GE_CORE_ASSERT(false, "Render API currently does not support VertexBuffer!"); return nullptr;
+			case RenderAPI::OpenGL: return std::make_shared<OpenGLVertexBuffer>(data, size, layout);
+			default: GE_CORE_ASSERT(false, "Render API currently does not support VertexBuffer!"); return nullptr;
 		}
 	}
 

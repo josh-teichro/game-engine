@@ -22,11 +22,8 @@ namespace GameEngine {
 	private:
 		static RenderAPI m_api;
 
-		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
-		std::unique_ptr<Shader> m_shader;
-		std::unique_ptr<VertexArray> m_vertexArray;
-		std::unique_ptr<VertexBuffer> m_vertexBuffer;
-		std::unique_ptr<IndexBuffer> m_indexBuffer;
+		std::shared_ptr<Shader> m_shader;
+		std::shared_ptr<VertexArray> m_vertexArray;
 	};
 
 }

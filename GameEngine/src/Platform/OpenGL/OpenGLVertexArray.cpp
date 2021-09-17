@@ -10,7 +10,7 @@ namespace GameEngine
     OpenGLVertexArray::OpenGLVertexArray()
     {
         glGenVertexArrays(1, &m_id);
-        Bind();
+        glBindVertexArray(m_id);
     }
 
     OpenGLVertexArray::~OpenGLVertexArray()
@@ -18,12 +18,14 @@ namespace GameEngine
         glDeleteVertexArrays(1, &m_id);
     }
 
-    void OpenGLVertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout)
+    void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
     {
-        Bind();
-        vb.Bind();
+        GE_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "VertexBufferLayout has no elements!");
 
-        const auto& elements = layout.GetElements();
+        glBindVertexArray(m_id);
+        vertexBuffer->Bind();
+
+        const auto& elements = vertexBuffer->GetLayout().GetElements();
 
         for (int i = 0; i < elements.size(); i++)
         {
@@ -35,11 +37,19 @@ namespace GameEngine
                 el.GetComponentCount(), 
                 ShaderDataTypeToOpenGLBaseType(el.type), 
                 el.normalized ? GL_TRUE : GL_FALSE,
-                layout.GetStride(), 
+                vertexBuffer->GetLayout().GetStride(),
                 (const void*)el.offset
             );
         }
+
+        m_vertexBuffers.push_back(vertexBuffer);
     }
+
+    void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+    {
+        m_indexBuffer = indexBuffer;
+    }
+
 
     void OpenGLVertexArray::Bind() const
     {

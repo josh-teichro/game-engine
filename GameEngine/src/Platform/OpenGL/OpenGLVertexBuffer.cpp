@@ -32,10 +32,11 @@ namespace GameEngine
     // -----------------------------------------------------------------
 
 
-    OpenGLVertexBuffer::OpenGLVertexBuffer(const void* data, unsigned int size)
+    OpenGLVertexBuffer::OpenGLVertexBuffer(const void* data, unsigned int size, const VertexBufferLayout& layout) :
+        m_layout(layout)
     {
         glGenBuffers(1, &m_id);
-        Bind();
+        glBindBuffer(GL_ARRAY_BUFFER, m_id);
         glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
     }
 

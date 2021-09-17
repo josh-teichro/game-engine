@@ -6,12 +6,12 @@
 namespace GameEngine
 {
 
-	IndexBuffer* IndexBuffer::Create(const unsigned int* data, unsigned int count)
+	std::shared_ptr<IndexBuffer> IndexBuffer::Create(const unsigned int* data, unsigned int count)
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RenderAPI::OpenGL: return new OpenGLIndexBuffer(data, count);
-		default: GE_CORE_ASSERT(false, "Render API currently does not support IndexBuffer!"); return nullptr;
+			case RenderAPI::OpenGL: return std::make_shared<OpenGLIndexBuffer>(data, count);
+			default: GE_CORE_ASSERT(false, "Render API currently does not support IndexBuffer!"); return nullptr;
 		}
 	}
 

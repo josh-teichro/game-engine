@@ -12,7 +12,7 @@ namespace GameEngine
         GE_CORE_ASSERT(sizeof(unsigned int) == sizeof(GLuint), "OpenGL index buffer data type does not match API.");
 
         glGenBuffers(1, &m_id);
-        Bind();
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW);
     }
 

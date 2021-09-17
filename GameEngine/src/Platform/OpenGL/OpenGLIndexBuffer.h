@@ -12,7 +12,7 @@ namespace GameEngine
 	{
 	public:
 		OpenGLIndexBuffer(const unsigned int* data, unsigned int count);
-		~OpenGLIndexBuffer();
+		virtual ~OpenGLIndexBuffer();
 
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
@@ -20,8 +20,8 @@ namespace GameEngine
 		virtual inline unsigned int GetCount() const override { return m_count; }
 
 	private:
-		unsigned int m_id;
-		unsigned int m_count;
+		uint32_t m_id;
+		uint32_t m_count;
 	};
 
 }

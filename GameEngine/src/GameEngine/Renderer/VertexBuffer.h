@@ -55,10 +55,15 @@ namespace GameEngine
 	class VertexBuffer
 	{
 	public:
+		virtual ~VertexBuffer() {};
+
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
-		static VertexBuffer* Create(const void* data, unsigned int size);
+		virtual const VertexBufferLayout& GetLayout() const = 0;
+		virtual void SetLayout(const VertexBufferLayout& layout) = 0;
+
+		static std::shared_ptr<VertexBuffer> Create(const void* data, unsigned int size, const VertexBufferLayout& layout);
 	};
 
 }
