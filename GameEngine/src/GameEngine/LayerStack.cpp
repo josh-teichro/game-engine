@@ -56,12 +56,12 @@ namespace GameEngine {
 	*/
 	void LayerStack::PopLayer(Layer* layer)
 	{
-		auto it = std::find(m_layers.begin(), m_layers.end(), layer);
+		auto it = std::find(m_layers.begin(), m_layers.begin() + m_layerInsertIndex, layer);
 		if (it != m_layers.end())
 		{
+			layer->OnDetach();
 			m_layers.erase(it);
 			m_layerInsertIndex--;
-			layer->OnDetach();
 		}
 	}
 
@@ -73,10 +73,10 @@ namespace GameEngine {
 	*/
 	void LayerStack::PopOverlay(Layer* overlay)
 	{
-		auto it = std::find(m_layers.begin(), m_layers.end(), overlay);
+		auto it = std::find(m_layers.begin() + m_layerInsertIndex, m_layers.end(), overlay);
 		if (it != m_layers.end()) {
-			m_layers.erase(it);
 			overlay->OnDetach();
+			m_layers.erase(it);
 		}
 	}
 

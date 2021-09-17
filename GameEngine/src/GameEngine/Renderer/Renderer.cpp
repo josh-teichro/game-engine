@@ -3,8 +3,6 @@
 
 #include <glad/glad.h>
 
-#include "Platform/OpenGL/OpenGLVertexArray.h"
-
 namespace GameEngine {
 
 	RenderAPI Renderer::m_api = RenderAPI::OpenGL;

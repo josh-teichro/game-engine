@@ -28,7 +28,7 @@ namespace GameEngine {
 	public:
 		using EventCallbackFn = std::function<void(const Event&)>;
 
-		virtual ~Window() {};
+		virtual ~Window() = default;
 
 		virtual void OnUpdate() = 0;
 

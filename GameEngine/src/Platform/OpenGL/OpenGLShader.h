@@ -25,7 +25,7 @@ namespace GameEngine
 	{
 	public:
 		OpenGLShader(const std::string& filepath);
-		~OpenGLShader();
+		virtual ~OpenGLShader();
 
 		virtual void Bind() const override;
 		virtual void Unbind() const override;

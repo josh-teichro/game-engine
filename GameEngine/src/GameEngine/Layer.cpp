@@ -14,11 +14,4 @@ namespace GameEngine {
 	{
 	}
 
-	/**
-	* Destroy this Layer.
-	*/
-	Layer::~Layer()
-	{
-	}
-
 }

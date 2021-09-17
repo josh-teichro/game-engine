@@ -38,7 +38,7 @@ namespace GameEngine
                 ShaderDataTypeToOpenGLBaseType(el.type), 
                 el.normalized ? GL_TRUE : GL_FALSE,
                 vertexBuffer->GetLayout().GetStride(),
-                (const void*)el.offset
+                (const void*)(uintptr_t)el.offset
             );
         }
 

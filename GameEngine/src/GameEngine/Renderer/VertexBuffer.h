@@ -33,6 +33,7 @@ namespace GameEngine
 	{
 	public:
 		VertexBufferLayout(const std::initializer_list<VertexBufferElement>& elements);
+		virtual ~VertexBufferLayout() = default;
 
 		inline uint32_t GetStride() const { return m_stride; }
 		inline const std::vector<VertexBufferElement>& GetElements() const { return m_elements; }
