@@ -17,7 +17,7 @@ namespace GameEngine
 		virtual void SetUniformMat4f(const std::string& name, const glm::mat4& matrix) = 0;
 		virtual int GetUniformLocation(const std::string& name) = 0;
 
-		static Shader* Create(const std::string& filepath);
+		static std::shared_ptr<Shader> Create(const std::string& filepath);
 
 	};
 

@@ -24,6 +24,9 @@ namespace GameEngine {
 
 		std::shared_ptr<Shader> m_shader;
 		std::shared_ptr<VertexArray> m_vertexArray;
+
+		std::shared_ptr<Shader> m_shader2;
+		std::shared_ptr<VertexArray> m_vertexArray2;
 	};
 
 }

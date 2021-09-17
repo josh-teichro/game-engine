@@ -47,6 +47,7 @@ namespace GameEngine
 
     void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
     {
+        indexBuffer->Bind();
         m_indexBuffer = indexBuffer;
     }
 
