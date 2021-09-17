@@ -11,6 +11,7 @@ namespace GameEngine {
 
 	Renderer::Renderer() 
 	{
+		m_vertexArray = VertexArray::Create();
 
 		float vertices[3 * 3 + 3 * 4] = {
 			-0.5f, -0.5f, 0.0f, 0.8f, 0.0f, 0.2f, 1.0f,
@@ -28,7 +29,6 @@ namespace GameEngine {
 		unsigned int indices[3] = { 0, 1, 2 };
 		std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 
-		m_vertexArray = VertexArray::Create();
 		m_vertexArray->AddVertexBuffer(vertexBuffer);
 		m_vertexArray->SetIndexBuffer(indexBuffer);
 
