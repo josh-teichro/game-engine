@@ -8,6 +8,7 @@
 #include "ImGui/ImGuiLayer.h"
 #include "Renderer/Shader.h"
 #include "Renderer/VertexArray.h"
+#include "Renderer/Camera.h"
 
 namespace GameEngine {
 
@@ -43,11 +44,16 @@ namespace GameEngine {
 
 		ImGuiLayer* m_imGuiLayer;
 
+		std::shared_ptr<Camera> m_camera;
+		glm::vec3 camRotation;
+
 		std::shared_ptr<Shader> m_shader;
 		std::shared_ptr<VertexArray> m_vertexArray;
+		glm::vec3 objectPositon;
 
 		std::shared_ptr<Shader> m_shader2;
 		std::shared_ptr<VertexArray> m_vertexArray2;
+		glm::vec3 objectPositon2;
 
 	};
 

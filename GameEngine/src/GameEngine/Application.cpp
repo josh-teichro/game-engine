@@ -26,7 +26,17 @@ namespace GameEngine {
 		m_imGuiLayer = new ImGuiLayer();
 		PushOverlay(m_imGuiLayer);
 
+		// set camera
+		float aspect = (float)m_window->GetWidth() / m_window->GetHeight();
+		m_camera = std::make_shared<PerspectiveCamera>(45.0f, aspect);
+		m_camera->GetTransform().position = glm::vec3(0.0f, 0.0f, 2.0f);
+		m_camera->LookAt(glm::vec3(0.0f), { 0.0f, 1.0f, 0.0f });
+		camRotation = m_camera->GetTransform().GetEulerAngles();
+
 		// create scene
+		objectPositon = glm::vec3(0.0f);
+		objectPositon2 = glm::vec3(0.0f);
+
 		// 1
 		m_vertexArray = VertexArray::Create();
 
@@ -93,16 +103,35 @@ namespace GameEngine {
 				layer->OnImGuiUpdate();
 
 			static bool show = true;
-			ImGui::ShowDemoWindow(&show);
+			//ImGui::ShowDemoWindow(&show);
+			ImGui::SliderFloat3("Object 1 Position", &objectPositon.x, -10.0f, 10.0f);
+			ImGui::SliderFloat3("Object 2 Position", &objectPositon2.x, -10.0f, 10.0f);
+			ImGui::SliderFloat3("Camera Position", &m_camera->GetTransform().position.x, -10.0f, 10.0f);
+			ImGui::SliderFloat3("Camera Rotation", &camRotation.x, -180.0f, 180.0f);
+
+			if (ImGui::Button("Reset"))
+			{
+				objectPositon = glm::vec3(0.0f);
+				objectPositon2 = glm::vec3(0.0f);
+				m_camera->GetTransform().position = glm::vec3(0.0f, 0.0f, 2.0f);
+				m_camera->LookAt(glm::vec3(0.0f), { 0.0f, 1.0f, 0.0f });
+				camRotation = m_camera->GetTransform().GetEulerAngles();
+			}
 			m_imGuiLayer->EndFrame();
 
 			// draw scene
 			Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 			Renderer::Clear();
 
-			Renderer::BeginScene();
-			Renderer::Submit(m_vertexArray, m_shader);
-			Renderer::Submit(m_vertexArray2, m_shader2);
+			glm::vec4 pos = { 0.5f, 0.5f, 0.0f, 0.0f };
+			glm::vec3 Mpos = glm::mat4(1) * pos;
+			glm::vec3 VMpos = m_camera->V() * glm::mat4(1) * pos;
+			glm::vec3 PVMpos = m_camera->VP() * glm::mat4(1) * pos;
+
+			m_camera->GetTransform().SetEulerAngles(camRotation);
+			Renderer::BeginScene(m_camera);
+			Renderer::Submit(m_vertexArray, glm::translate(glm::mat4(1.0f), objectPositon), m_shader);
+			Renderer::Submit(m_vertexArray2, glm::translate(glm::mat4(1.0f), objectPositon2), m_shader2);
 			Renderer::EndScene();
 
 			m_window->OnUpdate();

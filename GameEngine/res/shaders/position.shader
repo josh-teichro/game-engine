@@ -3,19 +3,24 @@
 
 layout(location = 0) in vec4 a_position;
 
+out vec3 v_position;
+
 uniform mat4 u_MVP;
 
 void main()
 {
     gl_Position = u_MVP * a_position;
+    v_position = u_MVP * a_position;
 }
 
 #fragment shader
 #version 330 core
 
+in vec3 v_position;
+
 layout(location = 0) out vec4 color;
 
 void main()
 {
-    color = vec4(0.9, 0.2, 0.3, 1.0);
+    color = 0.5 + v_position * 0.5;
 }
