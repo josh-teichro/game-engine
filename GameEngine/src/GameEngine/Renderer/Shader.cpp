@@ -10,7 +10,7 @@ namespace GameEngine
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RenderAPI::OpenGL: return std::make_shared<OpenGLShader>(filepath);
+		case Renderer::API::OpenGL: return std::make_shared<OpenGLShader>(filepath);
 		default: GE_CORE_ASSERT(false, "Render API currently does not support Shader!"); return nullptr;
 		}
 	}

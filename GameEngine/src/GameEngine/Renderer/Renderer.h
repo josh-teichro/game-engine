@@ -2,31 +2,33 @@
 
 #include "Shader.h"
 #include "VertexArray.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
+#include "RendererAPI.h"
+
+#include "glm/glm.hpp"
 
 namespace GameEngine {
 
-	enum class RenderAPI {
-		None = 0, OpenGL = 1
-	};
-
 	class Renderer {
 	public:
-		Renderer();
+		enum class API {
+			None = 0, OpenGL = 1
+		};
 
-		void Render();
+	public:
+		static void BeginScene();
+		static void EndScene();
 
-		static RenderAPI GetAPI() { return m_api; }
+		static void SetClearColor(const glm::vec4& color);
+		static void Clear();
+
+		static void Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader);
+
+		static API GetAPI() { return s_API; }
 
 	private:
-		static RenderAPI m_api;
+		static API s_API;
+		static std::unique_ptr<RendererAPI> s_rendererAPI;
 
-		std::shared_ptr<Shader> m_shader;
-		std::shared_ptr<VertexArray> m_vertexArray;
-
-		std::shared_ptr<Shader> m_shader2;
-		std::shared_ptr<VertexArray> m_vertexArray2;
 	};
 
 }

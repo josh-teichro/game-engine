@@ -10,7 +10,7 @@ namespace GameEngine
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RenderAPI::OpenGL: return std::make_shared<OpenGLIndexBuffer>(data, count);
+			case Renderer::API::OpenGL: return std::make_shared<OpenGLIndexBuffer>(data, count);
 			default: GE_CORE_ASSERT(false, "Render API currently does not support IndexBuffer!"); return nullptr;
 		}
 	}

@@ -6,7 +6,8 @@
 #include "Events/Event.h"
 #include "Events/EventManager.h"
 #include "ImGui/ImGuiLayer.h"
-#include "Renderer/Renderer.h"
+#include "Renderer/Shader.h"
+#include "Renderer/VertexArray.h"
 
 namespace GameEngine {
 
@@ -17,7 +18,7 @@ namespace GameEngine {
 	{
 	public:
 		Application();
-		virtual ~Application();
+		virtual ~Application() = default;
 
 		void Run();
 
@@ -42,7 +43,11 @@ namespace GameEngine {
 
 		ImGuiLayer* m_imGuiLayer;
 
-		Renderer* m_renderer;
+		std::shared_ptr<Shader> m_shader;
+		std::shared_ptr<VertexArray> m_vertexArray;
+
+		std::shared_ptr<Shader> m_shader2;
+		std::shared_ptr<VertexArray> m_vertexArray2;
 
 	};
 

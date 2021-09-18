@@ -90,7 +90,7 @@ namespace GameEngine
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RenderAPI::OpenGL: return std::make_shared<OpenGLVertexBuffer>(data, size, layout);
+			case Renderer::API::OpenGL: return std::make_shared<OpenGLVertexBuffer>(data, size, layout);
 			default: GE_CORE_ASSERT(false, "Render API currently does not support VertexBuffer!"); return nullptr;
 		}
 	}
