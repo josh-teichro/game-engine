@@ -3,7 +3,7 @@
 
 layout(location = 0) in vec4 a_position;
 
-out vec3 v_position;
+out vec4 v_position;
 
 uniform mat4 u_MVP;
 
@@ -16,7 +16,7 @@ void main()
 #fragment shader
 #version 330 core
 
-in vec3 v_position;
+in vec4 v_position;
 
 layout(location = 0) out vec4 color;
 

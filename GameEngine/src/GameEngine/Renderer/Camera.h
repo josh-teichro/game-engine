@@ -15,20 +15,23 @@ namespace GameEngine
 		void ComputeMatrices();
 		void LookAt(glm::vec3 point, glm::vec3 up);
 
-		glm::mat4 V() { return m_V; }
-		glm::mat4 P() { return m_P; }
-		glm::mat4 VP() { return m_VP; }
+		glm::mat4 V() { if (m_needToComputeMatrices) { ComputeMatrices(); } return m_V; }
+		glm::mat4 P() { if (m_needToComputeMatrices) { ComputeMatrices(); }  return m_P; }
+		glm::mat4 VP() { if (m_needToComputeMatrices) { ComputeMatrices(); } return m_VP; }
 
-		Transform& GetTransform() { return m_transform; }
+		const Transform& GetReadOnlyTransform() const { return m_transform; }
+		Transform& GetTransform() { return m_transform; m_needToComputeMatrices = true; }
 
 	protected:
 		Camera();
 
+	protected:
+		Transform m_transform;
+		bool m_needToComputeMatrices;
+
 		glm::mat4 m_V;
 		glm::mat4 m_P;
 		glm::mat4 m_VP;
-	private:
-		Transform m_transform;
 	};
 
 	/**

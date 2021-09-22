@@ -26,24 +26,30 @@ namespace GameEngine {
 		m_imGuiLayer = new ImGuiLayer();
 		PushOverlay(m_imGuiLayer);
 
+		CreateScene();
+		ResetScene();
+	}
+
+
+	void Application::CreateScene()
+	{
 		// set camera
 		float aspect = (float)m_window->GetWidth() / m_window->GetHeight();
-		m_camera = std::make_shared<PerspectiveCamera>(45.0f, aspect);
-		m_camera->GetTransform().position = glm::vec3(0.0f, 0.0f, 2.0f);
-		m_camera->LookAt(glm::vec3(0.0f), { 0.0f, 1.0f, 0.0f });
-		camRotation = m_camera->GetTransform().GetEulerAngles();
 
-		// create scene
-		objectPositon = glm::vec3(0.0f);
-		objectPositon2 = glm::vec3(0.0f);
+		if (m_isOrthographic) {
+			m_camera = std::make_shared<OrthographicCamera>(-2.0f, 2.0f, 2.0f / aspect, -2.0f / aspect, 0.1f, 100.0f);
+		}
+		else {
+			m_camera = std::make_shared<PerspectiveCamera>(45.0f, aspect);
+		}
 
-		// 1
+		// object 1
 		m_vertexArray = VertexArray::Create();
 
 		float vertices[3 * 3 + 3 * 4] = {
-			-0.5f, -0.5f, 0.0f, 0.8f, 0.0f, 0.2f, 1.0f,
-			 0.45f, -0.5f, 0.0f, 0.2f, 0.8f, 0.1f, 1.0f,
-			 -0.5f,  0.45f, 0.0f, 0.0f, 0.4f, 0.7f, 1.0f
+			-0.5f, 0.0f, 0.0f, 0.8f, 0.0f, 0.2f, 1.0f,
+			 0.45f, 0.0f, 0.0f, 0.2f, 0.8f, 0.1f, 1.0f,
+			 -0.5f,  0.95f, 0.0f, 0.0f, 0.4f, 0.7f, 1.0f
 		};
 
 		VertexBufferLayout layout = {
@@ -62,13 +68,13 @@ namespace GameEngine {
 
 		m_shader = Shader::Create("../GameEngine/res/shaders/red.shader");
 
-		// 2
+		// object 2
 		m_vertexArray2 = VertexArray::Create();
 
 		float vertices2[3 * 3] = {
-			0.5f, 0.5f, 0.0f,
-			-0.45f,  0.5f, 0.0f,
-			0.5f, -0.45f, 0.0f
+			0.5f, 1.0f, 0.0f,
+			-0.45f,  1.0f, 0.0f,
+			0.5f, 0.05f, 0.0f
 		};
 
 		VertexBufferLayout layout2 = {
@@ -84,6 +90,44 @@ namespace GameEngine {
 		m_vertexArray2->SetIndexBuffer(indexBuffer2);
 
 		m_shader2 = Shader::Create("../GameEngine/res/shaders/blue.shader");
+
+		// object 3
+		m_vertexArray3 = VertexArray::Create();
+
+		float vertices3[(3 + 4) * 4] = {
+			-0.5f, 0.0f, -0.5f, 0.4f, 0.4f, 0.4f, 1.0f,
+			-0.5f,  0.0f, 0.5f, 0.4f, 0.4f, 0.4f, 1.0f,
+			0.5f, 0.0f, -0.5f, 0.4f, 0.4f, 0.4f, 1.0f,
+			0.5f, 0.0f, 0.5f, 0.4f, 0.4f, 0.4f, 1.0f
+		};
+
+		VertexBufferLayout layout3 = {
+			{ ShaderDataType::Vec3, "a_position" },
+			{ ShaderDataType::Vec4, "a_color" }
+		};
+
+		std::shared_ptr<VertexBuffer> vertexBuffer3 = VertexBuffer::Create(vertices3, sizeof(vertices3), layout3);
+
+		uint32_t indices3[6] = { 0, 1, 2, 3, 1, 2 };
+		std::shared_ptr<IndexBuffer> indexBuffer3 = IndexBuffer::Create(indices3, sizeof(indices3) / sizeof(uint32_t));
+
+		m_vertexArray3->AddVertexBuffer(vertexBuffer3);
+		m_vertexArray3->SetIndexBuffer(indexBuffer3);
+
+		m_shader3 = Shader::Create("../GameEngine/res/shaders/basic.shader");
+	}
+
+	void Application::ResetScene()
+	{
+		// reset camera
+		m_camera->GetTransform().position = glm::vec3(0.0f, 0.5f, 2.0f);
+		m_camera->LookAt({ 0.0f, 0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f });
+		camRotation = m_camera->GetTransform().GetEulerAngles();
+
+		// reset objects
+		objectPositon = glm::vec3(0.0f);
+		objectPositon2 = glm::vec3(0.0f);
+		objectPositon3 = glm::vec3(0.0f);
 	}
 
 	/**
@@ -108,14 +152,26 @@ namespace GameEngine {
 			ImGui::SliderFloat3("Object 2 Position", &objectPositon2.x, -10.0f, 10.0f);
 			ImGui::SliderFloat3("Camera Position", &m_camera->GetTransform().position.x, -10.0f, 10.0f);
 			ImGui::SliderFloat3("Camera Rotation", &camRotation.x, -180.0f, 180.0f);
+			ImGui::Checkbox("Lock Onto Object", &m_lookAtObject);
+
+			if (ImGui::Button(m_isOrthographic ? "Perspective View" : "Orthographic View")) {
+				m_isOrthographic = !m_isOrthographic;
+				Transform tempTransform = m_camera->GetTransform();
+				float aspect = (float)m_window->GetWidth() / m_window->GetHeight();
+
+				if (m_isOrthographic) {
+					m_camera = std::make_shared<OrthographicCamera>(-2.0f, 2.0f, 2.0f / aspect, -2.0f / aspect, 0.1f, 100.0f);
+				}
+				else {
+					m_camera = std::make_shared<PerspectiveCamera>(45.0f, aspect);
+				}
+
+				m_camera->GetTransform() = tempTransform;
+			}
 
 			if (ImGui::Button("Reset"))
 			{
-				objectPositon = glm::vec3(0.0f);
-				objectPositon2 = glm::vec3(0.0f);
-				m_camera->GetTransform().position = glm::vec3(0.0f, 0.0f, 2.0f);
-				m_camera->LookAt(glm::vec3(0.0f), { 0.0f, 1.0f, 0.0f });
-				camRotation = m_camera->GetTransform().GetEulerAngles();
+				ResetScene();
 			}
 			m_imGuiLayer->EndFrame();
 
@@ -128,10 +184,25 @@ namespace GameEngine {
 			glm::vec3 VMpos = m_camera->V() * glm::mat4(1) * pos;
 			glm::vec3 PVMpos = m_camera->VP() * glm::mat4(1) * pos;
 
-			m_camera->GetTransform().SetEulerAngles(camRotation);
+			if (m_lookAtObject) {
+				m_camera->LookAt({ 0.0f, 0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f });
+				camRotation = m_camera->GetTransform().GetEulerAngles();
+			}
+			else {
+				m_camera->GetTransform().SetEulerAngles(camRotation);
+			}
+
 			Renderer::BeginScene(m_camera);
-			Renderer::Submit(m_vertexArray, glm::translate(glm::mat4(1.0f), objectPositon), m_shader);
-			Renderer::Submit(m_vertexArray2, glm::translate(glm::mat4(1.0f), objectPositon2), m_shader2);
+			if (m_camera->GetTransform().position.y > 0.0f) {
+				Renderer::Submit(m_vertexArray3, glm::translate(glm::mat4(1.0f), objectPositon3), m_shader3);
+				Renderer::Submit(m_vertexArray, glm::translate(glm::mat4(1.0f), objectPositon), m_shader);
+				Renderer::Submit(m_vertexArray2, glm::translate(glm::mat4(1.0f), objectPositon2), m_shader2);
+			}
+			else {
+				Renderer::Submit(m_vertexArray, glm::translate(glm::mat4(1.0f), objectPositon), m_shader);
+				Renderer::Submit(m_vertexArray2, glm::translate(glm::mat4(1.0f), objectPositon2), m_shader2);
+				Renderer::Submit(m_vertexArray3, glm::translate(glm::mat4(1.0f), objectPositon3), m_shader3);
+			}
 			Renderer::EndScene();
 
 			m_window->OnUpdate();

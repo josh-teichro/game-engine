@@ -39,6 +39,7 @@ namespace GameEngine {
 
 		std::unique_ptr<Window> m_window;
 		bool m_isRunning = true;
+		bool m_isOrthographic = false;
 
 		LayerStack m_layerStack;
 
@@ -46,6 +47,7 @@ namespace GameEngine {
 
 		std::shared_ptr<Camera> m_camera;
 		glm::vec3 camRotation;
+		bool m_lookAtObject = false;
 
 		std::shared_ptr<Shader> m_shader;
 		std::shared_ptr<VertexArray> m_vertexArray;
@@ -54,6 +56,13 @@ namespace GameEngine {
 		std::shared_ptr<Shader> m_shader2;
 		std::shared_ptr<VertexArray> m_vertexArray2;
 		glm::vec3 objectPositon2;
+
+		std::shared_ptr<Shader> m_shader3;
+		std::shared_ptr<VertexArray> m_vertexArray3;
+		glm::vec3 objectPositon3;
+
+		void CreateScene();
+		void ResetScene();
 
 	};
 
