@@ -28,8 +28,8 @@ public:
 private:
 	std::shared_ptr<GameEngine::Camera> m_camera;
 	glm::vec3 m_camRotation;
-	float m_cameraSpeed = 0.1f;
-	float m_cameraRotationSpeed = 0.1f;
+	float m_cameraSpeed = 5.0f;
+	float m_cameraRotationSpeed = 5.0f;
 	bool m_lookAtObject = false;
 	bool m_isOrthographic = false;
 	bool m_moveCamera = true;

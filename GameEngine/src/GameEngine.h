@@ -5,6 +5,7 @@
 #include "GameEngine/Application.h"
 #include "GameEngine/Layer.h"
 #include "GameEngine/Log.h"
+#include "GameEngine/Core/Time.h"
 
 // --- Events -------------------------------------
 #include "GameEngine/Input.h"

@@ -31,6 +31,7 @@ inline ExampleLayer::ExampleLayer()
 
 inline void ExampleLayer::OnUpdate()
 {
+	float deltaTime = GameEngine::Time::GetDeltaTime();
 	//static bool show = true;
 	//ImGui::ShowDemoWindow(&show);
 
@@ -42,24 +43,31 @@ inline void ExampleLayer::OnUpdate()
 	// move camera
 	if (m_moveCamera) {
 		if (GameEngine::Input::GetKeyDown(GameEngine::KeyCode::W)) {
-			m_camera->GetTransform().position += m_camera->GetTransform().Forward() * m_cameraSpeed;
+			m_camera->GetTransform().position += deltaTime * m_camera->GetTransform().Forward() * m_cameraSpeed;
 		}
 		else if (GameEngine::Input::GetKeyDown(GameEngine::KeyCode::S)) {
-			m_camera->GetTransform().position -= m_camera->GetTransform().Forward() * m_cameraSpeed;
+			m_camera->GetTransform().position -= deltaTime * m_camera->GetTransform().Forward() * m_cameraSpeed;
 		}
 
 		if (GameEngine::Input::GetKeyDown(GameEngine::KeyCode::A)) {
-			m_camera->GetTransform().position -= m_camera->GetTransform().Right() * m_cameraSpeed;
+			m_camera->GetTransform().position -= deltaTime * m_camera->GetTransform().Right() * m_cameraSpeed;
 		}
 		else if (GameEngine::Input::GetKeyDown(GameEngine::KeyCode::D)) {
-			m_camera->GetTransform().position += m_camera->GetTransform().Right() * m_cameraSpeed;
+			m_camera->GetTransform().position += deltaTime * m_camera->GetTransform().Right() * m_cameraSpeed;
+		}
+
+		if (GameEngine::Input::GetKeyDown(GameEngine::KeyCode::LeftShift)) {
+			m_camera->GetTransform().position -= deltaTime * m_camera->GetTransform().Up() * m_cameraSpeed;
+		}
+		else if (GameEngine::Input::GetKeyDown(GameEngine::KeyCode::Space)) {
+			m_camera->GetTransform().position += deltaTime * m_camera->GetTransform().Up() * m_cameraSpeed;
 		}
 
 		auto newMousePos = GameEngine::Input::GetMousePosition();
 		float dx = newMousePos.x - m_prevMousePos.x;
 		float dy = newMousePos.y - m_prevMousePos.y;
-		m_camRotation.y -= (m_invertCameraX ? -1.0f : 1.0f) * dx * m_cameraRotationSpeed;
-		m_camRotation.x -= (m_invertCameraY ? -1.0f : 1.0f) * dy * m_cameraRotationSpeed;
+		m_camRotation.y -= (m_invertCameraX ? -1.0f : 1.0f) * deltaTime * dx * m_cameraRotationSpeed;
+		m_camRotation.x -= (m_invertCameraY ? -1.0f : 1.0f) * deltaTime * dy * m_cameraRotationSpeed;
 		m_prevMousePos = { newMousePos.x, newMousePos.y };
 	}
 

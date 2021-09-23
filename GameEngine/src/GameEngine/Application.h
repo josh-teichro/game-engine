@@ -2,6 +2,7 @@
 
 #include "Core.h"
 #include "Window.h"
+#include "Core/Time.h"
 #include "LayerStack.h"
 #include "Events/Event.h"
 #include "Events/EventManager.h"
@@ -35,6 +36,7 @@ namespace GameEngine {
 		static Application* s_instance;
 
 		std::unique_ptr<Window> m_window;
+		std::unique_ptr<Time> m_time;
 		bool m_isRunning = true;
 
 		LayerStack m_layerStack;

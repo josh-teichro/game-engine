@@ -20,6 +20,8 @@ namespace GameEngine {
 		m_window = std::unique_ptr<Window>(Window::Create());
 		m_window->SetEventCallback(std::bind(&Application::EventCallback, this, std::placeholders::_1));
 
+		m_time = std::make_unique<Time>();
+
 		m_imGuiLayer = new ImGuiLayer();
 		PushOverlay(m_imGuiLayer);
 	}
@@ -32,6 +34,8 @@ namespace GameEngine {
 
 		while (m_isRunning) {
 			// Update
+			m_time->OnUpdate();
+
 			for (Layer* layer : m_layerStack)
 				layer->OnUpdate();
 
