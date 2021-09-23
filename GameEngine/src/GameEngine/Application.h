@@ -6,9 +6,6 @@
 #include "Events/Event.h"
 #include "Events/EventManager.h"
 #include "ImGui/ImGuiLayer.h"
-#include "Renderer/Shader.h"
-#include "Renderer/VertexArray.h"
-#include "Renderer/Camera.h"
 
 namespace GameEngine {
 
@@ -39,30 +36,10 @@ namespace GameEngine {
 
 		std::unique_ptr<Window> m_window;
 		bool m_isRunning = true;
-		bool m_isOrthographic = false;
 
 		LayerStack m_layerStack;
 
 		ImGuiLayer* m_imGuiLayer;
-
-		std::shared_ptr<Camera> m_camera;
-		glm::vec3 camRotation;
-		bool m_lookAtObject = false;
-
-		std::shared_ptr<Shader> m_shader;
-		std::shared_ptr<VertexArray> m_vertexArray;
-		glm::vec3 objectPositon;
-
-		std::shared_ptr<Shader> m_shader2;
-		std::shared_ptr<VertexArray> m_vertexArray2;
-		glm::vec3 objectPositon2;
-
-		std::shared_ptr<Shader> m_shader3;
-		std::shared_ptr<VertexArray> m_vertexArray3;
-		glm::vec3 objectPositon3;
-
-		void CreateScene();
-		void ResetScene();
 
 	};
 

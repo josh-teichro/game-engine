@@ -19,7 +19,6 @@ namespace GameEngine {
 
 	void Camera::ComputeMatrices()
 	{
-		GE_CORE_INFO("Recomputed camera matrices");
 		m_V = glm::translate(glm::mat4(1.0f), m_transform.position) * glm::toMat4(m_transform.orientation);
 		m_V = glm::inverse(m_V);
 		m_VP = m_P * m_V;
