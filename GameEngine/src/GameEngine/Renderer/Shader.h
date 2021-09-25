@@ -23,7 +23,7 @@ namespace GameEngine
 		virtual void SetUniformMat3f(const std::string& name, const glm::mat3& value) = 0;
 		virtual void SetUniformMat4f(const std::string& name, const glm::mat4& value) = 0;
 
-		static std::shared_ptr<Shader> Create(const std::string& filepath);
+		static Ref<Shader> Create(const std::string& filepath);
 
 	};
 

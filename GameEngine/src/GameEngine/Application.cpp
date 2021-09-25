@@ -17,10 +17,10 @@ namespace GameEngine {
 		s_instance = this;
 
 		Log::Init();
-		m_window = std::unique_ptr<Window>(Window::Create());
+		m_window = Scope<Window>(Window::Create());
 		m_window->SetEventCallback(std::bind(&Application::EventCallback, this, std::placeholders::_1));
 
-		m_time = std::make_unique<Time>();
+		m_time = MakeScope<Time>();
 
 		m_imGuiLayer = new ImGuiLayer();
 		PushOverlay(m_imGuiLayer);

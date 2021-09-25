@@ -6,11 +6,11 @@
 
 namespace GameEngine {
 
-	std::unique_ptr<RendererAPI> Renderer::s_rendererAPI = std::make_unique<OpenGLRendererAPI>();
+	Scope<RendererAPI> Renderer::s_rendererAPI = MakeScope<OpenGLRendererAPI>();
 	Renderer::SceneData* Renderer::s_sceneData = new Renderer::SceneData();
 	bool Renderer::s_sceneActive = false;
 
-	void Renderer::BeginScene(const std::shared_ptr<Camera>& camera)
+	void Renderer::BeginScene(const Ref<Camera>& camera)
 	{
 		GE_CORE_ASSERT(!s_sceneActive, "Cannot render two scenes at the same time!");
 
@@ -34,7 +34,7 @@ namespace GameEngine {
 		s_rendererAPI->Clear();
 	}
 
-	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const Transform& transform, const std::shared_ptr<Shader>& shader)
+	void Renderer::Submit(const Ref<VertexArray>& vertexArray, const Transform& transform, const Ref<Shader>& shader)
 	{
 		vertexArray->Bind();
 		shader->Bind();

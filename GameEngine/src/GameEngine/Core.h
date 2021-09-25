@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Core/Types.h"
+
 #ifndef GE_PLATFORM_WINDOWS
 	#error Game Engine only supports Windows!
 #endif

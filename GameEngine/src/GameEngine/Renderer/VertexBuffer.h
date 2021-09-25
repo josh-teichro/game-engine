@@ -64,7 +64,7 @@ namespace GameEngine
 		virtual const VertexBufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const VertexBufferLayout& layout) = 0;
 
-		static std::shared_ptr<VertexBuffer> Create(const void* data, unsigned int size, const VertexBufferLayout& layout);
+		static Ref<VertexBuffer> Create(const void* data, unsigned int size, const VertexBufferLayout& layout);
 	};
 
 }

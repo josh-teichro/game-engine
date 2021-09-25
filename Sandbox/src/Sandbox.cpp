@@ -122,10 +122,10 @@ void ExampleLayer::OnImGuiUpdate()
 		float aspect = (float)app.GetWindow().GetWidth() / app.GetWindow().GetHeight();
 
 		if (m_isOrthographic) {
-			m_camera = std::make_shared<GameEngine::OrthographicCamera>(-2.0f, 2.0f, -2.0f / aspect, 2.0f / aspect);
+			m_camera = GameEngine::MakeRef<GameEngine::OrthographicCamera>(-2.0f, 2.0f, -2.0f / aspect, 2.0f / aspect);
 		}
 		else {
-			m_camera = std::make_shared<GameEngine::PerspectiveCamera>(45.0f, aspect);
+			m_camera = GameEngine::MakeRef<GameEngine::PerspectiveCamera>(45.0f, aspect);
 		}
 
 		m_camera->GetTransform() = tempTransform;
@@ -181,10 +181,10 @@ void ExampleLayer::CreateScene()
 	float aspect = (float)app.GetWindow().GetWidth() / app.GetWindow().GetHeight();
 
 	if (m_isOrthographic) {
-		m_camera = std::make_shared<GameEngine::OrthographicCamera>(-2.0f, 2.0f, -2.0f / aspect, 2.0f / aspect);
+		m_camera = GameEngine::MakeRef<GameEngine::OrthographicCamera>(-2.0f, 2.0f, -2.0f / aspect, 2.0f / aspect);
 	}
 	else {
-		m_camera = std::make_shared<GameEngine::PerspectiveCamera>(45.0f, aspect);
+		m_camera = GameEngine::MakeRef<GameEngine::PerspectiveCamera>(45.0f, aspect);
 	}
 
 	// object 1
@@ -201,10 +201,10 @@ void ExampleLayer::CreateScene()
 		{ GameEngine::ShaderDataType::Vec4, "a_color" }
 	};
 
-	std::shared_ptr<GameEngine::VertexBuffer> vertexBuffer = GameEngine::VertexBuffer::Create(vertices, sizeof(vertices), layout);
+	GameEngine::Ref<GameEngine::VertexBuffer> vertexBuffer = GameEngine::VertexBuffer::Create(vertices, sizeof(vertices), layout);
 
 	uint32_t indices[3] = { 0, 1, 2 };
-	std::shared_ptr<GameEngine::IndexBuffer> indexBuffer = GameEngine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
+	GameEngine::Ref<GameEngine::IndexBuffer> indexBuffer = GameEngine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 
 	m_vertexArray->AddVertexBuffer(vertexBuffer);
 	m_vertexArray->SetIndexBuffer(indexBuffer);
@@ -225,10 +225,10 @@ void ExampleLayer::CreateScene()
 		{ GameEngine::ShaderDataType::Vec3, "a_position" }
 	};
 
-	std::shared_ptr<GameEngine::VertexBuffer> vertexBuffer2 = GameEngine::VertexBuffer::Create(vertices2, sizeof(vertices2), layout2);
+	GameEngine::Ref<GameEngine::VertexBuffer> vertexBuffer2 = GameEngine::VertexBuffer::Create(vertices2, sizeof(vertices2), layout2);
 
 	uint32_t indices2[3] = { 0, 1, 2 };
-	std::shared_ptr<GameEngine::IndexBuffer> indexBuffer2 = GameEngine::IndexBuffer::Create(indices2, sizeof(indices2) / sizeof(uint32_t));
+	GameEngine::Ref<GameEngine::IndexBuffer> indexBuffer2 = GameEngine::IndexBuffer::Create(indices2, sizeof(indices2) / sizeof(uint32_t));
 
 	m_vertexArray2->AddVertexBuffer(vertexBuffer2);
 	m_vertexArray2->SetIndexBuffer(indexBuffer2);
@@ -250,10 +250,10 @@ void ExampleLayer::CreateScene()
 		{ GameEngine::ShaderDataType::Vec4, "a_color" }
 	};
 
-	std::shared_ptr<GameEngine::VertexBuffer> vertexBuffer3 = GameEngine::VertexBuffer::Create(vertices3, sizeof(vertices3), layout3);
+	GameEngine::Ref<GameEngine::VertexBuffer> vertexBuffer3 = GameEngine::VertexBuffer::Create(vertices3, sizeof(vertices3), layout3);
 
 	uint32_t indices3[6] = { 0, 1, 2, 3, 1, 2 };
-	std::shared_ptr<GameEngine::IndexBuffer> indexBuffer3 = GameEngine::IndexBuffer::Create(indices3, sizeof(indices3) / sizeof(uint32_t));
+	GameEngine::Ref<GameEngine::IndexBuffer> indexBuffer3 = GameEngine::IndexBuffer::Create(indices3, sizeof(indices3) / sizeof(uint32_t));
 
 	m_vertexArray3->AddVertexBuffer(vertexBuffer3);
 	m_vertexArray3->SetIndexBuffer(indexBuffer3);

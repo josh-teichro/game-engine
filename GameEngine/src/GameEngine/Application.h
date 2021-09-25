@@ -35,8 +35,8 @@ namespace GameEngine {
 	private:
 		static Application* s_instance;
 
-		std::unique_ptr<Window> m_window;
-		std::unique_ptr<Time> m_time;
+		Scope<Window> m_window;
+		Scope<Time> m_time;
 		bool m_isRunning = true;
 
 		LayerStack m_layerStack;

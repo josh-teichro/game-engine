@@ -13,7 +13,7 @@ namespace GameEngine
 
 		virtual inline unsigned int GetCount() const = 0;
 
-		static std::shared_ptr<IndexBuffer> Create(const unsigned int* data, unsigned int count);
+		static Ref<IndexBuffer> Create(const unsigned int* data, unsigned int count);
 	};
 
 }

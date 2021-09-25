@@ -6,11 +6,11 @@
 namespace GameEngine
 {
 
-	std::shared_ptr<VertexArray> VertexArray::Create()
+	Ref<VertexArray> VertexArray::Create()
 	{
 		switch (Renderer::GetAPI())
 		{
-			case Renderer::API::OpenGL: return std::make_shared<OpenGLVertexArray>();
+			case Renderer::API::OpenGL: return MakeRef<OpenGLVertexArray>();
 			default: GE_CORE_ASSERT(false, "Render API currently does not support VertexArray!"); return nullptr;
 		}
 	}

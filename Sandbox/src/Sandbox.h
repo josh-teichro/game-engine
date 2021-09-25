@@ -27,7 +27,7 @@ public:
 	bool OnWindowResize(const GameEngine::WindowResizeEvent& e) override;
 
 private:
-	std::shared_ptr<GameEngine::Camera> m_camera;
+	GameEngine::Ref<GameEngine::Camera> m_camera;
 	glm::vec3 m_camRotation;
 	float m_cameraSpeed = 5.0f;
 	float m_cameraRotationSpeed = 5.0f;
@@ -38,16 +38,16 @@ private:
 	bool m_invertCameraY = false;
 	glm::vec2 m_prevMousePos = { 0.0f, 0.0f };
 
-	std::shared_ptr<GameEngine::Shader> m_shader;
-	std::shared_ptr<GameEngine::VertexArray> m_vertexArray;
+	GameEngine::Ref<GameEngine::Shader> m_shader;
+	GameEngine::Ref<GameEngine::VertexArray> m_vertexArray;
 	GameEngine::Transform objectTransform;
 
-	std::shared_ptr<GameEngine::Shader> m_shader2;
-	std::shared_ptr<GameEngine::VertexArray> m_vertexArray2;
+	GameEngine::Ref<GameEngine::Shader> m_shader2;
+	GameEngine::Ref<GameEngine::VertexArray> m_vertexArray2;
 	GameEngine::Transform objectTransform2;
 
-	std::shared_ptr<GameEngine::Shader> m_shader3;
-	std::shared_ptr<GameEngine::VertexArray> m_vertexArray3;
+	GameEngine::Ref<GameEngine::Shader> m_shader3;
+	GameEngine::Ref<GameEngine::VertexArray> m_vertexArray3;
 	GameEngine::Transform objectTransform3;
 
 private:
