@@ -40,15 +40,12 @@ private:
 
 	GameEngine::Ref<GameEngine::Shader> m_shader;
 	GameEngine::Ref<GameEngine::VertexArray> m_vertexArray;
-	GameEngine::Transform objectTransform;
-
-	GameEngine::Ref<GameEngine::Shader> m_shader2;
-	GameEngine::Ref<GameEngine::VertexArray> m_vertexArray2;
-	GameEngine::Transform objectTransform2;
+	GameEngine::Ref<GameEngine::Texture2D> m_texture;
+	GameEngine::Transform m_objectTransform;
 
 	GameEngine::Ref<GameEngine::Shader> m_shader3;
 	GameEngine::Ref<GameEngine::VertexArray> m_vertexArray3;
-	GameEngine::Transform objectTransform3;
+	GameEngine::Transform m_objectTransform3;
 
 private:
 	void CreateScene();

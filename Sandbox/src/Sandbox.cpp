@@ -83,22 +83,19 @@ inline void ExampleLayer::OnUpdate()
 
 	GameEngine::Renderer::BeginScene(m_camera);
 	if (m_camera->GetTransform().position.y > 0.0f) {
-		GameEngine::Renderer::Submit(m_vertexArray3, objectTransform3, m_shader3);
-		GameEngine::Renderer::Submit(m_vertexArray, objectTransform2, m_shader);
-		GameEngine::Renderer::Submit(m_vertexArray2, objectTransform, m_shader2);
+		GameEngine::Renderer::Submit(m_vertexArray3, m_objectTransform3, m_shader3);
+		GameEngine::Renderer::Submit(m_vertexArray, m_objectTransform, m_shader);
 	}
 	else {
-		GameEngine::Renderer::Submit(m_vertexArray, objectTransform, m_shader);
-		GameEngine::Renderer::Submit(m_vertexArray2, objectTransform2, m_shader2);
-		GameEngine::Renderer::Submit(m_vertexArray3, objectTransform3, m_shader3);
+		GameEngine::Renderer::Submit(m_vertexArray, m_objectTransform, m_shader);
+		GameEngine::Renderer::Submit(m_vertexArray3, m_objectTransform3, m_shader3);
 	}
 	GameEngine::Renderer::EndScene();
 }
 
 void ExampleLayer::OnImGuiUpdate()
 {
-	ImGui::SliderFloat3("Object 1 Position", &objectTransform.position[0], -10.0f, 10.0f);
-	ImGui::SliderFloat3("Object 2 Position", &objectTransform2.position[0], -10.0f, 10.0f);
+	ImGui::SliderFloat3("Object Position", &m_objectTransform.position[0], -10.0f, 10.0f);
 	ImGui::SliderFloat3("Camera Position", &m_camera->GetTransform().position[0], -10.0f, 10.0f);
 	ImGui::SliderFloat3("Camera Rotation", &m_camRotation[0], -180.0f, 180.0f);
 	ImGui::Checkbox("Lock Onto Object", &m_lookAtObject);
@@ -190,50 +187,30 @@ void ExampleLayer::CreateScene()
 	// object 1
 	m_vertexArray = GameEngine::VertexArray::Create();
 
-	float vertices[3 * 3 + 3 * 4] = {
-		-0.5f, 0.0f, 0.0f, 0.8f, 0.0f, 0.2f, 1.0f,
-		 0.45f, 0.0f, 0.0f, 0.2f, 0.8f, 0.1f, 1.0f,
-		 -0.5f,  0.95f, 0.0f, 0.0f, 0.4f, 0.7f, 1.0f
+	float vertices[(3 + 2) * 4] = {
+		-0.5f, 0.0f, 0.0f, 0.0f, 0.0f,
+		-0.5f, 1.0, 0.0f, 0.0f, 1.0f,
+		0.5, 0.0f, 0.0f, 1.0f, 0.0f,
+		0.5, 1.0, 0.0f, 1.0f, 1.0f
 	};
 
 	GameEngine::VertexBufferLayout layout = {
 		{ GameEngine::ShaderDataType::Vec3, "a_position" },
-		{ GameEngine::ShaderDataType::Vec4, "a_color" }
+		{ GameEngine::ShaderDataType::Vec2, "a_texCoord" }
 	};
 
 	GameEngine::Ref<GameEngine::VertexBuffer> vertexBuffer = GameEngine::VertexBuffer::Create(vertices, sizeof(vertices), layout);
 
-	uint32_t indices[3] = { 0, 1, 2 };
+	uint32_t indices[6] = { 0, 1, 2, 3, 1, 2 };
 	GameEngine::Ref<GameEngine::IndexBuffer> indexBuffer = GameEngine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 
 	m_vertexArray->AddVertexBuffer(vertexBuffer);
 	m_vertexArray->SetIndexBuffer(indexBuffer);
 
-
-	m_shader = GameEngine::Shader::Create("../GameEngine/res/shaders/red.shader");
-
-	// object 2
-	m_vertexArray2 = GameEngine::VertexArray::Create();
-
-	float vertices2[3 * 3] = {
-		0.5f, 1.0f, 0.0f,
-		-0.45f,  1.0f, 0.0f,
-		0.5f, 0.05f, 0.0f
-	};
-
-	GameEngine::VertexBufferLayout layout2 = {
-		{ GameEngine::ShaderDataType::Vec3, "a_position" }
-	};
-
-	GameEngine::Ref<GameEngine::VertexBuffer> vertexBuffer2 = GameEngine::VertexBuffer::Create(vertices2, sizeof(vertices2), layout2);
-
-	uint32_t indices2[3] = { 0, 1, 2 };
-	GameEngine::Ref<GameEngine::IndexBuffer> indexBuffer2 = GameEngine::IndexBuffer::Create(indices2, sizeof(indices2) / sizeof(uint32_t));
-
-	m_vertexArray2->AddVertexBuffer(vertexBuffer2);
-	m_vertexArray2->SetIndexBuffer(indexBuffer2);
-
-	m_shader2 = GameEngine::Shader::Create("../GameEngine/res/shaders/blue.shader");
+	m_shader = GameEngine::Shader::Create("../GameEngine/res/shaders/texture.shader");
+	m_texture = GameEngine::Texture2D::Create("../GameEngine/res/textures/checkerboard.png");
+	m_texture->Bind(0);
+	m_shader->SetUniform1i("u_texture", 0);
 
 	// object 3
 	m_vertexArray3 = GameEngine::VertexArray::Create();
@@ -269,7 +246,6 @@ void ExampleLayer::ResetScene()
 	m_camRotation = m_camera->GetTransform().GetEulerAngles();
 
 	// reset objects
-	objectTransform.Reset();
-	objectTransform2.Reset();
-	objectTransform3.Reset();
+	m_objectTransform.Reset();
+	m_objectTransform3.Reset();
 }

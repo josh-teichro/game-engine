@@ -13,13 +13,13 @@ namespace GameEngine
 
 
 	template<typename T, typename...Args>
-	std::unique_ptr<T> MakeScope(Args&&...args)
+	Scope<T> MakeScope(Args&&...args)
 	{
 		return std::make_unique<T>(std::forward<Args>(args)...);
 	}
 
 	template<typename T, typename...Args>
-	std::shared_ptr<T> MakeRef(Args&&...args) 
+	Ref<T> MakeRef(Args&&...args)
 	{
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
