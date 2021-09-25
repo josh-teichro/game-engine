@@ -3,7 +3,7 @@
 #include "gepch.h"
 #include "GameEngine/Core.h"
 #include "Event.h"
-#include "MouseButtonCodes.h"
+#include "MouseCodes.h"
 
 namespace GameEngine {
 

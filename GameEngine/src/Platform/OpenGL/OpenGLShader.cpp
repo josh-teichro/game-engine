@@ -77,9 +77,24 @@ namespace GameEngine
         glUniform1f(GetUniformLocation(name), v);
     }
 
-    void OpenGLShader::SetUniform4f(const std::string& name, float v1, float v2, float v3, float v4)
+    void OpenGLShader::SetUniform2f(const std::string& name, const glm::vec2& value)
     {
-        glUniform4f(GetUniformLocation(name), v1, v2, v3, v4);
+        glUniform2f(GetUniformLocation(name), value[0], value[1]);
+    }
+
+    void OpenGLShader::SetUniform3f(const std::string& name, const glm::vec3& value)
+    {
+        glUniform3f(GetUniformLocation(name), value[0], value[1], value[2]);
+    }
+
+    void OpenGLShader::SetUniform4f(const std::string& name, const glm::vec4& value)
+    {
+        glUniform4f(GetUniformLocation(name), value[0], value[1], value[2], value[3]);
+    }
+
+    void OpenGLShader::SetUniformMat3f(const std::string& name, const glm::mat3& matrix)
+    {
+        glUniformMatrix3fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
     }
 
     void OpenGLShader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix)

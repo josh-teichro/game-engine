@@ -9,9 +9,16 @@ namespace GameEngine
 	{
 	public:
 		glm::vec3 position;
+		glm::vec3 scale;
 		glm::quat orientation;
 	public:
-		Transform() : position(0.0f), orientation() {}
+		Transform() : position(0.0f), scale(1.0f), orientation() {}
+
+		void Reset() {
+			position = glm::vec3(0.0f);
+			scale = glm::vec3(1.0f);
+			orientation = glm::quat();
+		}
 
 		void SetEulerAngles(glm::vec3 eulerAngles) {
 			orientation = glm::radians(eulerAngles);
@@ -31,6 +38,10 @@ namespace GameEngine
 
 		glm::vec3 Up() {
 			return glm::normalize(orientation * glm::vec3(0.0f, 1.0f, 0.0f));
+		}
+
+		glm::mat4 operator*(const glm::mat4& other) const {
+			return glm::translate(glm::scale(other, scale) * glm::toMat4(orientation), position);
 		}
 	};
 

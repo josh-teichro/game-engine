@@ -8,9 +8,9 @@
 #include "GameEngine/Core/Time.h"
 
 // --- Events -------------------------------------
-#include "GameEngine/Input.h"
+#include "GameEngine/Events/Input.h"
 #include "GameEngine/Events/KeyCodes.h"
-#include "GameEngine/Events/MouseButtonCodes.h"
+#include "GameEngine/Events/MouseCodes.h"
 // ------------------------------------------------
 
 // --- Renderer -----------------------------------

@@ -9,33 +9,34 @@ namespace GameEngine {
 
 	Input* Input::s_instance = nullptr;
 
-	WindowsInput::WindowsInput()
+	WindowsInput::WindowsInput() :
+		m_isCursorLocked(false)
 	{
 		// GLFW cursors
 		// (By design, on X11 cursors are user configurable and some cursors may be missing. When a cursor doesn't exist,
 		// GLFW will emit an error which will often be printed by the app, so we temporarily disable error reporting.
 		// Missing cursors will return NULL and our SetMouseCursor() function will use the Arrow cursor instead.)
 		GLFWerrorfun prev_error_callback = glfwSetErrorCallback(NULL);
-		m_cursors[MouseCursor_Arrow] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-		m_cursors[MouseCursor_Hand] = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
-		m_cursors[MouseCursor_TextInput] = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
-		m_cursors[MouseCursor_ResizeNS] = glfwCreateStandardCursor(GLFW_RESIZE_NS_CURSOR);
-		m_cursors[MouseCursor_ResizeEW] = glfwCreateStandardCursor(GLFW_RESIZE_EW_CURSOR);
-		m_cursors[MouseCursor_ResizeNESW] = glfwCreateStandardCursor(GLFW_RESIZE_NESW_CURSOR);
-		m_cursors[MouseCursor_ResizeNWSE] = glfwCreateStandardCursor(GLFW_RESIZE_NWSE_CURSOR);
-		m_cursors[MouseCursor_ResizeAll] = glfwCreateStandardCursor(GLFW_RESIZE_ALL_CURSOR);
-		m_cursors[MouseCursor_NotAllowed] = glfwCreateStandardCursor(GLFW_NOT_ALLOWED_CURSOR);
+		m_cursors[(int)MouseCursor::Arrow] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+		m_cursors[(int)MouseCursor::Hand] = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
+		m_cursors[(int)MouseCursor::TextInput] = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
+		m_cursors[(int)MouseCursor::ResizeNS] = glfwCreateStandardCursor(GLFW_RESIZE_NS_CURSOR);
+		m_cursors[(int)MouseCursor::ResizeEW] = glfwCreateStandardCursor(GLFW_RESIZE_EW_CURSOR);
+		m_cursors[(int)MouseCursor::ResizeNESW] = glfwCreateStandardCursor(GLFW_RESIZE_NESW_CURSOR);
+		m_cursors[(int)MouseCursor::ResizeNWSE] = glfwCreateStandardCursor(GLFW_RESIZE_NWSE_CURSOR);
+		m_cursors[(int)MouseCursor::ResizeAll] = glfwCreateStandardCursor(GLFW_RESIZE_ALL_CURSOR);
+		m_cursors[(int)MouseCursor::NotAllowed] = glfwCreateStandardCursor(GLFW_NOT_ALLOWED_CURSOR);
 		glfwSetErrorCallback(prev_error_callback);
 	}
 
 	WindowsInput::~WindowsInput()
 	{
 		// Destroy GLFW cursors
-		for (int cursor_n = 0; cursor_n < MouseCursor_Count; cursor_n++)
+		for (int cursor_n = 0; cursor_n < (int)MouseCursor::Count; cursor_n++)
 			glfwDestroyCursor(m_cursors[cursor_n]);
 	}
 
-	Input::MousePosition WindowsInput::GetMousePositionImpl()
+	glm::vec2 WindowsInput::GetMousePositionImpl()
 	{
 		double x, y;
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
@@ -56,15 +57,18 @@ namespace GameEngine {
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	void WindowsInput::SetMouseCursorImpl(Input::MouseCursor cursor)
+	void WindowsInput::SetMouseCursorImpl(MouseCursor cursor)
 	{
+		if (m_isCursorLocked)
+			return;
+
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 
-		if (cursor == MouseCursor_None) {
+		if (cursor == MouseCursor::None) {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 		}
 		else {
-			glfwSetCursor(window, m_cursors[cursor] ? m_cursors[cursor] : m_cursors[MouseCursor_Arrow]);
+			glfwSetCursor(window, m_cursors[(int)cursor] ? m_cursors[(int)cursor] : m_cursors[(int)MouseCursor::Arrow]);
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}
 	}
@@ -79,6 +83,20 @@ namespace GameEngine {
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		glfwSetClipboardString(window, text);
+	}
+
+	void WindowsInput::LockMouseCursorImpl()
+	{
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		m_isCursorLocked = true;
+	}
+
+	void WindowsInput::UnlockMouseCursorImpl()
+	{
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		m_isCursorLocked = false;
 	}
 
 }

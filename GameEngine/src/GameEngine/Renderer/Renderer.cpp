@@ -6,17 +6,16 @@
 
 namespace GameEngine {
 
-	Renderer::API Renderer::s_API = Renderer::API::OpenGL;
 	std::unique_ptr<RendererAPI> Renderer::s_rendererAPI = std::make_unique<OpenGLRendererAPI>();
+	Renderer::SceneData* Renderer::s_sceneData = new Renderer::SceneData();
 	bool Renderer::s_sceneActive = false;
-	std::shared_ptr<Camera> Renderer::s_camera = nullptr;
 
 	void Renderer::BeginScene(const std::shared_ptr<Camera>& camera)
 	{
 		GE_CORE_ASSERT(!s_sceneActive, "Cannot render two scenes at the same time!");
 
-		s_camera = camera;
-		s_camera->ComputeMatrices();
+		camera->RecalculateMatrices();
+		s_sceneData->ViewProjectionMatrix = camera->VP();
 		s_sceneActive = true;
 	}
 
@@ -35,11 +34,11 @@ namespace GameEngine {
 		s_rendererAPI->Clear();
 	}
 
-	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transform, const std::shared_ptr<Shader>& shader)
+	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const Transform& transform, const std::shared_ptr<Shader>& shader)
 	{
 		vertexArray->Bind();
 		shader->Bind();
-		shader->SetUniformMat4f("u_MVP", s_camera->VP() * transform);
+		shader->SetUniformMat4f("u_MVP", transform * s_sceneData->ViewProjectionMatrix);
 		s_rendererAPI->DrawArray(vertexArray);
 	}
 

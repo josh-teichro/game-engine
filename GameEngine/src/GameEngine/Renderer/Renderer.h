@@ -11,9 +11,7 @@ namespace GameEngine {
 
 	class Renderer {
 	public:
-		enum class API {
-			None = 0, OpenGL = 1
-		};
+		using API = RendererAPI::API;
 
 	public:
 		static void BeginScene(const std::shared_ptr<Camera>& camera);
@@ -22,16 +20,19 @@ namespace GameEngine {
 		static void SetClearColor(const glm::vec4& color);
 		static void Clear();
 
-		static void Submit(const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transform, const std::shared_ptr<Shader>& shader);
+		static void Submit(const std::shared_ptr<VertexArray>& vertexArray, const Transform& transform, const std::shared_ptr<Shader>& shader);
 
-		static API GetAPI() { return s_API; }
+		static API GetAPI() { return s_rendererAPI->GetAPI(); }
 
 	private:
-		static bool s_sceneActive;
-		static API s_API;
-		static std::unique_ptr<RendererAPI> s_rendererAPI;
+		struct SceneData
+		{
+			glm::mat4 ViewProjectionMatrix;
+		};
 
-		static std::shared_ptr<Camera> s_camera;
+		static std::unique_ptr<RendererAPI> s_rendererAPI;
+		static SceneData* s_sceneData;
+		static bool s_sceneActive;
 
 	};
 

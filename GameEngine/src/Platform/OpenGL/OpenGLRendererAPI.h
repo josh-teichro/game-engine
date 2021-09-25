@@ -13,7 +13,10 @@ namespace GameEngine
 	public:
 		virtual void SetClearColor(const glm::vec4& color) override;
 		virtual void Clear() override;
+
 		virtual void DrawArray(const std::shared_ptr<VertexArray>& vertexArray) override;
+
+		virtual RendererAPI::API GetAPI() override { return RendererAPI::API::OpenGL; }
 
 	};
 

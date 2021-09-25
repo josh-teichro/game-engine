@@ -26,7 +26,9 @@ inline ExampleLayer::ExampleLayer()
 	CreateScene();
 	ResetScene();
 
+	m_moveCamera = false;
 	m_prevMousePos = { GameEngine::Input::GetMousePosition().x, GameEngine::Input::GetMousePosition().y };
+	//GameEngine::Input::LockMouseCursor();
 }
 
 inline void ExampleLayer::OnUpdate()
@@ -34,11 +36,6 @@ inline void ExampleLayer::OnUpdate()
 	float deltaTime = GameEngine::Time::GetDeltaTime();
 	//static bool show = true;
 	//ImGui::ShowDemoWindow(&show);
-
-	glm::vec4 pos = { 0.5f, 0.5f, 0.0f, 0.0f };
-	glm::vec3 Mpos = glm::mat4(1) * pos;
-	glm::vec3 VMpos = m_camera->V() * glm::mat4(1) * pos;
-	glm::vec3 PVMpos = m_camera->VP() * glm::mat4(1) * pos;
 
 	// move camera
 	if (m_moveCamera) {
@@ -86,37 +83,46 @@ inline void ExampleLayer::OnUpdate()
 
 	GameEngine::Renderer::BeginScene(m_camera);
 	if (m_camera->GetTransform().position.y > 0.0f) {
-		GameEngine::Renderer::Submit(m_vertexArray3, glm::translate(glm::mat4(1.0f), objectPositon3), m_shader3);
-		GameEngine::Renderer::Submit(m_vertexArray, glm::translate(glm::mat4(1.0f), objectPositon), m_shader);
-		GameEngine::Renderer::Submit(m_vertexArray2, glm::translate(glm::mat4(1.0f), objectPositon2), m_shader2);
+		GameEngine::Renderer::Submit(m_vertexArray3, objectTransform3, m_shader3);
+		GameEngine::Renderer::Submit(m_vertexArray, objectTransform2, m_shader);
+		GameEngine::Renderer::Submit(m_vertexArray2, objectTransform, m_shader2);
 	}
 	else {
-		GameEngine::Renderer::Submit(m_vertexArray, glm::translate(glm::mat4(1.0f), objectPositon), m_shader);
-		GameEngine::Renderer::Submit(m_vertexArray2, glm::translate(glm::mat4(1.0f), objectPositon2), m_shader2);
-		GameEngine::Renderer::Submit(m_vertexArray3, glm::translate(glm::mat4(1.0f), objectPositon3), m_shader3);
+		GameEngine::Renderer::Submit(m_vertexArray, objectTransform, m_shader);
+		GameEngine::Renderer::Submit(m_vertexArray2, objectTransform2, m_shader2);
+		GameEngine::Renderer::Submit(m_vertexArray3, objectTransform3, m_shader3);
 	}
 	GameEngine::Renderer::EndScene();
 }
 
 void ExampleLayer::OnImGuiUpdate()
 {
-	ImGui::SliderFloat3("Object 1 Position", &objectPositon.x, -10.0f, 10.0f);
-	ImGui::SliderFloat3("Object 2 Position", &objectPositon2.x, -10.0f, 10.0f);
-	ImGui::SliderFloat3("Camera Position", &m_camera->GetTransform().position.x, -10.0f, 10.0f);
-	ImGui::SliderFloat3("Camera Rotation", &m_camRotation.x, -180.0f, 180.0f);
+	ImGui::SliderFloat3("Object 1 Position", &objectTransform.position[0], -10.0f, 10.0f);
+	ImGui::SliderFloat3("Object 2 Position", &objectTransform2.position[0], -10.0f, 10.0f);
+	ImGui::SliderFloat3("Camera Position", &m_camera->GetTransform().position[0], -10.0f, 10.0f);
+	ImGui::SliderFloat3("Camera Rotation", &m_camRotation[0], -180.0f, 180.0f);
 	ImGui::Checkbox("Lock Onto Object", &m_lookAtObject);
 	ImGui::Checkbox("Invert Camera X", &m_invertCameraX);
 	ImGui::Checkbox("Invert Camera Y", &m_invertCameraY);
-	ImGui::Checkbox("Move Camera", &m_moveCamera);
 
-	if (ImGui::Button(m_isOrthographic ? "Perspective View" : "Orthographic View")) {
+	ImGui::BeginDisabled(m_moveCamera);
+	if (ImGui::Button("Move Camera"))
+	{
+		GameEngine::Input::LockMouseCursor();
+		m_moveCamera = true;
+		m_prevMousePos = GameEngine::Input::GetMousePosition();
+	}
+	ImGui::EndDisabled();
+
+	if (ImGui::Button(m_isOrthographic ? "Perspective View" : "Orthographic View")) 
+	{
 		m_isOrthographic = !m_isOrthographic;
 		GameEngine::Transform tempTransform = m_camera->GetTransform();
 		GameEngine::Application& app = GameEngine::Application::Get();
 		float aspect = (float)app.GetWindow().GetWidth() / app.GetWindow().GetHeight();
 
 		if (m_isOrthographic) {
-			m_camera = std::make_shared<GameEngine::OrthographicCamera>(-2.0f, 2.0f, 2.0f / aspect, -2.0f / aspect, 0.1f, 100.0f);
+			m_camera = std::make_shared<GameEngine::OrthographicCamera>(-2.0f, 2.0f, -2.0f / aspect, 2.0f / aspect);
 		}
 		else {
 			m_camera = std::make_shared<GameEngine::PerspectiveCamera>(45.0f, aspect);
@@ -139,11 +145,30 @@ bool ExampleLayer::OnMouseDown(const GameEngine::MouseDownEvent& e)
 
 bool ExampleLayer::OnKeyUp(const GameEngine::KeyUpEvent& e)
 {
-	if (e.keyCode == GameEngine::KeyCode::Escape) {
+	if (e.keyCode == GameEngine::KeyCode::Escape) 
+	{
+		GameEngine::Input::UnlockMouseCursor();
 		m_moveCamera = false;
 	}
-	else if (e.keyCode == GameEngine::KeyCode::M) {
+	else if (e.keyCode == GameEngine::KeyCode::M)
+	{
+		GameEngine::Input::LockMouseCursor();
 		m_moveCamera = true;
+	}
+
+	return false;
+}
+
+bool ExampleLayer::OnWindowResize(const GameEngine::WindowResizeEvent& e)
+{
+	GameEngine::Application& app = GameEngine::Application::Get();
+	float aspect = (float)app.GetWindow().GetWidth() / app.GetWindow().GetHeight();
+
+	if (m_isOrthographic) {
+		std::dynamic_pointer_cast<GameEngine::OrthographicCamera>(m_camera)->SetBounds(-2.0f, 2.0f, -2.0f / aspect, 2.0f / aspect);
+	}
+	else {
+		std::dynamic_pointer_cast<GameEngine::PerspectiveCamera>(m_camera)->SetAspect(aspect);
 	}
 
 	return false;
@@ -156,7 +181,7 @@ void ExampleLayer::CreateScene()
 	float aspect = (float)app.GetWindow().GetWidth() / app.GetWindow().GetHeight();
 
 	if (m_isOrthographic) {
-		m_camera = std::make_shared<GameEngine::OrthographicCamera>(-2.0f, 2.0f, 2.0f / aspect, -2.0f / aspect, 0.1f, 100.0f);
+		m_camera = std::make_shared<GameEngine::OrthographicCamera>(-2.0f, 2.0f, -2.0f / aspect, 2.0f / aspect);
 	}
 	else {
 		m_camera = std::make_shared<GameEngine::PerspectiveCamera>(45.0f, aspect);
@@ -244,7 +269,7 @@ void ExampleLayer::ResetScene()
 	m_camRotation = m_camera->GetTransform().GetEulerAngles();
 
 	// reset objects
-	objectPositon = glm::vec3(0.0f);
-	objectPositon2 = glm::vec3(0.0f);
-	objectPositon3 = glm::vec3(0.0f);
+	objectTransform.Reset();
+	objectTransform2.Reset();
+	objectTransform3.Reset();
 }

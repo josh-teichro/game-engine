@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GameEngine/Layer.h"
-#include "GameEngine/Events/MouseButtonCodes.h"
+#include "GameEngine/Events/MouseCodes.h"
 
 namespace GameEngine {
 
