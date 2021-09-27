@@ -1,0 +1,4 @@
+Some things I didn't add that were added in Hazel.
+
+Aug. 27, 2019
+Changed IndexBuffer in OpenGL to be bound to the 'GL_ARRAY_BUFFER' target instead of 'GL_ELEMENT_ARRAY_BUFFER'.

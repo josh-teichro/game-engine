@@ -20,6 +20,8 @@ namespace GameEngine {
 		m_window = Scope<Window>(Window::Create());
 		m_window->SetEventCallback(std::bind(&Application::EventCallback, this, std::placeholders::_1));
 
+		Renderer::Init();
+
 		m_time = MakeScope<Time>();
 
 		m_imGuiLayer = new ImGuiLayer();

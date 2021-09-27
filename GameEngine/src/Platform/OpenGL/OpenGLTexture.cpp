@@ -19,10 +19,24 @@ namespace GameEngine
 		m_width = width;
 		m_height = height;
 
+		GLenum internalFormat = 0, dataFormat = 0;
+		if (channels == 4)
+		{
+			internalFormat = GL_RGBA8;
+			dataFormat = GL_RGBA;
+		}
+		else if (channels == 3)
+		{
+			internalFormat = GL_RGB8;
+			dataFormat = GL_RGB;
+		}
+
+		GE_CORE_ASSERT(internalFormat & dataFormat, "Failed to load image: format not supported!");
+
 		glGenTextures(1, &m_id);
 		glBindTexture(GL_TEXTURE_2D, m_id);
 		//glCreateTextures(GL_TEXTURE_2D, 1, &m_id);
-		//glTextureStorage2D(m_id, 1, GL_RGB8, m_width, m_height);
+		//glTextureStorage2D(m_id, 1, internalFormat, m_width, m_height);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -31,8 +45,8 @@ namespace GameEngine
 		//glTextureParameteri(m_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		//glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		//glTextureSubImage2D(m_id, 0, 0, 0, m_width, m_height, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_width, m_height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
+		//glTextureSubImage2D(m_id, 0, 0, 0, m_width, m_height, dataFormat, GL_UNSIGNED_BYTE, data);
 
 		//stbi_image_free(data);
 	}

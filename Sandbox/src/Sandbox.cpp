@@ -207,8 +207,8 @@ void ExampleLayer::CreateScene()
 	m_vertexArray->AddVertexBuffer(vertexBuffer);
 	m_vertexArray->SetIndexBuffer(indexBuffer);
 
-	m_shader = GameEngine::Shader::Create("../GameEngine/res/shaders/texture.shader");
-	m_texture = GameEngine::Texture2D::Create("../GameEngine/res/textures/checkerboard.png");
+	m_shader = GameEngine::Shader::Create("./res/shaders/texture.shader");
+	m_texture = GameEngine::Texture2D::Create("./res/textures/logo.png");
 	m_texture->Bind(0);
 	m_shader->SetUniform1i("u_texture", 0);
 
@@ -235,7 +235,7 @@ void ExampleLayer::CreateScene()
 	m_vertexArray3->AddVertexBuffer(vertexBuffer3);
 	m_vertexArray3->SetIndexBuffer(indexBuffer3);
 
-	m_shader3 = GameEngine::Shader::Create("../GameEngine/res/shaders/basic.shader");
+	m_shader3 = GameEngine::Shader::Create("./res/shaders/basic.shader");
 }
 
 void ExampleLayer::ResetScene()

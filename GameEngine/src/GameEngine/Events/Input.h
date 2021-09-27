@@ -12,7 +12,13 @@ namespace GameEngine {
 
 	class Input
 	{
+	protected:
+		Input() = default;
+
 	public:
+		Input(const Input&) = delete;
+		Input& operator=(const Input&) = delete;
+
 		virtual ~Input() {};
 
 		inline static glm::vec2 GetMousePosition() { return s_instance->GetMousePositionImpl(); }

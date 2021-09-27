@@ -14,6 +14,8 @@ namespace GameEngine {
 		using API = RendererAPI::API;
 
 	public:
+		static void Init();
+
 		static void BeginScene(const Ref<Camera>& camera);
 		static void EndScene();
 

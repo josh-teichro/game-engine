@@ -10,6 +10,11 @@ namespace GameEngine {
 	Renderer::SceneData* Renderer::s_sceneData = new Renderer::SceneData();
 	bool Renderer::s_sceneActive = false;
 
+	void Renderer::Init()
+	{
+		s_rendererAPI->Init();
+	}
+
 	void Renderer::BeginScene(const Ref<Camera>& camera)
 	{
 		GE_CORE_ASSERT(!s_sceneActive, "Cannot render two scenes at the same time!");

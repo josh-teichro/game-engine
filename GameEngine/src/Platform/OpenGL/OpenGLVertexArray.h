@@ -25,6 +25,7 @@ namespace GameEngine
 
 	private:
 		uint32_t m_id;
+		uint32_t m_vertexBufferIndex;
 
 		std::vector<Ref<VertexBuffer>> m_vertexBuffers;
 		Ref<IndexBuffer> m_indexBuffer;

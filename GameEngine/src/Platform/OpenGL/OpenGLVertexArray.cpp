@@ -7,7 +7,8 @@
 namespace GameEngine
 {
 
-    OpenGLVertexArray::OpenGLVertexArray()
+    OpenGLVertexArray::OpenGLVertexArray() :
+        m_vertexBufferIndex(0)
     {
         glGenVertexArrays(1, &m_id);
         glBindVertexArray(m_id);
@@ -31,9 +32,9 @@ namespace GameEngine
         {
             const auto& el = elements[i];
 
-            glEnableVertexAttribArray(i); 
+            glEnableVertexAttribArray(m_vertexBufferIndex + i);
             glVertexAttribPointer(
-                i, 
+                m_vertexBufferIndex + i,
                 el.GetComponentCount(), 
                 ShaderDataTypeToOpenGLBaseType(el.type), 
                 el.normalized ? GL_TRUE : GL_FALSE,
@@ -43,6 +44,7 @@ namespace GameEngine
         }
 
         m_vertexBuffers.push_back(vertexBuffer);
+        m_vertexBufferIndex += (uint32_t)elements.size();
     }
 
     void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)

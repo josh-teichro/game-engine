@@ -52,16 +52,13 @@ namespace GameEngine {
 	*/
 	class EventDispatcher {
 	public:
-		template <typename T>
-		using EventCallback = std::function<bool(const T&)>;
-
 		EventDispatcher(const Event& event) : m_event(event) {}
 
-		template <typename T>
-		bool Dispatch(EventCallback<T> callback)
+		template <typename T, typename F>
+		bool Dispatch(F callback)
 		{
 			if (m_event.GetEventType() == T::GetStaticEventType()) {
-				return callback(*(T*)&m_event);
+				return callback(static_cast<const T&>(m_event));
 			}
 
 			return false;
