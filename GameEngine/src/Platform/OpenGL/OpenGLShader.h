@@ -5,6 +5,7 @@
 #include "glm/glm.hpp"
 
 #include <unordered_map>
+#include <glad/glad.h>
 
 namespace GameEngine
 {
@@ -25,6 +26,7 @@ namespace GameEngine
 	{
 	public:
 		OpenGLShader(const std::string& filepath);
+		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
 		virtual ~OpenGLShader();
 
 		virtual void Bind() const override;
@@ -43,8 +45,10 @@ namespace GameEngine
 	private:
 		int GetUniformLocation(const std::string& name);
 
-		struct ShaderProgramSource ParseShader(const std::string& filepath);
-		int CompileShader(unsigned int type, const std::string& source);
+
+		std::string ReadFile(const std::string& filepath);
+		std::unordered_map<GLenum, std::string> ParseShader(const std::string& shaderSource);
+		int CompileShader(std::unordered_map<GLenum, std::string> shaderSources);
 
 	private:
 		unsigned int m_id;

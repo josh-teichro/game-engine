@@ -1,4 +1,4 @@
-#vertex shader
+#type vertex
 #version 330 core
 
 layout(location = 0) in vec4 a_position;
@@ -13,7 +13,7 @@ void main()
     v_position = u_MVP * a_position;
 }
 
-#fragment shader
+#type fragment
 #version 330 core
 
 in vec4 v_position;

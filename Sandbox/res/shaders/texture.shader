@@ -1,4 +1,4 @@
-#vertex shader
+#type vertex
 #version 330 core
 
 layout(location = 0) in vec4 a_position;
@@ -14,7 +14,7 @@ void main()
     v_texCoord = a_texCoord;
 }
 
-#fragment shader
+#type fragment
 #version 330 core
 
 in vec2 v_texCoord;
