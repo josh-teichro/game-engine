@@ -38,12 +38,12 @@ private:
 	bool m_invertCameraY = false;
 	glm::vec2 m_prevMousePos = { 0.0f, 0.0f };
 
-	GameEngine::Ref<GameEngine::Shader> m_shader;
+	GameEngine::ShaderLibrary m_shaderLibrary;
+
 	GameEngine::Ref<GameEngine::VertexArray> m_vertexArray;
 	GameEngine::Ref<GameEngine::Texture2D> m_texture;
 	GameEngine::Transform m_objectTransform;
 
-	GameEngine::Ref<GameEngine::Shader> m_shader3;
 	GameEngine::Ref<GameEngine::VertexArray> m_vertexArray3;
 	GameEngine::Transform m_objectTransform3;
 

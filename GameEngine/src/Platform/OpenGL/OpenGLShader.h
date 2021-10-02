@@ -26,7 +26,8 @@ namespace GameEngine
 	{
 	public:
 		OpenGLShader(const std::string& filepath);
-		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
+		OpenGLShader(const std::string& name, const std::string& filepath);
+		OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 		virtual ~OpenGLShader();
 
 		virtual void Bind() const override;
@@ -42,9 +43,10 @@ namespace GameEngine
 		virtual void SetUniformMat3f(const std::string& name, const glm::mat3& value) override;
 		virtual void SetUniformMat4f(const std::string& name, const glm::mat4& value) override;
 
+		virtual const std::string& GetName() const override { return m_name; }
+
 	private:
 		int GetUniformLocation(const std::string& name);
-
 
 		std::string ReadFile(const std::string& filepath);
 		std::unordered_map<GLenum, std::string> ParseShader(const std::string& shaderSource);
@@ -52,7 +54,7 @@ namespace GameEngine
 
 	private:
 		unsigned int m_id;
-		std::string m_filepath;
+		std::string m_name;
 		std::unordered_map<std::string, int> m_uniformLocationCache;
 	};
 

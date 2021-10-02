@@ -82,13 +82,17 @@ inline void ExampleLayer::OnUpdate()
 	GameEngine::Renderer::Clear();
 
 	GameEngine::Renderer::BeginScene(m_camera);
+
+	auto basicShader = m_shaderLibrary.Get("basic");
+	auto textureShader = m_shaderLibrary.Get("texture");
+
 	if (m_camera->GetTransform().position.y > 0.0f) {
-		GameEngine::Renderer::Submit(m_vertexArray3, m_objectTransform3, m_shader3);
-		GameEngine::Renderer::Submit(m_vertexArray, m_objectTransform, m_shader);
+		GameEngine::Renderer::Submit(m_vertexArray3, m_objectTransform3, basicShader);
+		GameEngine::Renderer::Submit(m_vertexArray, m_objectTransform, textureShader);
 	}
 	else {
-		GameEngine::Renderer::Submit(m_vertexArray, m_objectTransform, m_shader);
-		GameEngine::Renderer::Submit(m_vertexArray3, m_objectTransform3, m_shader3);
+		GameEngine::Renderer::Submit(m_vertexArray, m_objectTransform, textureShader);
+		GameEngine::Renderer::Submit(m_vertexArray3, m_objectTransform3, basicShader);
 	}
 	GameEngine::Renderer::EndScene();
 }
@@ -207,10 +211,10 @@ void ExampleLayer::CreateScene()
 	m_vertexArray->AddVertexBuffer(vertexBuffer);
 	m_vertexArray->SetIndexBuffer(indexBuffer);
 
-	m_shader = GameEngine::Shader::Create("./res/shaders/texture.shader");
+	auto textureShader = m_shaderLibrary.Load("./res/shaders/texture.shader");
 	m_texture = GameEngine::Texture2D::Create("./res/textures/logo.png");
 	m_texture->Bind(0);
-	m_shader->SetUniform1i("u_texture", 0);
+	textureShader->SetUniform1i("u_texture", 0);
 
 	// object 3
 	m_vertexArray3 = GameEngine::VertexArray::Create();
@@ -235,7 +239,7 @@ void ExampleLayer::CreateScene()
 	m_vertexArray3->AddVertexBuffer(vertexBuffer3);
 	m_vertexArray3->SetIndexBuffer(indexBuffer3);
 
-	m_shader3 = GameEngine::Shader::Create("./res/shaders/basic.shader");
+	m_shaderLibrary.Load("./res/shaders/basic.shader");
 }
 
 void ExampleLayer::ResetScene()
