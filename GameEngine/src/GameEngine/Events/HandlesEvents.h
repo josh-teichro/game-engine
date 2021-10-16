@@ -16,7 +16,7 @@ namespace GameEngine {
 	class HandlesEvents
 	{
 	public:
-		bool OnEvent(const Event& e)
+		virtual bool OnEvent(const Event& e)
 		{
 			switch (e.GetEventType())
 			{

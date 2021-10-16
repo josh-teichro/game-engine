@@ -8,6 +8,10 @@
 #include "GameEngine/Core/Time.h"
 #include "GameEngine/Core/Types.h"
 
+// --- Components ---------------------------------
+#include "GameEngine/Components/CameraController2D.h"
+#include "GameEngine/Components/CameraController3D.h"
+
 // --- Events -------------------------------------
 #include "GameEngine/Events/Input.h"
 #include "GameEngine/Events/KeyCodes.h"
@@ -16,7 +20,7 @@
 
 // --- Renderer -----------------------------------
 #include "GameEngine/Renderer/Renderer.h"
-#include "GameEngine/Renderer/Transform.h"
+#include "GameEngine/Components/Transform.h"
 #include "GameEngine/Renderer/Camera.h"
 
 #include "GameEngine/Renderer/VertexBuffer.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Transform.h"
+#include "GameEngine/Components/Transform.h"
 #include "glm/glm.hpp"
 
 namespace GameEngine
@@ -43,18 +43,18 @@ namespace GameEngine
 	class PerspectiveCamera : public Camera
 	{
 	public:
-		PerspectiveCamera(float fov, float aspect, float clipNear = 0.1f, float clipFar = 100.0f);
+		PerspectiveCamera(float fov, float aspectRatio, float clipNear = 0.1f, float clipFar = 100.0f);
 
 		virtual void RecalculatePMatrix() override;
 
 		void SetFOV(float fov);
-		void SetAspect(float aspect);
+		void SetAspectRatio(float aspectRatio);
 		void SetClipNear(float clipNear);
 		void SetClipFar(float clipFar);
 
 	private:
 		float m_fov;
-		float m_aspect;
+		float m_aspectRatio;
 		float m_clipNear, m_clipFar;
 	};
 
@@ -64,11 +64,11 @@ namespace GameEngine
 	class OrthographicCamera : public Camera
 	{
 	public:
-		OrthographicCamera(float left, float right, float bottom, float top, float zNear = 0.1f, float zFar = 100.0f);
+		OrthographicCamera(float left, float right, float bottom, float top, float zNear = -1.0f, float zFar = 1.0f);
 
 		virtual void RecalculatePMatrix() override;
 
-		void SetBounds(float left, float right, float bottom, float top, float zNear = 0.1f, float zFar = 100.0f);
+		void SetBounds(float left, float right, float bottom, float top, float zNear = -1.0f, float zFar = 1.0f);
 
 	private:
 		float m_left, m_right, m_bottom, m_top, m_zNear, m_zFar;

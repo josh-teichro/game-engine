@@ -20,15 +20,13 @@ GameEngine::Application* GameEngine::CreateApplication() {
 /**
 * Example Layer
 */
-inline ExampleLayer::ExampleLayer()
-	: Layer("Example")
+inline ExampleLayer::ExampleLayer() : 
+	Layer("Example"),
+	m_cameraController2D(1.0f),
+	m_cameraController3D(45.0f)
 {
 	CreateScene();
 	ResetScene();
-
-	m_moveCamera = false;
-	m_prevMousePos = { GameEngine::Input::GetMousePosition().x, GameEngine::Input::GetMousePosition().y };
-	//GameEngine::Input::LockMouseCursor();
 }
 
 inline void ExampleLayer::OnUpdate()
@@ -37,56 +35,29 @@ inline void ExampleLayer::OnUpdate()
 	//static bool show = true;
 	//ImGui::ShowDemoWindow(&show);
 
-	// move camera
-	if (m_moveCamera) {
-		if (GameEngine::Input::GetKeyDown(GameEngine::KeyCode::W)) {
-			m_camera->GetTransform().position += deltaTime * m_camera->GetTransform().Forward() * m_cameraSpeed;
-		}
-		else if (GameEngine::Input::GetKeyDown(GameEngine::KeyCode::S)) {
-			m_camera->GetTransform().position -= deltaTime * m_camera->GetTransform().Forward() * m_cameraSpeed;
-		}
+	if (m_is2D)
+		m_cameraController2D.OnUpdate();
+	else
+		m_cameraController3D.OnUpdate();
 
-		if (GameEngine::Input::GetKeyDown(GameEngine::KeyCode::A)) {
-			m_camera->GetTransform().position -= deltaTime * m_camera->GetTransform().Right() * m_cameraSpeed;
-		}
-		else if (GameEngine::Input::GetKeyDown(GameEngine::KeyCode::D)) {
-			m_camera->GetTransform().position += deltaTime * m_camera->GetTransform().Right() * m_cameraSpeed;
-		}
-
-		if (GameEngine::Input::GetKeyDown(GameEngine::KeyCode::LeftShift)) {
-			m_camera->GetTransform().position -= deltaTime * m_camera->GetTransform().Up() * m_cameraSpeed;
-		}
-		else if (GameEngine::Input::GetKeyDown(GameEngine::KeyCode::Space)) {
-			m_camera->GetTransform().position += deltaTime * m_camera->GetTransform().Up() * m_cameraSpeed;
-		}
-
-		auto newMousePos = GameEngine::Input::GetMousePosition();
-		float dx = newMousePos.x - m_prevMousePos.x;
-		float dy = newMousePos.y - m_prevMousePos.y;
-		m_camRotation.y -= (m_invertCameraX ? -1.0f : 1.0f) * deltaTime * dx * m_cameraRotationSpeed;
-		m_camRotation.x -= (m_invertCameraY ? -1.0f : 1.0f) * deltaTime * dy * m_cameraRotationSpeed;
-		m_prevMousePos = { newMousePos.x, newMousePos.y };
-	}
-
-	// ---
-	if (m_lookAtObject) {
-		m_camera->LookAt({ 0.0f, 0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f });
-		m_camRotation = m_camera->GetTransform().GetEulerAngles();
-	}
-	else {
-		m_camera->GetTransform().SetEulerAngles(m_camRotation);
+	if (!m_is2D && m_lookAtObject) {
+		m_cameraController3D.LookAt({ 0.0f, 0.5f, 0.0f });
 	}
 
 	// draw scene
 	GameEngine::Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 	GameEngine::Renderer::Clear();
 
-	GameEngine::Renderer::BeginScene(m_camera);
+	if (m_is2D)
+		GameEngine::Renderer::BeginScene(m_cameraController2D.GetCamera());
+	else
+		GameEngine::Renderer::BeginScene(m_cameraController3D.GetCamera());
+
 
 	auto basicShader = m_shaderLibrary.Get("basic");
 	auto textureShader = m_shaderLibrary.Get("texture");
 
-	if (m_camera->GetTransform().position.y > 0.0f) {
+	if (!m_is2D && (m_cameraController3D.GetPosition().y > 0.0f)) {
 		GameEngine::Renderer::Submit(m_vertexArray3, m_objectTransform3, basicShader);
 		GameEngine::Renderer::Submit(m_vertexArray, m_objectTransform, textureShader);
 	}
@@ -99,43 +70,52 @@ inline void ExampleLayer::OnUpdate()
 
 void ExampleLayer::OnImGuiUpdate()
 {
+	if (ImGui::Button(m_is2D ? "Switch to 3D" : "Switch to 2D"))
+		m_is2D = !m_is2D;
+
 	ImGui::SliderFloat3("Object Position", &m_objectTransform.position[0], -10.0f, 10.0f);
-	ImGui::SliderFloat3("Camera Position", &m_camera->GetTransform().position[0], -10.0f, 10.0f);
-	ImGui::SliderFloat3("Camera Rotation", &m_camRotation[0], -180.0f, 180.0f);
-	ImGui::Checkbox("Lock Onto Object", &m_lookAtObject);
-	ImGui::Checkbox("Invert Camera X", &m_invertCameraX);
-	ImGui::Checkbox("Invert Camera Y", &m_invertCameraY);
 
-	ImGui::BeginDisabled(m_moveCamera);
-	if (ImGui::Button("Move Camera"))
+	if (!m_is2D)
 	{
-		GameEngine::Input::LockMouseCursor();
-		m_moveCamera = true;
-		m_prevMousePos = GameEngine::Input::GetMousePosition();
-	}
-	ImGui::EndDisabled();
+		ImGui::Checkbox("Lock Onto Object", &m_lookAtObject);
+		ImGui::Checkbox("Invert Camera X", &m_invertCameraX);
+		ImGui::Checkbox("Invert Camera Y", &m_invertCameraY);
 
-	if (ImGui::Button(m_isOrthographic ? "Perspective View" : "Orthographic View")) 
-	{
-		m_isOrthographic = !m_isOrthographic;
-		GameEngine::Transform tempTransform = m_camera->GetTransform();
-		GameEngine::Application& app = GameEngine::Application::Get();
-		float aspect = (float)app.GetWindow().GetWidth() / app.GetWindow().GetHeight();
+		m_cameraController3D.SetInvertCameraX(m_invertCameraX);
+		m_cameraController3D.SetInvertCameraY(m_invertCameraY);
 
-		if (m_isOrthographic) {
-			m_camera = GameEngine::MakeRef<GameEngine::OrthographicCamera>(-2.0f, 2.0f, -2.0f / aspect, 2.0f / aspect);
+		ImGui::BeginDisabled(m_fly);
+		if (ImGui::Button("Fly"))
+		{
+			m_fly = true;
+			m_cameraController3D.SetMode(GameEngine::CameraController3D::Mode::Fly);
 		}
-		else {
-			m_camera = GameEngine::MakeRef<GameEngine::PerspectiveCamera>(45.0f, aspect);
-		}
+		ImGui::EndDisabled();
 
-		m_camera->GetTransform() = tempTransform;
+		if (ImGui::Button(m_isOrthographic ? "Perspective View" : "Orthographic View"))
+		{
+			m_isOrthographic = !m_isOrthographic;
+			m_cameraController3D.SetIsOrthographic(m_isOrthographic);
+		}
 	}
 
 	if (ImGui::Button("Reset"))
 	{
 		ResetScene();
 	}
+}
+
+bool ExampleLayer::OnEvent(const GameEngine::Event& e)
+{
+	bool result = false;
+
+	if (m_is2D) 
+		result = m_cameraController2D.OnEvent(e);
+	else
+		result = m_cameraController3D.OnEvent(e);
+
+	result |= HandlesEvents::OnEvent(e);
+	return result;
 }
 
 bool ExampleLayer::OnMouseDown(const GameEngine::MouseDownEvent& e)
@@ -146,15 +126,18 @@ bool ExampleLayer::OnMouseDown(const GameEngine::MouseDownEvent& e)
 
 bool ExampleLayer::OnKeyUp(const GameEngine::KeyUpEvent& e)
 {
-	if (e.keyCode == GameEngine::KeyCode::Escape) 
+	if (!m_is2D)
 	{
-		GameEngine::Input::UnlockMouseCursor();
-		m_moveCamera = false;
-	}
-	else if (e.keyCode == GameEngine::KeyCode::M)
-	{
-		GameEngine::Input::LockMouseCursor();
-		m_moveCamera = true;
+		if (e.keyCode == GameEngine::KeyCode::Escape)
+		{
+			m_fly = false;
+			m_cameraController3D.SetMode(GameEngine::CameraController3D::Mode::Normal);
+		}
+		else if (e.keyCode == GameEngine::KeyCode::F)
+		{
+			m_fly = true;
+			m_cameraController3D.SetMode(GameEngine::CameraController3D::Mode::Fly);
+		}
 	}
 
 	return false;
@@ -162,32 +145,11 @@ bool ExampleLayer::OnKeyUp(const GameEngine::KeyUpEvent& e)
 
 bool ExampleLayer::OnWindowResize(const GameEngine::WindowResizeEvent& e)
 {
-	GameEngine::Application& app = GameEngine::Application::Get();
-	float aspect = (float)app.GetWindow().GetWidth() / app.GetWindow().GetHeight();
-
-	if (m_isOrthographic) {
-		std::dynamic_pointer_cast<GameEngine::OrthographicCamera>(m_camera)->SetBounds(-2.0f, 2.0f, -2.0f / aspect, 2.0f / aspect);
-	}
-	else {
-		std::dynamic_pointer_cast<GameEngine::PerspectiveCamera>(m_camera)->SetAspect(aspect);
-	}
-
 	return false;
 }
 
 void ExampleLayer::CreateScene()
 {
-	// set camera
-	GameEngine::Application& app = GameEngine::Application::Get();
-	float aspect = (float)app.GetWindow().GetWidth() / app.GetWindow().GetHeight();
-
-	if (m_isOrthographic) {
-		m_camera = GameEngine::MakeRef<GameEngine::OrthographicCamera>(-2.0f, 2.0f, -2.0f / aspect, 2.0f / aspect);
-	}
-	else {
-		m_camera = GameEngine::MakeRef<GameEngine::PerspectiveCamera>(45.0f, aspect);
-	}
-
 	// object 1
 	m_vertexArray = GameEngine::VertexArray::Create();
 
@@ -245,9 +207,11 @@ void ExampleLayer::CreateScene()
 void ExampleLayer::ResetScene()
 {
 	// reset camera
-	m_camera->GetTransform().position = glm::vec3(0.0f, 0.5f, 2.0f);
-	m_camera->LookAt({ 0.0f, 0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f });
-	m_camRotation = m_camera->GetTransform().GetEulerAngles();
+	m_cameraController2D.SetZoom(1.0f);
+	m_cameraController2D.SetPosition({ 0.0f, 0.5f });
+	m_cameraController3D.SetFOV(45.0f);
+	m_cameraController3D.SetPosition({ 0.0f, 0.5f, 2.0f });
+	m_cameraController3D.LookAt({ 0.0f, 0.5f, 0.0f });
 
 	// reset objects
 	m_objectTransform.Reset();

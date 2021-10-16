@@ -46,13 +46,13 @@ namespace GameEngine {
 
 	PerspectiveCamera::PerspectiveCamera(float fov, float aspect, float clipNear, float clipFar) :
 		m_fov(fov),
-		m_aspect(aspect),
+		m_aspectRatio(aspect),
 		m_clipNear(clipNear),
 		m_clipFar(clipFar) {}
 
 	void PerspectiveCamera::RecalculatePMatrix()
 	{
-		m_P = glm::perspective(glm::radians(m_fov), m_aspect, m_clipNear, m_clipFar);
+		m_P = glm::perspective(glm::radians(m_fov), m_aspectRatio, m_clipNear, m_clipFar);
 	}
 
 	void PerspectiveCamera::SetFOV(float fov)
@@ -60,9 +60,9 @@ namespace GameEngine {
 		m_fov = fov;
 	}
 
-	void PerspectiveCamera::SetAspect(float aspect)
+	void PerspectiveCamera::SetAspectRatio(float aspectRatio)
 	{
-		m_aspect = aspect;
+		m_aspectRatio = aspectRatio;
 	}
 
 	void PerspectiveCamera::SetClipNear(float clipNear)
