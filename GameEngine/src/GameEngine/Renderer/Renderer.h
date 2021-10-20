@@ -35,7 +35,7 @@ namespace GameEngine {
 		};
 
 		static Scope<RendererAPI> s_rendererAPI;
-		static SceneData* s_sceneData;
+		static Scope<SceneData> s_sceneData;
 		static bool s_sceneActive;
 
 	};

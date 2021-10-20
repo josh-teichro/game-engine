@@ -2,7 +2,7 @@
 #include "CameraController2D.h"
 #include "GameEngine/Events/Input.h"
 #include "GameEngine/Core/Time.h"
-#include "GameEngine/Application.h"
+#include "GameEngine/Core/Application.h"
 
 namespace GameEngine
 {

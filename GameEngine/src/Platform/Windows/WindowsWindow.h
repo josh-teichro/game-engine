@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GameEngine/Window.h"
+#include "GameEngine/Core/Window.h"
 #include "GameEngine/Events/KeyCodes.h"
 #include "GameEngine/Renderer/RenderContext.h"
 
@@ -34,7 +34,7 @@ namespace GameEngine {
 
 	private:
 		GLFWwindow* m_window;
-		RenderContext* m_context;
+		Scope<RenderContext> m_context;
 
 		struct WindowData {
 			std::string title;

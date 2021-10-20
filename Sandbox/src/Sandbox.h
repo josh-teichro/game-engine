@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GameEngine.h>
+#include <GameEngine/Core/EntryPoint.h>
 
 /**
 * Sandbox application for testing.

@@ -2,9 +2,9 @@
 
 // For use by GameEngine applications
 
-#include "GameEngine/Application.h"
-#include "GameEngine/Layer.h"
-#include "GameEngine/Log.h"
+#include "GameEngine/Core/Application.h"
+#include "GameEngine/Core/Layer.h"
+#include "GameEngine/Core/Log.h"
 #include "GameEngine/Core/Time.h"
 #include "GameEngine/Core/Types.h"
 
@@ -28,8 +28,3 @@
 #include "GameEngine/Renderer/VertexArray.h"
 #include "GameEngine/Renderer/Shader.h"
 #include "GameEngine/Renderer/Texture.h"
-// ------------------------------------------------
-
-// --- Entry Point --------------------------------
-#include "GameEngine/EntryPoint.h"
-// ------------------------------------------------

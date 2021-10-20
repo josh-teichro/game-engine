@@ -22,7 +22,7 @@ namespace GameEngine {
 
 	Window* Window::Create(const WindowProps& props) {
 		Window* window =  new WindowsWindow(props);
-		Input::s_instance = new WindowsInput();
+		Input::s_instance = MakeScope<WindowsInput>();
 		return window;
 	}
 
@@ -53,7 +53,7 @@ namespace GameEngine {
 		}
 
 		m_window = glfwCreateWindow((int)m_data.width, (int)m_data.height, m_data.title.c_str(), nullptr, nullptr);
-		m_context = new OpenGLContext(m_window);
+		m_context = MakeScope<OpenGLContext>(m_window);
 		m_context->Init();
 
 		glfwSetWindowUserPointer(m_window, &m_data);

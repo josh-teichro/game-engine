@@ -7,7 +7,7 @@
 namespace GameEngine {
 
 	Scope<RendererAPI> Renderer::s_rendererAPI = MakeScope<OpenGLRendererAPI>();
-	Renderer::SceneData* Renderer::s_sceneData = new Renderer::SceneData();
+	Scope<Renderer::SceneData> Renderer::s_sceneData = MakeScope<Renderer::SceneData>();
 	bool Renderer::s_sceneActive = false;
 
 	void Renderer::Init()

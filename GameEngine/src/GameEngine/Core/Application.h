@@ -2,11 +2,11 @@
 
 #include "Core.h"
 #include "Window.h"
-#include "Core/Time.h"
+#include "GameEngine/Core/Time.h"
 #include "LayerStack.h"
-#include "Events/Event.h"
-#include "Events/EventManager.h"
-#include "ImGui/ImGuiLayer.h"
+#include "GameEngine/Events/Event.h"
+#include "GameEngine/Events/EventManager.h"
+#include "GameEngine/ImGui/ImGuiLayer.h"
 
 namespace GameEngine {
 

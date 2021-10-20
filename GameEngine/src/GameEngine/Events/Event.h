@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gepch.h"
-#include "GameEngine/Core.h"
+#include "GameEngine/Core/Core.h"
 
 #define BIND_EVENT_FN(x) std::bind(x, this, std::placeholders::_1)
 
@@ -28,7 +28,7 @@ namespace GameEngine {
 * Define class type for an event class
 */
 #define EVENT_CLASS_TYPE(x) \
-	static EventType GetStaticEventType() { return EventType::##x; }\
+	static EventType GetStaticEventType() { return EventType::x; }\
 	virtual EventType GetEventType() const override { return GetStaticEventType(); }
 
 	/**

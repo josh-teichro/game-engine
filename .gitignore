@@ -5,7 +5,7 @@ bin-int/
 Archive/
 
 # Files
-*.user
-*.sln
-*.vcxproj
-*.vcxproj.filters
+**.user
+**.sln
+**.vcxproj
+**.vcxproj.filters

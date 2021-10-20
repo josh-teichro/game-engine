@@ -1,4 +1,11 @@
-Some things I didn't add that were added in Hazel.
+--- Differs from Hazel in that:
 
-Aug. 27, 2019
-Changed IndexBuffer in OpenGL to be bound to the 'GL_ARRAY_BUFFER' target instead of 'GL_ELEMENT_ARRAY_BUFFER'.
+
+I changed IndexBuffer in OpenGL to be bound to the 'GL_ARRAY_BUFFER' target instead of 'GL_ELEMENT_ARRAY_BUFFER'. (Aug. 27, 2019)
+
+I did not update .gitmodules (git submodules) from this commit:
+https://github.com/TheCherno/Hazel/commit/52ff54ca80ff426e42176482444b2874280c0ad6
+
+My shaders are parsed with my own code.
+
+And more.

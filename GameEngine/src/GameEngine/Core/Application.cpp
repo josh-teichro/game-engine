@@ -1,9 +1,9 @@
 #include "gepch.h"
 
 #include "Application.h"
-#include "Renderer/Renderer.h"
-#include "Renderer/VertexBuffer.h"
-#include "Log.h"
+#include "GameEngine/Renderer/Renderer.h"
+#include "GameEngine/Renderer/VertexBuffer.h"
+#include "GameEngine/Core/Log.h"
 
 namespace GameEngine {
 
