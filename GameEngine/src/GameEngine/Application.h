@@ -24,6 +24,7 @@ namespace GameEngine {
 		void EventCallback(const Event& e);
 
 		bool OnWindowClose(const WindowCloseEvent& e);
+		bool OnWindowResize(const WindowResizeEvent& e);
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);
@@ -38,6 +39,7 @@ namespace GameEngine {
 		Scope<Window> m_window;
 		Scope<Time> m_time;
 		bool m_isRunning = true;
+		bool m_isMinimized = false;
 
 		LayerStack m_layerStack;
 

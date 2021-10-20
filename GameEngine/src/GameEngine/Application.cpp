@@ -56,7 +56,12 @@ namespace GameEngine {
 	*/
 	void Application::EventCallback(const Event& e)
 	{
-		if (EventDispatcher(e).Dispatch<WindowCloseEvent>(std::bind(&Application::OnWindowClose, this, std::placeholders::_1)))
+		bool handled = false;
+		EventDispatcher dispatcher(e);
+		handled &= dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(&Application::OnWindowClose));
+		handled &= dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(&Application::OnWindowResize));
+
+		if (handled)
 			return;
 
 		for (auto it = m_layerStack.end(); it != m_layerStack.begin();)
@@ -70,6 +75,19 @@ namespace GameEngine {
 	{
 		m_isRunning = false;
 		return true;
+	}
+
+	bool Application::OnWindowResize(const WindowResizeEvent& e)
+	{
+		if (e.width == 0 || e.height == 0)
+		{ 
+			m_isMinimized = true;
+			return false;
+		}
+
+		m_isMinimized = false;
+		Renderer::SetViewport(0, 0, e.width, e.height);
+		return false;
 	}
 
 	/**
