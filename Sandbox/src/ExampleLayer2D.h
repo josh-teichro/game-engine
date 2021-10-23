@@ -22,6 +22,9 @@ private:
 
 	GameEngine::ShaderLibrary m_shaderLibrary;
 
+	GameEngine::Ref<GameEngine::Texture2D> m_backgroundTexture;
+	GameEngine::Transform m_backgroundTransform;
+
 	GameEngine::Transform m_squareTransform;
 	glm::vec3 m_squareRotation;
 	glm::vec4 m_squareColor;

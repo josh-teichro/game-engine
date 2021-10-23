@@ -10,8 +10,8 @@ namespace GameEngine {
 
 	struct Renderer2DStorage {
 		Ref<VertexArray> squareVertexArray;
-		Ref<Shader> flatShader;
-		Ref<Shader> textureShader;
+		Ref<Shader> standardShader;
+		Ref<Texture2D> whiteTexture;
 	};
 
 	static Renderer2DStorage* s_data;
@@ -22,15 +22,16 @@ namespace GameEngine {
 
 		s_data->squareVertexArray = VertexArray::Create();
 
-		float vertices[3 * 4] = {
-			-0.5f, -0.5f, 0.0f,
-			-0.5f, 0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			0.5f, 0.5f, 0.0f
+		float vertices[4 * (3 + 2)] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			-0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+			0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			0.5f, 0.5f, 0.0f, 1.0f, 1.0f
 		};
 
 		VertexBufferLayout layout = {
-			{ ShaderDataType::Vec3, "a_position" }
+			{ ShaderDataType::Vec3, "a_position" },
+			{ ShaderDataType::Vec2, "a_texCoord" }
 		};
 
 		Ref<VertexBuffer> vertexBuffer3 = VertexBuffer::Create(vertices, sizeof(vertices), layout);
@@ -41,8 +42,7 @@ namespace GameEngine {
 		s_data->squareVertexArray->AddVertexBuffer(vertexBuffer3);
 		s_data->squareVertexArray->SetIndexBuffer(indexBuffer3);
 
-		s_data->flatShader = Shader::Create("./res/shaders/flat.shader");
-		s_data->textureShader = Shader::Create("./res/shaders/texture.shader");
+		s_data->standardShader = Shader::Create("./res/shaders/standard.shader");
 	}
 
 	void Renderer2D::Shutdown()
@@ -56,6 +56,14 @@ namespace GameEngine {
 
 		camera->RecalculateMatrices();
 		s_sceneData->viewProjectionMatrix = camera->VP();
+
+		s_data->whiteTexture = Texture2D::Create(1, 1);
+		uint32_t whiteTextureData = 0xffffffff;
+		s_data->whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+
+		s_data->standardShader->Bind();		
+		s_data->standardShader->SetUniform1i("u_texture", 0);
+
 		s_sceneActive = true;
 	}
 
@@ -66,11 +74,24 @@ namespace GameEngine {
 
 	void Renderer2D::DrawRect(const Transform& transform, const glm::vec4& color)
 	{
+		s_data->whiteTexture->Bind(0);
+
+		s_data->standardShader->SetUniformMat4f("u_MVP", s_sceneData->viewProjectionMatrix * transform.ToMat4());
+		s_data->standardShader->SetUniform4f("u_color", color);
+
 		s_data->squareVertexArray->Bind();
-		s_data->flatShader->Bind();
-		s_data->flatShader->SetUniformMat4f("u_MVP", s_sceneData->viewProjectionMatrix * transform.ToMat4());
-		s_data->flatShader->SetUniform4f("u_color", color);
 		RenderCommand::DrawArray(s_data->squareVertexArray);
+	}
+
+	void Renderer2D::DrawRect(const Transform& transform, const Ref<Texture2D>& texture)
+	{
+		texture->Bind(0);
+
+		s_data->standardShader->SetUniformMat4f("u_MVP", s_sceneData->viewProjectionMatrix * transform.ToMat4());
+		s_data->standardShader->SetUniform4f("u_color", glm::vec4(1.0f));
+
+		s_data->squareVertexArray->Bind();
+		RenderCommand::DrawArray(s_data->squareVertexArray);	
 	}
 
 }

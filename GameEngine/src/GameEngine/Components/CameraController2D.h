@@ -34,7 +34,7 @@ namespace GameEngine
 		void SetWalkSpeed(float speed) { m_cameraWalkSpeed = speed; }
 		void SetPanSpeed(float speed) { m_cameraPanSpeed = speed; }
 		void SetZoomSpeed(float speed) { m_cameraZoomSpeed = speed; }
-		void SetPosition(glm::vec2 position) { m_camera->GetTransform().position = {position.x, position.y, 1.0f }; }
+		void SetPosition(glm::vec2 position) { m_camera->GetTransform().position = {position.x, position.y, 0.0f }; }
 
 	private:
 		float m_zoom;

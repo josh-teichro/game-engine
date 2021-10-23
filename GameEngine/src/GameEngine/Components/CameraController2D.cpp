@@ -24,7 +24,7 @@ namespace GameEngine
 		float top = zoom;
 		m_camera = MakeRef<OrthographicCamera>(left, right, bottom, top);
 
-		m_camera->GetTransform().position = { 0.0f, 0.0f, 1.0f };
+		m_camera->GetTransform().position = { 0.0f, 0.0f, 0.0f };
 		m_camera->GetTransform().SetEulerAngles({ 0.0f, 0.0f, 0.0f });
 	}
 

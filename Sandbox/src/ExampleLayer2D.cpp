@@ -31,6 +31,7 @@ void ExampleLayer2D::OnUpdate()
 
 	m_squareTransform.SetEulerAngles(m_squareRotation);
 	GameEngine::Renderer2D::DrawRect(m_squareTransform, m_squareColor);
+	GameEngine::Renderer2D::DrawRect(m_backgroundTransform, m_backgroundTexture);
 
 	GameEngine::Renderer2D::EndScene();
 }
@@ -82,14 +83,18 @@ bool ExampleLayer2D::OnKeyUp(const GameEngine::KeyUpEvent& e)
 
 void ExampleLayer2D::CreateScene()
 {
+	m_backgroundTexture = GameEngine::Texture2D::Create("./res/textures/checkerboard.png");
+	m_backgroundTexture->SetWrapMode(GameEngine::Texture::WrapMode::Repeat);
+	m_backgroundTransform.position.z = -0.1f;
+	m_backgroundTransform.scale = { 10.0f, 10.0f, 10.0f };
 }
 
 void ExampleLayer2D::ResetScene()
 {
 	m_cameraController.SetZoom(1.0f);
-	m_cameraController.SetPosition({ 0.0f, 0.5f });
+	m_cameraController.SetPosition({ 0.0f, 0.0f });
 
-	m_squareTransform.position = { 0.0f, 0.5f, 0.0f };
+	m_squareTransform.position = { 0.0f, 0.0f, 0.0f };
 	m_squareTransform.scale = { 1.0f, 1.0f, 1.0f };
 	m_squareRotation = { 0.0f, 0.0f, 0.0f };
 	m_squareColor = { 0.3f, 0.2f, 0.8f, 1.0f };
