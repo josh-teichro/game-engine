@@ -7,10 +7,18 @@
 
 namespace GameEngine {
 
-	Scope<Input> Input::s_instance = nullptr;
+	Scope<Input> Input::s_instance = MakeScope<WindowsInput>();
 
 	WindowsInput::WindowsInput() :
 		m_isCursorLocked(false)
+	{
+	}
+
+	WindowsInput::~WindowsInput()
+	{
+	}
+
+	void WindowsInput::InitImpl()
 	{
 		// GLFW cursors
 		// (By design, on X11 cursors are user configurable and some cursors may be missing. When a cursor doesn't exist,
@@ -29,7 +37,7 @@ namespace GameEngine {
 		glfwSetErrorCallback(prev_error_callback);
 	}
 
-	WindowsInput::~WindowsInput()
+	void WindowsInput::ShutdownImpl()
 	{
 		// Destroy GLFW cursors
 		for (int cursor_n = 0; cursor_n < (int)MouseCursor::Count; cursor_n++)

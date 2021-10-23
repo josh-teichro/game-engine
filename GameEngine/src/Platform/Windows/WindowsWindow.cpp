@@ -13,7 +13,7 @@
 
 namespace GameEngine {
 
-	static bool s_GLFWInitialized = false;
+	static uint8_t s_GLFWWindowCount = 0;
 
 	static void GLFWErrorCallback(int error, const char* description)
 	{
@@ -22,17 +22,18 @@ namespace GameEngine {
 
 	Window* Window::Create(const WindowProps& props) {
 		Window* window =  new WindowsWindow(props);
-		Input::s_instance = MakeScope<WindowsInput>();
 		return window;
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
 		Init(props);
+		WindowsInput::Init();
 	}
 
 	WindowsWindow::~WindowsWindow()
 	{
+		WindowsInput::Shutdown();
 		Shutdown();
 	}
 
@@ -42,17 +43,19 @@ namespace GameEngine {
 		m_data.width = props.width; 
 		m_data.height = props.height;
 
-		GE_CORE_INFO("Creating window: {0} ({1}x{2})", m_data.title, m_data.width, m_data.height);
-
-		if (!s_GLFWInitialized) {
+		if (s_GLFWWindowCount == 0) {
+			GE_CORE_INFO("Initializing GLFW");
 			int success = glfwInit();
 
 			GE_CORE_ASSERT(success, "Could not initialize GLFW!");
-			s_GLFWInitialized = true;
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}
 
+		GE_CORE_INFO("Creating window: {0} ({1}x{2})", m_data.title, m_data.width, m_data.height);
+
 		m_window = glfwCreateWindow((int)m_data.width, (int)m_data.height, m_data.title.c_str(), nullptr, nullptr);
+		s_GLFWWindowCount++;
+
 		m_context = MakeScope<OpenGLContext>(m_window);
 		m_context->Init();
 
@@ -184,6 +187,13 @@ namespace GameEngine {
 	void WindowsWindow::Shutdown()
 	{
 		glfwDestroyWindow(m_window);
+		s_GLFWWindowCount--;
+
+		if (s_GLFWWindowCount == 0)
+		{
+			GE_CORE_INFO("Terminating GLFW");
+			glfwTerminate();
+		}
 	}
 
 }

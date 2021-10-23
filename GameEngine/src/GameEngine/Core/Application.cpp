@@ -17,7 +17,6 @@ namespace GameEngine {
 		GE_CORE_ASSERT(!s_instance, "Application already exists!");
 		s_instance = this;
 
-		Log::Init();
 		m_window = Scope<Window>(Window::Create());
 		m_window->SetEventCallback(std::bind(&Application::EventCallback, this, std::placeholders::_1));
 

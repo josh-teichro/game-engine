@@ -21,6 +21,9 @@ namespace GameEngine {
 
 		virtual ~Input() {};
 
+		inline static void Init() { return s_instance->InitImpl(); }
+		inline static void Shutdown() { return s_instance->ShutdownImpl(); }
+
 		inline static glm::vec2 GetMousePosition() { return s_instance->GetMousePositionImpl(); }
 		inline static bool GetMouseDown(MouseButton button) { return s_instance->GetMouseDownImpl(button); }
 		inline static bool GetKeyDown(KeyCode keycode) { return s_instance->GetKeyDownImpl(keycode); }
@@ -33,6 +36,9 @@ namespace GameEngine {
 		inline static void UnlockMouseCursor() { return s_instance->UnlockMouseCursorImpl(); }
 
 	protected:
+		virtual void InitImpl() = 0;
+		virtual void ShutdownImpl() = 0;
+
 		virtual glm::vec2 GetMousePositionImpl() = 0;
 		virtual bool GetMouseDownImpl(MouseButton button) = 0;
 		virtual bool GetKeyDownImpl(KeyCode keycode) = 0;

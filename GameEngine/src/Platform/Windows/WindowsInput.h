@@ -13,6 +13,9 @@ namespace GameEngine {
 		virtual ~WindowsInput();
 
 	protected:
+		virtual void InitImpl() override;
+		virtual void ShutdownImpl() override;
+
 		virtual glm::vec2 GetMousePositionImpl() override;
 		virtual bool GetMouseDownImpl(MouseButton button) override;
 		virtual bool GetKeyDownImpl(KeyCode keycode) override;

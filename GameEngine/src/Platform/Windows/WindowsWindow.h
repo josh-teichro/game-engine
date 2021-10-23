@@ -3,6 +3,7 @@
 #include "GameEngine/Core/Window.h"
 #include "GameEngine/Events/KeyCodes.h"
 #include "GameEngine/Renderer/RenderContext.h"
+#include "WindowsInput.h"
 
 #include <GLFW/glfw3.h>
 
