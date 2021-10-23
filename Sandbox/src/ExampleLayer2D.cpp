@@ -24,21 +24,22 @@ void ExampleLayer2D::OnUpdate()
 	m_cameraController.OnUpdate();
 
 	// draw scene
-	GameEngine::Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-	GameEngine::Renderer::Clear();
+	GameEngine::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+	GameEngine::RenderCommand::Clear();
 
-	GameEngine::Renderer::BeginScene(m_cameraController.GetCamera());
+	GameEngine::Renderer2D::BeginScene(m_cameraController.GetCamera());
 
-	auto flatShader = m_shaderLibrary.Get("flat");
-	flatShader->SetUniform4f("u_color", m_squareColor);
+	m_squareTransform.SetEulerAngles(m_squareRotation);
+	GameEngine::Renderer2D::DrawRect(m_squareTransform, m_squareColor);
 
-	GameEngine::Renderer::Submit(m_square, m_squareTransform, flatShader);
-
-	GameEngine::Renderer::EndScene();
+	GameEngine::Renderer2D::EndScene();
 }
 
 void ExampleLayer2D::OnImGuiUpdate()
 {
+	ImGui::DragFloat3("Square Position", glm::value_ptr(m_squareTransform.position));
+	ImGui::DragFloat3("Square Rotation", glm::value_ptr(m_squareRotation));
+	ImGui::DragFloat3("Square Scale", glm::value_ptr(m_squareTransform.scale));
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_squareColor));
 
 	ImGui::BeginDisabled(m_walk);
@@ -81,28 +82,6 @@ bool ExampleLayer2D::OnKeyUp(const GameEngine::KeyUpEvent& e)
 
 void ExampleLayer2D::CreateScene()
 {
-	m_square = GameEngine::VertexArray::Create();
-
-	float vertices[3 * 4] = {
-		-0.5f, -0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.5f, 0.5f, 0.0f
-	};
-
-	GameEngine::VertexBufferLayout layout = {
-		{ GameEngine::ShaderDataType::Vec3, "a_position" }
-	};
-
-	GameEngine::Ref<GameEngine::VertexBuffer> vertexBuffer3 = GameEngine::VertexBuffer::Create(vertices, sizeof(vertices), layout);
-
-	uint32_t indices[6] = { 0, 1, 2, 3, 1, 2 };
-	GameEngine::Ref<GameEngine::IndexBuffer> indexBuffer3 = GameEngine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
-
-	m_square->AddVertexBuffer(vertexBuffer3);
-	m_square->SetIndexBuffer(indexBuffer3);
-
-	m_shaderLibrary.Load("./res/shaders/flat.shader");
 }
 
 void ExampleLayer2D::ResetScene()
@@ -111,5 +90,7 @@ void ExampleLayer2D::ResetScene()
 	m_cameraController.SetPosition({ 0.0f, 0.5f });
 
 	m_squareTransform.position = { 0.0f, 0.5f, 0.0f };
-	m_squareColor = { 0.2f, 0.1f, 0.7f, 1.0f };
+	m_squareTransform.scale = { 1.0f, 1.0f, 1.0f };
+	m_squareRotation = { 0.0f, 0.0f, 0.0f };
+	m_squareColor = { 0.3f, 0.2f, 0.8f, 1.0f };
 }

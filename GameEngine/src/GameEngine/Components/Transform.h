@@ -40,8 +40,8 @@ namespace GameEngine
 			return glm::normalize(orientation * glm::vec3(0.0f, 1.0f, 0.0f));
 		}
 
-		glm::mat4 operator*(const glm::mat4& other) const {
-			return glm::translate(glm::scale(other, scale) * glm::toMat4(orientation), position);
+		const glm::mat4 ToMat4() const {
+			return glm::translate(glm::mat4(1.0), position) * glm::toMat4(orientation) * glm::scale(glm::mat4(1.0), scale);
 		}
 	};
 

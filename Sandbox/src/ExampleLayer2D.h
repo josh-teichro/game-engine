@@ -22,8 +22,8 @@ private:
 
 	GameEngine::ShaderLibrary m_shaderLibrary;
 
-	GameEngine::Ref<GameEngine::VertexArray> m_square;
 	GameEngine::Transform m_squareTransform;
+	glm::vec3 m_squareRotation;
 	glm::vec4 m_squareColor;
 
 	bool m_walk = false;

@@ -8,7 +8,7 @@ namespace GameEngine
 
 	Ref<VertexArray> VertexArray::Create()
 	{
-		switch (Renderer::GetAPI())
+		switch (RenderCommand::GetAPI())
 		{
 			case Renderer::API::OpenGL: return MakeRef<OpenGLVertexArray>();
 			default: GE_CORE_ASSERT(false, "Render API currently does not support VertexArray!"); return nullptr;

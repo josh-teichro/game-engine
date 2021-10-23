@@ -29,8 +29,8 @@ void ExampleLayer::OnUpdate()
 	}
 
 	// draw scene
-	GameEngine::Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-	GameEngine::Renderer::Clear();
+	GameEngine::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+	GameEngine::RenderCommand::Clear();
 
 	if (m_is2D)
 		GameEngine::Renderer::BeginScene(m_cameraController2D.GetCamera());

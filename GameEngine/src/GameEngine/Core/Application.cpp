@@ -2,6 +2,7 @@
 
 #include "Application.h"
 #include "GameEngine/Renderer/Renderer.h"
+#include "GameEngine/Renderer/Renderer2D.h"
 #include "GameEngine/Renderer/VertexBuffer.h"
 #include "GameEngine/Core/Log.h"
 
@@ -20,7 +21,10 @@ namespace GameEngine {
 		m_window = Scope<Window>(Window::Create());
 		m_window->SetEventCallback(std::bind(&Application::EventCallback, this, std::placeholders::_1));
 
+		// TODO: automate some of this so we dont have to manually init every Renderer class
+		RenderCommand::Init();
 		Renderer::Init();
+		Renderer2D::Init();
 
 		m_time = MakeScope<Time>();
 
@@ -86,7 +90,7 @@ namespace GameEngine {
 		}
 
 		m_isMinimized = false;
-		Renderer::SetViewport(0, 0, e.width, e.height);
+		RenderCommand::SetViewport(0, 0, e.width, e.height);
 		return false;
 	}
 

@@ -12,7 +12,7 @@ namespace GameEngine
 
 	Ref<Shader> Shader::Create(const std::string& filepath)
 	{
-		switch (Renderer::GetAPI())
+		switch (RenderCommand::GetAPI())
 		{
 			case Renderer::API::OpenGL: return MakeRef<OpenGLShader>(filepath);
 			default: GE_CORE_ASSERT(false, "Render API currently does not support Shader!"); return nullptr;
@@ -21,7 +21,7 @@ namespace GameEngine
 
 	Ref<Shader> Shader::Create(const std::string& name, const std::string& filepath)
 	{
-		switch (Renderer::GetAPI())
+		switch (RenderCommand::GetAPI())
 		{
 		case Renderer::API::OpenGL: return MakeRef<OpenGLShader>(name, filepath);
 		default: GE_CORE_ASSERT(false, "Render API currently does not support Shader!"); return nullptr;
@@ -30,7 +30,7 @@ namespace GameEngine
 
 	Ref<Shader> Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 	{
-		switch (Renderer::GetAPI())
+		switch (RenderCommand::GetAPI())
 		{
 			case Renderer::API::OpenGL: return MakeRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
 			default: GE_CORE_ASSERT(false, "Render API currently does not support Shader!"); return nullptr;
