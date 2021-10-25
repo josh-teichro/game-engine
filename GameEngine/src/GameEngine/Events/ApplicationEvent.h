@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Event.h"
+#include "GameEngine/Events/Event.h"
 
 namespace GameEngine {
 
@@ -13,13 +13,13 @@ namespace GameEngine {
 		}
 
 	protected: 
-		ApplicationEvent() {}
+		ApplicationEvent() = default;
 	};
 
 	class WindowCloseEvent : public ApplicationEvent
 	{
 	public:
-		WindowCloseEvent() {};
+		WindowCloseEvent() = default;
 
 		std::string ToString() const override
 		{

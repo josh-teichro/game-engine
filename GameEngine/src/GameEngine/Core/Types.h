@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gepch.h"
+#include <memory>
 
 namespace GameEngine
 {

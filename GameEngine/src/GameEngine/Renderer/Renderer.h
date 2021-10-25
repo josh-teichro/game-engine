@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Shader.h"
-#include "VertexArray.h"
-#include "RenderCommand.h"
-#include "Camera.h"
+#include "GameEngine/Renderer/Shader.h"
+#include "GameEngine/Renderer/VertexArray.h"
+#include "GameEngine/Renderer/RenderCommand.h"
+#include "GameEngine/Renderer/Camera.h"
 
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
 namespace GameEngine {
 
@@ -21,6 +21,8 @@ namespace GameEngine {
 		static void EndScene();
 
 		static void Submit(const Ref<VertexArray>& vertexArray, const Transform& transform, const Ref<Shader>& shader);
+
+		static API GetAPI() { return RenderCommand::GetAPI(); }
 
 	private:
 		struct SceneData

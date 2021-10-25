@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Shader.h"
-#include "VertexArray.h"
-#include "RenderCommand.h"
-#include "Camera.h"
-#include "Texture.h"
+#include "GameEngine/Renderer/Shader.h"
+#include "GameEngine/Renderer/VertexArray.h"
+#include "GameEngine/Renderer/RenderCommand.h"
+#include "GameEngine/Renderer/Camera.h"
+#include "GameEngine/Renderer/Texture.h"
 
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
 namespace GameEngine {
 
@@ -25,6 +25,8 @@ namespace GameEngine {
 		//static void DrawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
 		static void DrawRect(const Transform& transform, const Ref<Texture2D>& texture);
 		static void DrawRect(const Transform& transform, const glm::vec4& color);
+
+		static API GetAPI() { return RenderCommand::GetAPI(); }
 
 	private:
 		struct SceneData

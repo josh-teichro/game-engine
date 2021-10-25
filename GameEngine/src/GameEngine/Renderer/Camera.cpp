@@ -1,5 +1,6 @@
 #include "gepch.h"
-#include "Camera.h"
+
+#include "GameEngine/Renderer/Camera.h"
 
 #include <glm/gtx/matrix_decompose.hpp>
 

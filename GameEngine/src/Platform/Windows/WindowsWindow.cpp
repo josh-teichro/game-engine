@@ -1,13 +1,13 @@
 
 #include "gepch.h"
-#include "WindowsWindow.h"
-#include "WindowsInput.h"
+
+#include "Platform/Windows/WindowsWindow.h"
+#include "Platform/Windows/WindowsInput.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 #include "GameEngine/Events/MouseEvent.h"
 #include "GameEngine/Events/KeyEvent.h"
 #include "GameEngine/Events/ApplicationEvent.h"
-
-#include "Platform/OpenGL/OpenGLContext.h"
 
 #include <glad/glad.h>
 
@@ -20,9 +20,8 @@ namespace GameEngine {
 		GE_CORE_ERROR("GLFW error ({0}): {1}", error, description);
 	}
 
-	Window* Window::Create(const WindowProps& props) {
-		Window* window =  new WindowsWindow(props);
-		return window;
+	Scope<Window> Window::Create(const WindowProps& props) {
+		return MakeScope<WindowsWindow>(props);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)

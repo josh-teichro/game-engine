@@ -1,15 +1,15 @@
 #include "gepch.h"
 
-#include "ImGuiLayer.h"
+#include "GameEngine/ImGui/ImGuiLayer.h"
 #include "GameEngine/Core/Application.h"
 #include "GameEngine/Events/Input.h"
 
-#include "imgui.h"
-#include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
+#include <imgui.h>
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
 
 // TODO: remove
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 
 namespace GameEngine {
 

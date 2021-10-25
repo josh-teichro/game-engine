@@ -1,6 +1,7 @@
 #include "gepch.h"
-#include "VertexBuffer.h"
-#include "Renderer.h"
+
+#include "GameEngine/Renderer/VertexBuffer.h"
+#include "GameEngine/Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLVertexBuffer.h"
 
 namespace GameEngine
@@ -88,7 +89,7 @@ namespace GameEngine
 
 	Ref<VertexBuffer> VertexBuffer::Create(const void* data, unsigned int size, const VertexBufferLayout& layout)
 	{
-		switch (RenderCommand::GetAPI())
+		switch (Renderer::GetAPI())
 		{
 			case Renderer::API::OpenGL: return MakeRef<OpenGLVertexBuffer>(data, size, layout);
 			default: GE_CORE_ASSERT(false, "Render API currently does not support VertexBuffer!"); return nullptr;

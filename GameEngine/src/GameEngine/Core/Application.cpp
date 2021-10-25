@@ -1,6 +1,6 @@
 #include "gepch.h"
 
-#include "Application.h"
+#include "GameEngine/Core/Application.h"
 #include "GameEngine/Renderer/Renderer.h"
 #include "GameEngine/Renderer/Renderer2D.h"
 #include "GameEngine/Renderer/VertexBuffer.h"
@@ -17,7 +17,7 @@ namespace GameEngine {
 		GE_CORE_ASSERT(!s_instance, "Application already exists!");
 		s_instance = this;
 
-		m_window = Scope<Window>(Window::Create());
+		m_window = Window::Create();
 		m_window->SetEventCallback(std::bind(&Application::EventCallback, this, std::placeholders::_1));
 
 		// TODO: automate some of this so we dont have to manually init every Renderer class
@@ -29,6 +29,12 @@ namespace GameEngine {
 
 		m_imGuiLayer = new ImGuiLayer();
 		PushOverlay(m_imGuiLayer);
+	}
+
+	Application::~Application()
+	{
+		Renderer::Shutdown();
+		Renderer2D::Shutdown();
 	}
 
 	/**

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GameEngine/Core/Log.h"
 
 #ifdef GE_PLATFORM_WINDOWS
 

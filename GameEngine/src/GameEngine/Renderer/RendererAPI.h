@@ -1,9 +1,10 @@
 #pragma once
 
 #include "gepch.h"
-#include "VertexArray.h"
 
-#include "glm/glm.hpp"
+#include "GameEngine/Renderer/VertexArray.h"
+
+#include <glm/glm.hpp>
 
 namespace GameEngine
 {
@@ -27,7 +28,12 @@ namespace GameEngine
 
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
 
-		virtual RendererAPI::API GetAPI() = 0;
+		inline static RendererAPI::API GetAPI() { return s_API; }
+
+		static Scope<RendererAPI> Create();
+
+	private:
+		static API s_API;
 
 	};
 

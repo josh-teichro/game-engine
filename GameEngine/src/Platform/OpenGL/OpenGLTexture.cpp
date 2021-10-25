@@ -1,7 +1,8 @@
 #include "gepch.h"
-#include "OpenGLTexture.h"
 
-#include "stb_image.h"
+#include "Platform/OpenGL/OpenGLTexture.h"
+
+#include <stb_image.h>
 #include <glad/glad.h>
 
 // TODO: Switch to newer OpenGL functions (replace code with comments)

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
+#include "GameEngine/Renderer/VertexBuffer.h"
+#include "GameEngine/Renderer/IndexBuffer.h"
 
 namespace GameEngine
 {

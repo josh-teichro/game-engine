@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Core.h"
-#include "Window.h"
+#include "GameEngine/Core/Core.h"
+#include "GameEngine/Core/Window.h"
 #include "GameEngine/Core/Time.h"
-#include "LayerStack.h"
+#include "GameEngine/Core/LayerStack.h"
 #include "GameEngine/Events/Event.h"
 #include "GameEngine/Events/EventManager.h"
 #include "GameEngine/ImGui/ImGuiLayer.h"
@@ -17,7 +17,7 @@ namespace GameEngine {
 	{
 	public:
 		Application();
-		virtual ~Application() = default;
+		virtual ~Application();
 
 		void Run();
 

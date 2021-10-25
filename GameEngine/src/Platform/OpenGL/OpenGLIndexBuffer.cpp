@@ -1,5 +1,6 @@
 #include "gepch.h"
-#include "OpenGLIndexBuffer.h"
+
+#include "Platform/OpenGL/OpenGLIndexBuffer.h"
 
 #include <glad/glad.h>
 

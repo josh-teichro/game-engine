@@ -1,6 +1,7 @@
 #include "gepch.h"
-#include "Time.h"
-#include "Platform.h"
+
+#include "GameEngine/Core/Time.h"
+#include "GameEngine/Core/Platform.h"
 
 namespace GameEngine {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RendererAPI.h"
+#include "GameEngine/Renderer/RendererAPI.h"
 #include "GameEngine/Core/Types.h"
 
 namespace GameEngine
@@ -24,7 +24,7 @@ namespace GameEngine
 
 		inline static void Clear() { s_RendererAPI->Clear(); }
 
-		inline static void DrawArray(const std::shared_ptr<VertexArray>& vertexArray)
+		inline static void DrawArray(const Ref<VertexArray>& vertexArray)
 		{
 			s_RendererAPI->DrawArray(vertexArray);
 		}
@@ -34,7 +34,7 @@ namespace GameEngine
 			s_RendererAPI->SetViewport(x, y, width, height);
 		}
 
-		inline static API GetAPI() { return s_RendererAPI->GetAPI(); }
+		inline static API GetAPI() { return RendererAPI::GetAPI(); }
 	
 	private:
 		static Scope<RendererAPI> s_RendererAPI;

@@ -1,5 +1,6 @@
 #include "gepch.h"
-#include "OpenGLVertexBuffer.h"
+
+#include "Platform/OpenGL/OpenGLVertexBuffer.h"
 
 #include <glad/glad.h>
 

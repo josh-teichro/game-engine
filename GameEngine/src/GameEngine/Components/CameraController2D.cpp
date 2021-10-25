@@ -1,5 +1,6 @@
 #include "gepch.h"
-#include "CameraController2D.h"
+
+#include "GameEngine/Components/CameraController2D.h"
 #include "GameEngine/Events/Input.h"
 #include "GameEngine/Core/Time.h"
 #include "GameEngine/Core/Application.h"

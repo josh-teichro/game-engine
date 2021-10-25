@@ -1,5 +1,6 @@
 #include "gepch.h"
-#include "OpenGLShader.h"
+
+#include "Platform/OpenGL/OpenGLShader.h"
 #include "GameEngine/Core/Core.h"
 
 #include <fstream>

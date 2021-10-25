@@ -1,7 +1,8 @@
 #pragma once
 
 #include "GameEngine/Components/Transform.h"
-#include "glm/glm.hpp"
+
+#include <glm/glm.hpp>
 
 namespace GameEngine
 {

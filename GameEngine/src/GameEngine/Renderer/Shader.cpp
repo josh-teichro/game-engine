@@ -1,6 +1,7 @@
 #include "gepch.h"
-#include "Shader.h"
-#include "Renderer.h"
+
+#include "GameEngine/Renderer/Shader.h"
+#include "GameEngine/Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 
 namespace GameEngine 
@@ -12,7 +13,7 @@ namespace GameEngine
 
 	Ref<Shader> Shader::Create(const std::string& filepath)
 	{
-		switch (RenderCommand::GetAPI())
+		switch (Renderer::GetAPI())
 		{
 			case Renderer::API::OpenGL: return MakeRef<OpenGLShader>(filepath);
 			default: GE_CORE_ASSERT(false, "Render API currently does not support Shader!"); return nullptr;
@@ -21,7 +22,7 @@ namespace GameEngine
 
 	Ref<Shader> Shader::Create(const std::string& name, const std::string& filepath)
 	{
-		switch (RenderCommand::GetAPI())
+		switch (Renderer::GetAPI())
 		{
 		case Renderer::API::OpenGL: return MakeRef<OpenGLShader>(name, filepath);
 		default: GE_CORE_ASSERT(false, "Render API currently does not support Shader!"); return nullptr;
@@ -30,7 +31,7 @@ namespace GameEngine
 
 	Ref<Shader> Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 	{
-		switch (RenderCommand::GetAPI())
+		switch (Renderer::GetAPI())
 		{
 			case Renderer::API::OpenGL: return MakeRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
 			default: GE_CORE_ASSERT(false, "Render API currently does not support Shader!"); return nullptr;

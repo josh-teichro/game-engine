@@ -1,10 +1,11 @@
 #pragma once
 
 #include "gepch.h"
-#include "Event.h"
-#include "ApplicationEvent.h"
-#include "KeyEvent.h"
-#include "MouseEvent.h"
+
+#include "GameEngine/Events/Event.h"
+#include "GameEngine/Events/ApplicationEvent.h"
+#include "GameEngine/Events/KeyEvent.h"
+#include "GameEngine/Events/MouseEvent.h"
 
 namespace GameEngine {
 

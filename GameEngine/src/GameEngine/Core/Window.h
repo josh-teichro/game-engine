@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gepch.h"
+
 #include "GameEngine/Core/Core.h"
 #include "GameEngine/Events/Event.h"
 #include "GameEngine/Events/MouseEvent.h"
@@ -42,7 +43,7 @@ namespace GameEngine {
 		virtual void* GetNativeWindow() const = 0;
 
 		// to be defined in platform specific files
-		static Window* Create(const WindowProps& props = WindowProps());
+		static Scope<Window> Create(const WindowProps& props = WindowProps());
 	};
 
 }

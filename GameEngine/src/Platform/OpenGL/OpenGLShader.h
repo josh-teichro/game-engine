@@ -2,7 +2,7 @@
 
 #include "GameEngine/Renderer/Shader.h"
 
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
 #include <unordered_map>
 #include <glad/glad.h>

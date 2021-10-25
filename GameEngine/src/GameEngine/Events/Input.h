@@ -2,11 +2,11 @@
 
 #include "gepch.h"
 
-#include "KeyCodes.h"
-#include "MouseCodes.h"
-#include "MouseEvent.h"
+#include "GameEngine/Events/KeyCodes.h"
+#include "GameEngine/Events/MouseCodes.h"
+#include "GameEngine/Events/MouseEvent.h"
 
-#include "glm/vec2.hpp"
+#include <glm/vec2.hpp>
 
 namespace GameEngine {
 
