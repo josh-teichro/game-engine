@@ -20,6 +20,8 @@ namespace GameEngine {
 
 	void WindowsInput::InitImpl()
 	{
+		GE_PROFILE_FUNCTION();
+
 		// GLFW cursors
 		// (By design, on X11 cursors are user configurable and some cursors may be missing. When a cursor doesn't exist,
 		// GLFW will emit an error which will often be printed by the app, so we temporarily disable error reporting.
@@ -39,6 +41,8 @@ namespace GameEngine {
 
 	void WindowsInput::ShutdownImpl()
 	{
+		GE_PROFILE_FUNCTION();
+
 		// Destroy GLFW cursors
 		for (int cursor_n = 0; cursor_n < (int)MouseCursor::Count; cursor_n++)
 			glfwDestroyCursor(m_cursors[cursor_n]);
@@ -46,6 +50,8 @@ namespace GameEngine {
 
 	glm::vec2 WindowsInput::GetMousePositionImpl()
 	{
+		GE_PROFILE_FUNCTION();
+
 		double x, y;
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		glfwGetCursorPos(window, &x, &y);
@@ -54,12 +60,16 @@ namespace GameEngine {
 
 	bool WindowsInput::GetMouseDownImpl(MouseButton button) 
 	{
+		GE_PROFILE_FUNCTION();
+
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		return glfwGetMouseButton(window, (int)button) == GLFW_PRESS;
 	}
 
 	bool WindowsInput::GetKeyDownImpl(KeyCode keycode) 
 	{
+		GE_PROFILE_FUNCTION();
+
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		auto state = glfwGetKey(window, (int)keycode);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
@@ -67,6 +77,8 @@ namespace GameEngine {
 
 	void WindowsInput::SetMouseCursorImpl(MouseCursor cursor)
 	{
+		GE_PROFILE_FUNCTION();
+
 		if (m_isCursorLocked)
 			return;
 
@@ -83,18 +95,24 @@ namespace GameEngine {
 
 	const char* WindowsInput::GetClipBoardTextImpl()
 	{
+		GE_PROFILE_FUNCTION();
+
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		return glfwGetClipboardString(window);
 	}
 
 	void WindowsInput::SetClipBoardTextImpl(const char* text)
 	{
+		GE_PROFILE_FUNCTION();
+
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		glfwSetClipboardString(window, text);
 	}
 
 	void WindowsInput::LockMouseCursorImpl()
 	{
+		GE_PROFILE_FUNCTION();
+
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		m_isCursorLocked = true;
@@ -102,6 +120,8 @@ namespace GameEngine {
 
 	void WindowsInput::UnlockMouseCursorImpl()
 	{
+		GE_PROFILE_FUNCTION();
+
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		m_isCursorLocked = false;

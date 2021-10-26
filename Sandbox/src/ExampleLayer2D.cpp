@@ -20,6 +20,8 @@ void ExampleLayer2D::OnDetach()
 
 void ExampleLayer2D::OnUpdate()
 {
+	GE_PROFILE_FUNCTION();
+
 	float deltaTime = GameEngine::Time::GetDeltaTime();
 
 	m_cameraController.OnUpdate();
@@ -39,6 +41,8 @@ void ExampleLayer2D::OnUpdate()
 
 void ExampleLayer2D::OnImGuiUpdate()
 {
+	GE_PROFILE_FUNCTION();
+
 	ImGui::DragFloat3("Square Position", glm::value_ptr(m_squareTransform.position));
 	ImGui::DragFloat3("Square Rotation", glm::value_ptr(m_squareRotation));
 	ImGui::DragFloat3("Square Scale", glm::value_ptr(m_squareTransform.scale));
@@ -60,6 +64,8 @@ void ExampleLayer2D::OnImGuiUpdate()
 
 bool ExampleLayer2D::OnEvent(const GameEngine::Event& e)
 {
+	GE_PROFILE_FUNCTION();
+
 	bool result = false;
 	result |= m_cameraController.OnEvent(e);
 	result |= HandlesEvents::OnEvent(e);
@@ -84,6 +90,8 @@ bool ExampleLayer2D::OnKeyUp(const GameEngine::KeyUpEvent& e)
 
 void ExampleLayer2D::CreateScene()
 {
+	GE_PROFILE_FUNCTION();
+
 	m_backgroundTexture = GameEngine::Texture2D::Create("./res/textures/checkerboard.png");
 	m_backgroundTexture->SetWrapMode(GameEngine::Texture::WrapMode::Repeat);
 	m_backgroundTransform.position.z = -0.1f;
@@ -92,6 +100,8 @@ void ExampleLayer2D::CreateScene()
 
 void ExampleLayer2D::ResetScene()
 {
+	GE_PROFILE_FUNCTION();
+
 	m_cameraController.SetZoom(1.0f);
 	m_cameraController.SetPosition({ 0.0f, 0.0f });
 

@@ -9,6 +9,8 @@ namespace GameEngine
 
 	float WindowsPlatformAPI::GetTime()
 	{
+		GE_PROFILE_FUNCTION();
+
 		return (float)glfwGetTime();
 	}
 

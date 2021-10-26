@@ -9,7 +9,7 @@ namespace GameEngine {
 	{
 	public:
 		ImGuiLayer();
-		~ImGuiLayer();
+		virtual ~ImGuiLayer();
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;

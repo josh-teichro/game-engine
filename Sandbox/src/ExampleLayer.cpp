@@ -10,12 +10,16 @@ ExampleLayer::ExampleLayer() :
 	m_cameraController2D(1.0f),
 	m_cameraController3D(45.0f)
 {
+	GE_PROFILE_FUNCTION();
+
 	CreateScene();
 	ResetScene();
 }
 
 void ExampleLayer::OnUpdate()
 {
+	GE_PROFILE_FUNCTION();
+
 	float deltaTime = GameEngine::Time::GetDeltaTime();
 	//static bool show = true;
 	//ImGui::ShowDemoWindow(&show);
@@ -55,6 +59,8 @@ void ExampleLayer::OnUpdate()
 
 void ExampleLayer::OnImGuiUpdate()
 {
+	GE_PROFILE_FUNCTION();
+
 	if (ImGui::Button(m_is2D ? "Switch to 3D" : "Switch to 2D"))
 		m_is2D = !m_is2D;
 
@@ -102,6 +108,8 @@ void ExampleLayer::OnImGuiUpdate()
 
 bool ExampleLayer::OnEvent(const GameEngine::Event& e)
 {
+	GE_PROFILE_FUNCTION();
+
 	bool result = false;
 
 	if (m_is2D)
@@ -158,6 +166,8 @@ bool ExampleLayer::OnWindowResize(const GameEngine::WindowResizeEvent& e)
 
 void ExampleLayer::CreateScene()
 {
+	GE_PROFILE_FUNCTION();
+
 	// object 1
 	m_vertexArray = GameEngine::VertexArray::Create();
 
@@ -214,6 +224,8 @@ void ExampleLayer::CreateScene()
 
 void ExampleLayer::ResetScene()
 {
+	GE_PROFILE_FUNCTION();
+
 	// reset camera
 	m_cameraController2D.SetZoom(1.0f);
 	m_cameraController2D.SetPosition({ 0.0f, 0.5f });

@@ -74,6 +74,8 @@ namespace GameEngine
 
 	void VertexBufferLayout::CalculateOffsetsAndStride()
 	{
+		GE_PROFILE_FUNCTION();
+
 		uint32_t offset = 0;
 		for (auto& el : m_elements)
 		{

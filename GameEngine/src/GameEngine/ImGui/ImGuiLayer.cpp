@@ -24,6 +24,8 @@ namespace GameEngine {
 
 	void ImGuiLayer::OnAttach()
 	{
+		GE_PROFILE_FUNCTION();
+
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -54,6 +56,8 @@ namespace GameEngine {
 
 	void ImGuiLayer::OnDetach()
 	{
+		GE_PROFILE_FUNCTION();
+
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
@@ -61,6 +65,8 @@ namespace GameEngine {
 
 	void ImGuiLayer::BeginFrame()
 	{
+		GE_PROFILE_FUNCTION();
+
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
@@ -68,6 +74,8 @@ namespace GameEngine {
 
 	void ImGuiLayer::EndFrame()
 	{
+		GE_PROFILE_FUNCTION();
+
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		Application& app = Application::Get();
 

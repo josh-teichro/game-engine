@@ -38,6 +38,8 @@ namespace GameEngine {
 
 	void WindowsWindow::Init(const WindowProps& props)
 	{
+		GE_PROFILE_FUNCTION();
+
 		m_data.title = props.title;
 		m_data.width = props.width; 
 		m_data.height = props.height;
@@ -154,6 +156,8 @@ namespace GameEngine {
 
 	void WindowsWindow::OnUpdate()
 	{
+		GE_PROFILE_FUNCTION();
+
 		glfwPollEvents();
 		m_context->SwapBuffers();
 	}
@@ -165,6 +169,8 @@ namespace GameEngine {
 
 	void WindowsWindow::SetVSync(bool enabled)
 	{
+		GE_PROFILE_FUNCTION();
+
 		if (enabled) 
 			glfwSwapInterval(1);
 		else 
@@ -185,6 +191,8 @@ namespace GameEngine {
 
 	void WindowsWindow::Shutdown()
 	{
+		GE_PROFILE_FUNCTION();
+
 		glfwDestroyWindow(m_window);
 		s_GLFWWindowCount--;
 

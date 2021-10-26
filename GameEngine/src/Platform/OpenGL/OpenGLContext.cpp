@@ -15,6 +15,8 @@ namespace GameEngine {
 
 	void OpenGLContext::Init()
 	{
+		GE_PROFILE_FUNCTION();
+
 		glfwMakeContextCurrent(m_windowHandle);
 
 		// init Glad
@@ -40,6 +42,8 @@ namespace GameEngine {
 
 	void OpenGLContext::SwapBuffers()
 	{
+		GE_PROFILE_FUNCTION();
+
 		glfwSwapBuffers(m_windowHandle);
 	}
 

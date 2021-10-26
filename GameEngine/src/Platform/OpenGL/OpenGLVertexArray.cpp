@@ -11,17 +11,23 @@ namespace GameEngine
     OpenGLVertexArray::OpenGLVertexArray() :
         m_vertexBufferIndex(0)
     {
+        GE_PROFILE_FUNCTION();
+
         glGenVertexArrays(1, &m_id);
         glBindVertexArray(m_id);
     }
 
     OpenGLVertexArray::~OpenGLVertexArray()
     {
+        GE_PROFILE_FUNCTION();
+
         glDeleteVertexArrays(1, &m_id);
     }
 
     void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
     {
+        GE_PROFILE_FUNCTION();
+
         GE_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "VertexBufferLayout has no elements!");
 
         glBindVertexArray(m_id);
@@ -50,6 +56,8 @@ namespace GameEngine
 
     void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
     {
+        GE_PROFILE_FUNCTION();
+
         indexBuffer->Bind();
         m_indexBuffer = indexBuffer;
     }
@@ -57,11 +65,15 @@ namespace GameEngine
 
     void OpenGLVertexArray::Bind() const
     {
+        GE_PROFILE_FUNCTION();
+
         glBindVertexArray(m_id);
     }
 
     void OpenGLVertexArray::Unbind() const
     {
+        GE_PROFILE_FUNCTION();
+
         glBindVertexArray(0);
     }
 

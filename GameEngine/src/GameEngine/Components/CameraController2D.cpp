@@ -34,6 +34,8 @@ namespace GameEngine
 
 	void CameraController2D::OnUpdate()
 	{
+		GE_PROFILE_FUNCTION();
+
 		float deltaTime = Time::GetDeltaTime();
 
 		if (m_mode == Mode::Normal)

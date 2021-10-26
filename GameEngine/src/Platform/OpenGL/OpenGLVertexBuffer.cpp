@@ -36,6 +36,8 @@ namespace GameEngine
     OpenGLVertexBuffer::OpenGLVertexBuffer(const void* data, unsigned int size, const VertexBufferLayout& layout) :
         m_layout(layout)
     {
+        GE_PROFILE_FUNCTION();
+
         glGenBuffers(1, &m_id);
         glBindBuffer(GL_ARRAY_BUFFER, m_id);
         glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
@@ -43,16 +45,22 @@ namespace GameEngine
 
     OpenGLVertexBuffer::~OpenGLVertexBuffer()
     {
+        GE_PROFILE_FUNCTION();
+
         glDeleteBuffers(1, &m_id);
     }
 
     void OpenGLVertexBuffer::Bind() const
     {
+        GE_PROFILE_FUNCTION();
+
         glBindBuffer(GL_ARRAY_BUFFER, m_id);
     }
 
     void OpenGLVertexBuffer::Unbind() const
     {
+        GE_PROFILE_FUNCTION();
+
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 

@@ -28,6 +28,8 @@ namespace GameEngine
 
 	void CameraController3D::OnUpdate()
 	{
+		GE_PROFILE_FUNCTION();
+
 		float deltaTime = Time::GetDeltaTime();
 
 		UpdateCameraPosition(deltaTime);

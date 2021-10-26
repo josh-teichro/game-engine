@@ -19,6 +19,8 @@ namespace GameEngine {
 
 	void Renderer::BeginScene(const Ref<Camera>& camera)
 	{
+		GE_PROFILE_FUNCTION();
+
 		GE_CORE_ASSERT(!s_sceneActive, "Cannot render two scenes at the same time!");
 
 		camera->RecalculateMatrices();
@@ -28,11 +30,15 @@ namespace GameEngine {
 
 	void Renderer::EndScene()
 	{
+		GE_PROFILE_FUNCTION();
+
 		s_sceneActive = false;
 	}
 
 	void Renderer::Submit(const Ref<VertexArray>& vertexArray, const Transform& transform, const Ref<Shader>& shader)
 	{
+		GE_PROFILE_FUNCTION();
+
 		vertexArray->Bind();
 		shader->Bind();
 		shader->SetUniformMat4f("u_MVP", s_sceneData->viewProjectionMatrix * transform.ToMat4());

@@ -15,6 +15,8 @@ namespace GameEngine
 		m_internalFormat(0),
 		m_dataFormat(0)
 	{
+		GE_PROFILE_FUNCTION();
+
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(1);
 		stbi_uc* data = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
@@ -56,6 +58,8 @@ namespace GameEngine
 	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height) :
 		m_width(width), m_height(height)
 	{
+		GE_PROFILE_FUNCTION();
+
 		m_internalFormat = GL_RGBA8;
 		m_dataFormat = GL_RGBA;
 
@@ -74,18 +78,25 @@ namespace GameEngine
 
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
+		GE_PROFILE_FUNCTION();
+
 		glDeleteTextures(1, &m_id);
 	}
 
 	void OpenGLTexture2D::SetData(void* data, uint32_t size)
 	{
+		GE_PROFILE_FUNCTION();
+
 		uint32_t bpp = m_dataFormat == GL_RGBA ? 4 : 3;
 		GE_CORE_ASSERT(size == m_width * m_height * bpp, "Data must be entire texture!");
 		glTexImage2D(GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_dataFormat, GL_UNSIGNED_BYTE, data);
 		//glTextureSubImage2D(m_id, 0, 0, 0, m_width, m_height, m_dataFormat, GL_UNSIGNED_BYTE, data);
 	}
 
-	inline void OpenGLTexture2D::SetWrapMode(WrapMode mode) { 
+	inline void OpenGLTexture2D::SetWrapMode(WrapMode mode) 
+	{
+		GE_PROFILE_FUNCTION();
+
 		m_wrapMode = mode;
 		glBindTexture(GL_TEXTURE_2D, m_id);
 
@@ -114,6 +125,8 @@ namespace GameEngine
 
 	void OpenGLTexture2D::Bind(uint32_t slot) const
 	{
+		GE_PROFILE_FUNCTION();
+
 		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, m_id);
 		//glBindTextureUnit(slot, m_id);

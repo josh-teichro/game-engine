@@ -13,7 +13,10 @@ namespace GameEngine {
 	/**
 	* Create and initialize an Application.
 	*/
-	Application::Application() {
+	Application::Application() 
+	{
+		GE_PROFILE_FUNCTION();
+
 		GE_CORE_ASSERT(!s_instance, "Application already exists!");
 		s_instance = this;
 
@@ -33,6 +36,8 @@ namespace GameEngine {
 
 	Application::~Application()
 	{
+		GE_PROFILE_FUNCTION();
+
 		Renderer::Shutdown();
 		Renderer2D::Shutdown();
 	}
@@ -40,21 +45,34 @@ namespace GameEngine {
 	/**
 	* Run the Application until window is closed.
 	*/
-	void Application::Run() {
+	void Application::Run() 
+	{
+		GE_PROFILE_FUNCTION();
+
 		GE_CORE_INFO("Starting Game Engine...");
 
 		while (m_isRunning) {
+			GE_PROFILE_SCOPE("RunLoop");
+
 			// Update
 			m_time->OnUpdate();
 
-			for (Layer* layer : m_layerStack)
-				layer->OnUpdate();
+			{
+				GE_PROFILE_SCOPE("LayerStack OnUpdate");
+
+				for (Layer* layer : m_layerStack)
+					layer->OnUpdate();
+			}
 
 			// ImGui update
 			m_imGuiLayer->BeginFrame();
-			for (Layer* layer : m_layerStack) 
-				layer->OnImGuiUpdate();
-			m_imGuiLayer->EndFrame();
+			{
+				GE_PROFILE_SCOPE("LayerStack OnImguiUpdate");
+
+				for (Layer* layer : m_layerStack) 
+					layer->OnImGuiUpdate();
+				m_imGuiLayer->EndFrame();
+			}
 
 			m_window->OnUpdate();
 		}
@@ -65,6 +83,8 @@ namespace GameEngine {
 	*/
 	void Application::EventCallback(const Event& e)
 	{
+		GE_PROFILE_FUNCTION();
+
 		bool handled = false;
 		EventDispatcher dispatcher(e);
 		handled &= dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(&Application::OnWindowClose));

@@ -19,6 +19,8 @@ namespace GameEngine {
 
 	void Renderer2D::Init()
 	{
+		GE_PROFILE_FUNCTION();
+
 		s_data = new Renderer2DStorage();
 
 		s_data->squareVertexArray = VertexArray::Create();
@@ -53,6 +55,8 @@ namespace GameEngine {
 
 	void Renderer2D::BeginScene(const Ref<Camera>& camera)
 	{
+		GE_PROFILE_FUNCTION();
+
 		GE_CORE_ASSERT(!s_sceneActive, "Cannot render two scenes at the same time!");
 
 		camera->RecalculateMatrices();
@@ -70,11 +74,15 @@ namespace GameEngine {
 
 	void Renderer2D::EndScene()
 	{
+		GE_PROFILE_FUNCTION();
+
 		s_sceneActive = false;
 	}
 
 	void Renderer2D::DrawRect(const Transform& transform, const glm::vec4& color)
 	{
+		GE_PROFILE_FUNCTION();
+
 		s_data->whiteTexture->Bind(0);
 
 		s_data->standardShader->SetUniformMat4f("u_MVP", s_sceneData->viewProjectionMatrix * transform.ToMat4());
@@ -86,6 +94,8 @@ namespace GameEngine {
 
 	void Renderer2D::DrawRect(const Transform& transform, const Ref<Texture2D>& texture)
 	{
+		GE_PROFILE_FUNCTION();
+
 		texture->Bind(0);
 
 		s_data->standardShader->SetUniformMat4f("u_MVP", s_sceneData->viewProjectionMatrix * transform.ToMat4());

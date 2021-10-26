@@ -19,6 +19,8 @@ namespace GameEngine {
 
 	void Camera::RecalculateMatrices()
 	{
+		GE_PROFILE_FUNCTION();
+
 		RecalculatePMatrix();
 		RecalculateVMatrix();
 		m_VP = m_P * m_V;
@@ -26,12 +28,16 @@ namespace GameEngine {
 
 	void Camera::RecalculateVMatrix()
 	{
+		GE_PROFILE_FUNCTION();
+
 		m_V = glm::translate(glm::mat4(1.0f), m_transform.position) * glm::toMat4(m_transform.orientation);
 		m_V = glm::inverse(m_V);
 	}
 
 	void Camera::LookAt(glm::vec3 point, glm::vec3 up)
 	{
+		GE_PROFILE_FUNCTION();
+
 		glm::mat4 camModel = glm::lookAt(m_transform.position, point, up);
 		glm::vec3 scale;
 		glm::vec3 translation;
@@ -53,6 +59,8 @@ namespace GameEngine {
 
 	void PerspectiveCamera::RecalculatePMatrix()
 	{
+		GE_PROFILE_FUNCTION();
+
 		m_P = glm::perspective(glm::radians(m_fov), m_aspectRatio, m_clipNear, m_clipFar);
 	}
 
@@ -90,6 +98,8 @@ namespace GameEngine {
 
 	void OrthographicCamera::RecalculatePMatrix()
 	{
+		GE_PROFILE_FUNCTION();
+
 		m_P = glm::ortho(m_left, m_right, m_bottom, m_top, m_zNear, m_zFar);
 	}
 

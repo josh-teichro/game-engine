@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GameEngine/Core/Config.h"
 #include "GameEngine/Core/Types.h"
 
 // Platform detection using predefined macros
@@ -42,10 +43,6 @@
 	/* Unknown compiler/platform */
     #error "Unknown platform!"
 #endif // End of platform detection
-
-#ifdef GE_DEBUG
-    #define GE_ENABLE_ASSERTS
-#endif
 
 #ifdef GE_ENABLE_ASSERTS
     #define GE_ASSERT(x, ...) { if(!(x)) { GE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
