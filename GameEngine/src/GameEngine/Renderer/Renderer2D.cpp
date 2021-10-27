@@ -45,7 +45,13 @@ namespace GameEngine {
 		s_data->squareVertexArray->AddVertexBuffer(vertexBuffer3);
 		s_data->squareVertexArray->SetIndexBuffer(indexBuffer3);
 
+		s_data->whiteTexture = Texture2D::Create(1, 1);
+		uint32_t whiteTextureData = 0xffffffff;
+		s_data->whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+
 		s_data->standardShader = Shader::Create("./res/shaders/standard.shader");
+		s_data->standardShader->Bind();
+		s_data->standardShader->SetUniform1i("u_texture", 0);
 	}
 
 	void Renderer2D::Shutdown()
@@ -61,13 +67,6 @@ namespace GameEngine {
 
 		camera->RecalculateMatrices();
 		s_sceneData->viewProjectionMatrix = camera->VP();
-
-		s_data->whiteTexture = Texture2D::Create(1, 1);
-		uint32_t whiteTextureData = 0xffffffff;
-		s_data->whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
-
-		s_data->standardShader->Bind();		
-		s_data->standardShader->SetUniform1i("u_texture", 0);
 
 		s_sceneActive = true;
 	}

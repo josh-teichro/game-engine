@@ -34,7 +34,7 @@ namespace GameEngine {
 #define GE_CORE_INFO(...)    GameEngine::Log::GetCoreLogger()->info(__VA_ARGS__)
 #define GE_CORE_WARN(...)    GameEngine::Log::GetCoreLogger()->warn(__VA_ARGS__)
 #define GE_CORE_ERROR(...)   GameEngine::Log::GetCoreLogger()->error(__VA_ARGS__)
-#define GE_CORE_FATAL(...)   GameEngine::Log::GetCoreLogger()->critical(__VA_ARGS__)
+#define GE_CORE_CRITICAL(...)   GameEngine::Log::GetCoreLogger()->critical(__VA_ARGS__)
 							 
 #define GE_TRACE(...)        GameEngine::Log::GetClientLogger()->trace(__VA_ARGS__)
 #define GE_INFO(...)         GameEngine::Log::GetClientLogger()->info(__VA_ARGS__)

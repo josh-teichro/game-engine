@@ -269,12 +269,13 @@ namespace GameEngine
             return -1;
         }
 
+        // TODO: When updating OpenGL, uncomment this
         // cleanup
-        for (auto id : glShaderIDs)
-        {
-            glDetachShader(program, id);
-            glDeleteShader(id);
-        }
+        //for (auto id : glShaderIDs)
+        //{
+        //    glDetachShader(program, id);
+        //    glDeleteShader(id);
+        //}
 
         return program;
     }

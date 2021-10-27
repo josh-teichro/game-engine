@@ -8,6 +8,7 @@
 #include "GameEngine/Events/MouseEvent.h"
 #include "GameEngine/Events/KeyEvent.h"
 #include "GameEngine/Events/ApplicationEvent.h"
+#include "GameEngine/Renderer/Renderer.h"
 
 #include <glad/glad.h>
 
@@ -45,6 +46,8 @@ namespace GameEngine {
 		m_data.height = props.height;
 
 		if (s_GLFWWindowCount == 0) {
+			GE_PROFILE_SCOPE("glfwInit");
+
 			GE_CORE_INFO("Initializing GLFW");
 			int success = glfwInit();
 
@@ -52,10 +55,17 @@ namespace GameEngine {
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}
 
-		GE_CORE_INFO("Creating window: {0} ({1}x{2})", m_data.title, m_data.width, m_data.height);
+		{
+			GE_PROFILE_SCOPE("glfwCreateWindow");
 
-		m_window = glfwCreateWindow((int)m_data.width, (int)m_data.height, m_data.title.c_str(), nullptr, nullptr);
-		s_GLFWWindowCount++;
+#ifdef GE_DEBUG
+			if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
+				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+#endif
+
+			m_window = glfwCreateWindow((int)m_data.width, (int)m_data.height, m_data.title.c_str(), nullptr, nullptr);
+			s_GLFWWindowCount++;
+		}
 
 		m_context = MakeScope<OpenGLContext>(m_window);
 		m_context->Init();

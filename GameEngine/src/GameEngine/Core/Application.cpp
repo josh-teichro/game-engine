@@ -93,9 +93,9 @@ namespace GameEngine {
 		if (handled)
 			return;
 
-		for (auto it = m_layerStack.end(); it != m_layerStack.begin();)
+		for (auto it = m_layerStack.rbegin(); it != m_layerStack.rend(); it++)
 		{
-			if ((*--it)->OnEvent(e))
+			if ((*it)->OnEvent(e))
 				break;
 		}
 	}
