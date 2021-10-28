@@ -51,6 +51,9 @@ namespace GameEngine {
 		virtual void UnlockMouseCursorImpl() = 0;
 
 	private:
+		static Scope<Input> Create();
+
+	private:
 		static Scope<Input> s_instance;
 
 		friend class Window;

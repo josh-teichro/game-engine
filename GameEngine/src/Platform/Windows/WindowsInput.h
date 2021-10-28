@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GameEngine/Events/Input.h"
+#include "GameEngine/Core/Input.h"
 
 struct GLFWcursor;
 

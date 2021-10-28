@@ -7,8 +7,6 @@
 
 namespace GameEngine {
 
-	Scope<Input> Input::s_instance = MakeScope<WindowsInput>();
-
 	WindowsInput::WindowsInput() :
 		m_isCursorLocked(false)
 	{

@@ -2,7 +2,7 @@
 
 #include "GameEngine/ImGui/ImGuiLayer.h"
 #include "GameEngine/Core/Application.h"
-#include "GameEngine/Events/Input.h"
+#include "GameEngine/Core/Input.h"
 
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>

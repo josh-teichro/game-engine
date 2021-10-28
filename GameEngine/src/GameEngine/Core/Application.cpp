@@ -5,6 +5,7 @@
 #include "GameEngine/Renderer/Renderer2D.h"
 #include "GameEngine/Renderer/VertexBuffer.h"
 #include "GameEngine/Core/Log.h"
+#include "GameEngine/Core/Input.h"
 
 namespace GameEngine {
 
@@ -23,6 +24,8 @@ namespace GameEngine {
 		m_window = Window::Create();
 		m_window->SetEventCallback(std::bind(&Application::EventCallback, this, std::placeholders::_1));
 
+		Input::Init();
+
 		// TODO: automate some of this so we dont have to manually init every Renderer class
 		RenderCommand::Init();
 		Renderer::Init();
@@ -37,6 +40,8 @@ namespace GameEngine {
 	Application::~Application()
 	{
 		GE_PROFILE_FUNCTION();
+
+		Input::Shutdown();
 
 		Renderer::Shutdown();
 		Renderer2D::Shutdown();

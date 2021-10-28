@@ -21,19 +21,13 @@ namespace GameEngine {
 		GE_CORE_ERROR("GLFW error ({0}): {1}", error, description);
 	}
 
-	Scope<Window> Window::Create(const WindowProps& props) {
-		return MakeScope<WindowsWindow>(props);
-	}
-
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
 		Init(props);
-		WindowsInput::Init();
 	}
 
 	WindowsWindow::~WindowsWindow()
 	{
-		WindowsInput::Shutdown();
 		Shutdown();
 	}
 

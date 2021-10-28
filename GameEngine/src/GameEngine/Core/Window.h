@@ -42,7 +42,6 @@ namespace GameEngine {
 
 		virtual void* GetNativeWindow() const = 0;
 
-		// to be defined in platform specific files
 		static Scope<Window> Create(const WindowProps& props = WindowProps());
 	};
 

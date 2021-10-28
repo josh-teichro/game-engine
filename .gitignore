@@ -5,6 +5,7 @@ bin-int/
 Archive/
 
 # Files
+*.log
 **.user
 **.sln
 **.vcxproj

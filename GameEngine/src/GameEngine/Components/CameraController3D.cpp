@@ -3,7 +3,7 @@
 #include "GameEngine/Components/CameraController3D.h"
 #include "GameEngine/Core/Application.h"
 #include "GameEngine/Core/Time.h"
-#include "GameEngine/Events/Input.h"
+#include "GameEngine/Core/Input.h"
 
 namespace GameEngine
 {

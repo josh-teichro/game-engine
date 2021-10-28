@@ -14,7 +14,7 @@
 #include "GameEngine/Components/CameraController3D.h"
 
 // --- Events -------------------------------------
-#include "GameEngine/Events/Input.h"
+#include "GameEngine/Core/Input.h"
 #include "GameEngine/Events/KeyCodes.h"
 #include "GameEngine/Events/MouseCodes.h"
 // ------------------------------------------------
