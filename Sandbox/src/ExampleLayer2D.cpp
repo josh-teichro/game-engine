@@ -32,9 +32,9 @@ void ExampleLayer2D::OnUpdate()
 
 	GameEngine::Renderer2D::BeginScene(m_cameraController.GetCamera());
 
-	m_squareTransform.SetEulerAngles(m_squareRotation);
-	GameEngine::Renderer2D::DrawRect(m_squareTransform, m_squareColor);
-	GameEngine::Renderer2D::DrawRect(m_backgroundTransform, m_backgroundTexture);
+	m_squareTransform.rotation = glm::radians(m_squareRotationDeg);
+	GameEngine::Renderer2D::DrawRect(m_squareTransform, m_squareMaterial);
+	GameEngine::Renderer2D::DrawRect(m_backgroundTransform, m_backgroundMaterial);
 
 	GameEngine::Renderer2D::EndScene();
 }
@@ -43,10 +43,13 @@ void ExampleLayer2D::OnImGuiUpdate()
 {
 	GE_PROFILE_FUNCTION();
 
-	ImGui::DragFloat3("Square Position", glm::value_ptr(m_squareTransform.position));
-	ImGui::DragFloat3("Square Rotation", glm::value_ptr(m_squareRotation));
-	ImGui::DragFloat3("Square Scale", glm::value_ptr(m_squareTransform.scale));
-	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_squareColor));
+	ImGui::DragFloat2("Square Position", glm::value_ptr(m_squareTransform.position), 0.1f);
+	ImGui::DragFloat("Square Rotation", &m_squareRotationDeg, 1.0f, 0.0f, 360.0f);
+	ImGui::DragFloat2("Square Size", glm::value_ptr(m_squareTransform.size), 0.1f, 0.0f);
+	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_squareMaterial.color));
+
+	ImGui::DragFloat2("Background Tiling Offset", &m_backgroundMaterial.textureOffset[0], 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat2("Background Tiling Scale", &m_backgroundMaterial.textureScale[0], 0.01f, 0.0f, 10.0f);
 
 	ImGui::BeginDisabled(m_walk);
 	if (ImGui::Button("Walk"))
@@ -92,10 +95,10 @@ void ExampleLayer2D::CreateScene()
 {
 	GE_PROFILE_FUNCTION();
 
-	m_backgroundTexture = GameEngine::Texture2D::Create("./res/textures/checkerboard.png");
-	m_backgroundTexture->SetWrapMode(GameEngine::Texture::WrapMode::Repeat);
-	m_backgroundTransform.position.z = -0.1f;
-	m_backgroundTransform.scale = { 10.0f, 10.0f, 10.0f };
+	m_backgroundMaterial.texture = GameEngine::Texture2D::Create("./res/textures/checkerboard.png");
+	m_backgroundMaterial.texture->SetWrapMode(GameEngine::Texture::WrapMode::Repeat);
+	m_backgroundTransform.zIndex = -0.1f;
+	m_backgroundTransform.size = { 10.0f, 10.0f };
 }
 
 void ExampleLayer2D::ResetScene()
@@ -105,8 +108,8 @@ void ExampleLayer2D::ResetScene()
 	m_cameraController.SetZoom(1.0f);
 	m_cameraController.SetPosition({ 0.0f, 0.0f });
 
-	m_squareTransform.position = { 0.0f, 0.0f, 0.0f };
-	m_squareTransform.scale = { 1.0f, 1.0f, 1.0f };
-	m_squareRotation = { 0.0f, 0.0f, 0.0f };
-	m_squareColor = { 0.3f, 0.2f, 0.8f, 1.0f };
+	m_squareTransform.position = { 0.0f, 0.0f };
+	m_squareTransform.size = { 1.0f, 1.0f };
+	m_squareTransform.rotation = m_squareRotationDeg = 0.0f;
+	m_squareMaterial.color = { 0.3f, 0.2f, 0.8f, 1.0f };
 }

@@ -33,7 +33,17 @@ namespace GameEngine
     // -----------------------------------------------------------------
 
 
-    OpenGLVertexBuffer::OpenGLVertexBuffer(const void* data, unsigned int size, const VertexBufferLayout& layout) :
+	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size, const VertexBufferLayout& layout) :
+        m_layout(layout)
+	{
+        GE_PROFILE_FUNCTION();
+
+        glGenBuffers(1, &m_id);
+        glBindBuffer(GL_ARRAY_BUFFER, m_id);
+        glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+	}
+
+	OpenGLVertexBuffer::OpenGLVertexBuffer(const void* data, uint32_t size, const VertexBufferLayout& layout) :
         m_layout(layout)
     {
         GE_PROFILE_FUNCTION();
@@ -62,6 +72,12 @@ namespace GameEngine
         GE_PROFILE_FUNCTION();
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
+    void OpenGLVertexBuffer::SetData(const void* data, uint32_t size)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, m_id);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
     }
 
 }

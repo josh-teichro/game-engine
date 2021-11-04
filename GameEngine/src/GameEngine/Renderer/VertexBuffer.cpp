@@ -89,7 +89,16 @@ namespace GameEngine
 	// VertexBuffer ----------------------------------------------------
 	// -----------------------------------------------------------------
 
-	Ref<VertexBuffer> VertexBuffer::Create(const void* data, unsigned int size, const VertexBufferLayout& layout)
+	Ref<VertexBuffer> VertexBuffer::Create(uint32_t size, const VertexBufferLayout& layout)
+	{
+		switch (Renderer::GetAPI())
+		{
+			case Renderer::API::OpenGL: return MakeRef<OpenGLVertexBuffer>(size, layout);
+			default: GE_CORE_ASSERT(false, "Render API currently does not support VertexBuffer!"); return nullptr;
+		}
+	}
+
+	Ref<VertexBuffer> VertexBuffer::Create(const void* data, uint32_t size, const VertexBufferLayout& layout)
 	{
 		switch (Renderer::GetAPI())
 		{

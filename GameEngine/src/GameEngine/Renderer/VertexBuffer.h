@@ -63,8 +63,10 @@ namespace GameEngine
 
 		virtual const VertexBufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const VertexBufferLayout& layout) = 0;
+		virtual void SetData(const void* data, uint32_t size) = 0;
 
-		static Ref<VertexBuffer> Create(const void* data, unsigned int size, const VertexBufferLayout& layout);
+		static Ref<VertexBuffer> Create(uint32_t size, const VertexBufferLayout& layout);
+		static Ref<VertexBuffer> Create(const void* data, uint32_t size, const VertexBufferLayout& layout);
 	};
 
 }

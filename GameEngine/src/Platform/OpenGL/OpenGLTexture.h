@@ -22,6 +22,8 @@ namespace GameEngine
 
 		virtual void Bind(uint32_t slot) const override;
 
+		virtual bool operator==(const Texture& other) const override;
+
 	public:
 		uint32_t m_id;
 		uint32_t m_width, m_height;

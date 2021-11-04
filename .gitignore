@@ -5,7 +5,8 @@ bin-int/
 Archive/
 
 # Files
-*.log
+**GameEngineProfile*.json
+**.log
 **.user
 **.sln
 **.vcxproj

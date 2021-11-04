@@ -28,6 +28,8 @@ namespace GameEngine
 		virtual void SetWrapMode(WrapMode mode) = 0;
 
 		virtual void Bind(uint32_t slot) const = 0;
+
+		virtual bool operator==(const Texture& other) const = 0;
 	};
 
 	/**

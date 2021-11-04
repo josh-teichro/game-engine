@@ -35,13 +35,23 @@ namespace GameEngine
 
 		virtual void SetUniform1i(const std::string& name, int value) override;
 
+		virtual void SetUniform1iv(const std::string& name, int* value, uint32_t count) override;
+
 		virtual void SetUniform1f(const std::string& name, float value) override;
 		virtual void SetUniform2f(const std::string& name, const glm::vec2& value) override;
 		virtual void SetUniform3f(const std::string& name, const glm::vec3& value) override;
 		virtual void SetUniform4f(const std::string& name, const glm::vec4& value) override;
 
+		virtual void SetUniform1fv(const std::string& name, const float* value, uint32_t count) override;
+		virtual void SetUniform2fv(const std::string& name, const glm::vec2* value, uint32_t count) override;
+		virtual void SetUniform3fv(const std::string& name, const glm::vec3* value, uint32_t count) override;
+		virtual void SetUniform4fv(const std::string& name, const glm::vec4* value, uint32_t count) override;
+
 		virtual void SetUniformMat3f(const std::string& name, const glm::mat3& value) override;
 		virtual void SetUniformMat4f(const std::string& name, const glm::mat4& value) override;
+
+		virtual void SetUniformMat3fv(const std::string& name, const glm::mat3* value, uint32_t count) override;
+		virtual void SetUniformMat4fv(const std::string& name, const glm::mat4* value, uint32_t count) override;
 
 		virtual const std::string& GetName() const override { return m_name; }
 

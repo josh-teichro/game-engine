@@ -22,12 +22,12 @@ private:
 
 	GameEngine::ShaderLibrary m_shaderLibrary;
 
-	GameEngine::Ref<GameEngine::Texture2D> m_backgroundTexture;
-	GameEngine::Transform m_backgroundTransform;
+	GameEngine::Renderer2D::RectTransform m_backgroundTransform;
+	GameEngine::Renderer2D::RectMaterial m_backgroundMaterial;
 
-	GameEngine::Transform m_squareTransform;
-	glm::vec3 m_squareRotation;
-	glm::vec4 m_squareColor;
+	GameEngine::Renderer2D::RectTransform m_squareTransform;
+	float m_squareRotationDeg;
+	GameEngine::Renderer2D::RectMaterial m_squareMaterial;
 
 	bool m_walk = false;
 

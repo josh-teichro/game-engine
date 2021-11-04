@@ -72,12 +72,19 @@ namespace GameEngine
         glUseProgram(0);
     }
 
-    void OpenGLShader::SetUniform1i(const std::string& name, int v)
+    void OpenGLShader::SetUniform1i(const std::string& name, int value)
     {
         GE_PROFILE_FUNCTION();
 
-        glUniform1i(GetUniformLocation(name), v);
+        glUniform1i(GetUniformLocation(name), value);
     }
+
+	void OpenGLShader::SetUniform1iv(const std::string& name, int* value, uint32_t count)
+	{
+        GE_PROFILE_FUNCTION();
+
+        glUniform1iv(GetUniformLocation(name), count, value);
+	}
 
     void OpenGLShader::SetUniform1f(const std::string& name, float v)
     {
@@ -107,18 +114,60 @@ namespace GameEngine
         glUniform4f(GetUniformLocation(name), value[0], value[1], value[2], value[3]);
     }
 
-    void OpenGLShader::SetUniformMat3f(const std::string& name, const glm::mat3& matrix)
+    void OpenGLShader::SetUniform1fv(const std::string& name, const float* value, uint32_t count)
     {
         GE_PROFILE_FUNCTION();
 
-        glUniformMatrix3fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
+        glUniform1fv(GetUniformLocation(name), count, value);
     }
 
-    void OpenGLShader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix)
+    void OpenGLShader::SetUniform2fv(const std::string& name, const glm::vec2* value, uint32_t count)
     {
         GE_PROFILE_FUNCTION();
 
-        glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
+        glUniform2fv(GetUniformLocation(name), count, &value[0][0]);
+    }
+
+    void OpenGLShader::SetUniform3fv(const std::string& name, const glm::vec3* value, uint32_t count)
+    {
+        GE_PROFILE_FUNCTION();
+
+        glUniform3fv(GetUniformLocation(name), count, &value[0][0]);
+    }
+
+    void OpenGLShader::SetUniform4fv(const std::string& name, const glm::vec4* value, uint32_t count)
+    {
+        GE_PROFILE_FUNCTION();
+
+        glUniform4fv(GetUniformLocation(name), count, &value[0][0]);
+    }
+
+    void OpenGLShader::SetUniformMat3f(const std::string& name, const glm::mat3& value)
+    {
+        GE_PROFILE_FUNCTION();
+
+        glUniformMatrix3fv(GetUniformLocation(name), 1, GL_FALSE, &value[0][0]);
+    }
+
+    void OpenGLShader::SetUniformMat4f(const std::string& name, const glm::mat4& value)
+    {
+        GE_PROFILE_FUNCTION();
+
+        glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &value[0][0]);
+    }
+
+    void OpenGLShader::SetUniformMat3fv(const std::string& name, const glm::mat3* value, uint32_t count)
+    {
+        GE_PROFILE_FUNCTION();
+
+        glUniformMatrix3fv(GetUniformLocation(name), count, GL_FALSE, &value[0][0][0]);
+    }
+
+    void OpenGLShader::SetUniformMat4fv(const std::string& name, const glm::mat4* value, uint32_t count)
+    {
+        GE_PROFILE_FUNCTION();
+
+        glUniformMatrix4fv(GetUniformLocation(name), count, GL_FALSE, &value[0][0][0]);
     }
 
     int OpenGLShader::GetUniformLocation(const std::string& name)
@@ -274,7 +323,7 @@ namespace GameEngine
         //for (auto id : glShaderIDs)
         //{
         //    glDetachShader(program, id);
-        //    glDeleteShader(id);
+        //    //glDeleteShader(id);
         //}
 
         return program;

@@ -132,4 +132,9 @@ namespace GameEngine
 		//glBindTextureUnit(slot, m_id);
 	}
 
+	bool OpenGLTexture2D::operator==(const Texture& other) const
+	{
+		return m_id == ((const OpenGLTexture2D&)other).m_id;
+	}
+
 }

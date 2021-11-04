@@ -15,7 +15,8 @@ namespace GameEngine
 	class OpenGLVertexBuffer : public VertexBuffer
 	{
 	public:
-		OpenGLVertexBuffer(const void* data, unsigned int size, const VertexBufferLayout& layout);
+		OpenGLVertexBuffer(uint32_t size, const VertexBufferLayout& layout);
+		OpenGLVertexBuffer(const void* data, uint32_t size, const VertexBufferLayout& layout);
 		virtual  ~OpenGLVertexBuffer();
 
 		virtual void Bind() const override;
@@ -23,6 +24,7 @@ namespace GameEngine
 
 		virtual const VertexBufferLayout& GetLayout() const override { return m_layout; }
 		virtual void SetLayout(const VertexBufferLayout& layout) override { m_layout = layout; }
+		virtual void SetData(const void* data, uint32_t size) override;
 
 	private:
 		uint32_t m_id;
