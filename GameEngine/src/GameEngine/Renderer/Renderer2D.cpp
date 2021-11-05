@@ -17,7 +17,7 @@ namespace GameEngine {
 	};
 
 	struct Renderer2DData {
-		static const uint32_t maxQuads = 100;
+		static const uint32_t maxQuads = 1000;
 		static const uint32_t maxVertices = maxQuads * 4;
 		static const uint32_t maxIndices = maxQuads * 6;
 		static const uint32_t maxTextureSlots = 32; // TODO: RenderCaps
@@ -36,6 +36,8 @@ namespace GameEngine {
 		glm::mat4 viewProjectionMatrix;
 
 		bool isSceneActive = false;
+
+		Renderer2D::Statistics stats;
 	};
 
 	static Renderer2DData s_data;
@@ -135,11 +137,19 @@ namespace GameEngine {
 
 		s_data.quadVertexArray->Bind();
 		RenderCommand::DrawArray(s_data.quadVertexArray, dataSize);
+
+		// stats
+		s_data.stats.drawCalls++;
 	}
 
 	void Renderer2D::DrawRect(const RectTransform& transform, const RectMaterial& material)
 	{
 		GE_PROFILE_FUNCTION();
+
+		if (s_data.quadIndexCount >= s_data.maxIndices) {
+			Flush();
+			Reset();
+		}
 
 		glm::vec4 color = material.color;
 		float texIndex = 0.0f;
@@ -225,12 +235,32 @@ namespace GameEngine {
 		s_data.quadVertexBufferPtr[3].texScaleFactor = texScaleFactor;
 
 		s_data.quadVertexBufferPtr += 4;
+		s_data.quadIndexCount += 6;
+
+		// stats
+		s_data.stats.quadCount++;
+	}
+
+	void Renderer2D::ResetStats()
+	{
+		s_data.stats.drawCalls = 0;
+		s_data.stats.quadCount = 0;
+		s_data.stats.vertexCount = 0;
+		s_data.stats.indexCount = 0;
+	}
+
+	Renderer2D::Statistics Renderer2D::GetStats()
+	{
+		s_data.stats.vertexCount = s_data.stats.quadCount * 4;
+		s_data.stats.indexCount = s_data.stats.quadCount * 6;
+		return s_data.stats;
 	}
 
 	void Renderer2D::Reset()
 	{
 		s_data.textureCount = 1;
 		s_data.quadVertexBufferPtr = s_data.quadVertexBufferBase;
+		s_data.quadIndexCount = 0;
 	}
 
 }

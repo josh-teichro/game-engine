@@ -31,6 +31,14 @@ namespace GameEngine {
 			glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		};
 
+		struct Statistics
+		{
+			uint32_t drawCalls = 0;
+			uint32_t quadCount = 0;
+			uint32_t vertexCount = 0;
+			uint32_t indexCount = 0;
+		};
+
 	public:
 		static void Init();
 		static void Shutdown();
@@ -43,6 +51,9 @@ namespace GameEngine {
 		static void DrawRect(const RectTransform& transform, const RectMaterial& material);
 
 		static API GetAPI() { return RenderCommand::GetAPI(); }
+
+		static void ResetStats();
+		static Statistics GetStats();
 
 	private:
 		static void Reset();

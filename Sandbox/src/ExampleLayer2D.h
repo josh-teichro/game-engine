@@ -22,12 +22,15 @@ private:
 
 	GameEngine::ShaderLibrary m_shaderLibrary;
 
-	GameEngine::Renderer2D::RectTransform m_backgroundTransform;
-	GameEngine::Renderer2D::RectMaterial m_backgroundMaterial;
+	GameEngine::Renderer2D::RectTransform m_checkerboardTransform;
+	GameEngine::Renderer2D::RectMaterial m_checkerboardMaterial;
 
 	GameEngine::Renderer2D::RectTransform m_squareTransform;
 	float m_squareRotationDeg;
 	GameEngine::Renderer2D::RectMaterial m_squareMaterial;
+
+	glm::vec4 m_gradientStart, m_gradientStop;
+	int32_t m_gradientSteps;
 
 	bool m_walk = false;
 
