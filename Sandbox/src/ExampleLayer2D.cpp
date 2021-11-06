@@ -185,6 +185,9 @@ void ExampleLayer2D::ResetScene()
 	m_cameraController.SetZoom(1.0f);
 	m_cameraController.SetPosition({ 0.0f, 0.0f });
 
+	m_checkerboardMaterial.textureOffset = { 0.0f, 0.0f };
+	m_checkerboardMaterial.textureScale = { 1.0f, 1.0f };
+
 	m_squareTransform.position = { 0.0f, 0.0f };
 	m_squareTransform.size = { 1.0f, 1.0f };
 	m_squareTransform.rotation = m_squareRotationDeg = 0.0f;
