@@ -19,6 +19,7 @@ namespace GameEngine
 
 		virtual void SetData(void* data, uint32_t size) override;
 		virtual void SetWrapMode(WrapMode mode) override;
+		virtual void SetFilter(Filter filter) override;
 
 		virtual void Bind(uint32_t slot) const override;
 
@@ -30,6 +31,7 @@ namespace GameEngine
 		std::string m_filepath;		
 		GLenum m_internalFormat, m_dataFormat;
 		WrapMode m_wrapMode = WrapMode::Repeat;
+		Filter m_filter = Filter::Linear;
 	};
 
 }

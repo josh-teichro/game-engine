@@ -37,17 +37,19 @@ namespace GameEngine
 
 		GE_CORE_ASSERT(m_internalFormat & m_dataFormat, "Failed to load image: format not supported!");
 
+		// TODO: Update when switching OpenGL version
 		glGenTextures(1, &m_id);
 		glBindTexture(GL_TEXTURE_2D, m_id);
 		//glCreateTextures(GL_TEXTURE_2D, 1, &m_id);
 		//glTextureStorage2D(m_id, 1, internalFormat, m_width, m_height);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		//glTextureParameteri(m_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		//glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		SetWrapMode(m_wrapMode);
+		SetFilter(m_filter);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_dataFormat, GL_UNSIGNED_BYTE, data);
 		//glTextureSubImage2D(m_id, 0, 0, 0, m_width, m_height, dataFormat, GL_UNSIGNED_BYTE, data);
@@ -67,11 +69,6 @@ namespace GameEngine
 		glBindTexture(GL_TEXTURE_2D, m_id);
 		//glCreateTextures(GL_TEXTURE_2D, 1, &m_id);
 		//glTextureStorage2D(m_id, 1, m_internalFormat, m_width, m_height);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		//glTextureParameteri(m_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		//glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		SetWrapMode(m_wrapMode);
 	}
@@ -120,6 +117,30 @@ namespace GameEngine
 				//glTextureParameteri(m_id, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 				//glTextureParameteri(m_id, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 				break;
+		}
+	}
+
+	void OpenGLTexture2D::SetFilter(Filter filter)
+	{
+		GE_PROFILE_FUNCTION();
+
+		m_filter = filter;
+		glBindTexture(GL_TEXTURE_2D, m_id);
+
+		switch (filter)
+		{
+		case Filter::Nearest:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			//glTextureParameteri(m_id, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			//glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			break;
+		case Filter::Linear:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			//glTextureParameteri(m_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			//glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			break;
 		}
 	}
 

@@ -26,6 +26,18 @@ void ExampleLayer2D::OnUpdate()
 
 	m_cameraController.OnUpdate();
 
+	// red hood character
+	m_characterAnimationTime += deltaTime;
+	while (m_characterAnimationTime > 1 / m_characterAnimationSpeed)
+	{
+		m_characterAnimationFrameIndex = (m_characterAnimationFrameIndex + 1) % (int)c_characterSheetNumCells[1];
+		m_characterAnimationTime -= 1 / m_characterAnimationSpeed;
+	}
+
+	GameEngine::Renderer2D::RectTexture& characterTexture = m_characterMaterial.texture;
+	characterTexture.textureCoords[0] = glm::vec2(m_characterAnimationFrameIndex, m_characterAnimationIndex) / c_characterSheetNumCells;
+	characterTexture.textureCoords[1] = glm::vec2(m_characterAnimationFrameIndex + 1, m_characterAnimationIndex + 1) / c_characterSheetNumCells;
+
 	// draw scene
 	GameEngine::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 	GameEngine::RenderCommand::Clear();
@@ -40,7 +52,7 @@ void ExampleLayer2D::OnUpdate()
 	// draw gradient
 	GameEngine::Renderer2D::RectTransform transform;
 	GameEngine::Renderer2D::RectMaterial material;
-	float minX = -10.0f, maxX = 10.0f, minY = -10.0f, maxY = 10.0f;
+	float minX = -2.0f, maxX = 2.0f, minY = -2.0f, maxY = 2.0f;
 	transform.size = { (maxX - minX) / m_gradientSteps, (maxY - minY) / m_gradientSteps }; 
 	transform.zIndex = -0.1f;
 
@@ -55,6 +67,9 @@ void ExampleLayer2D::OnUpdate()
 			GameEngine::Renderer2D::DrawRect(transform, material);
 		}
 	}
+
+	// draw character
+	GameEngine::Renderer2D::DrawRect(m_characterTransform, m_characterMaterial);
 
 	GameEngine::Renderer2D::EndScene();
 }
@@ -78,6 +93,24 @@ void ExampleLayer2D::OnImGuiUpdate()
 	ImGui::ColorEdit4("Gradient Stop", glm::value_ptr(m_gradientStop));
 	ImGui::DragInt("Gradient Steps", &m_gradientSteps, 1.0f, 1, 10000);
 
+	ImGui::Text("Character");
+	ImGui::DragFloat2("Position", glm::value_ptr(m_characterTransform.position), 0.1f);
+	if (ImGui::BeginCombo("Animation", std::to_string(m_characterAnimationIndex).c_str()))
+	{
+		for (int i = 0; i < (int)c_characterSheetNumCells[0]; i++)
+		{
+			bool is_selected = (m_characterAnimationIndex == i);
+			if (ImGui::Selectable(std::to_string(i).c_str(), is_selected)) {
+				m_characterAnimationIndex = i;
+				m_characterAnimationFrameIndex = 0;
+			}
+			if (is_selected)
+				ImGui::SetItemDefaultFocus();  
+		}
+		ImGui::EndCombo();
+	}
+	ImGui::DragFloat("Animation Speed", &m_characterAnimationSpeed, 1.0f, 0.0f, 60.0f);
+
 	ImGui::BeginDisabled(m_walk);
 	if (ImGui::Button("Walk"))
 	{
@@ -97,6 +130,7 @@ void ExampleLayer2D::OnImGuiUpdate()
 	ImGui::Text("Quads: %d", stats.quadCount);
 	ImGui::Text("Vertices: %d", stats.vertexCount);
 	ImGui::Text("Indices: %d", stats.indexCount);
+	ImGui::Text("Max Texture Slots Used: %d", stats.maxTextureSlotsUsed);
 }
 
 bool ExampleLayer2D::OnEvent(const GameEngine::Event& e)
@@ -129,10 +163,19 @@ void ExampleLayer2D::CreateScene()
 {
 	GE_PROFILE_FUNCTION();
 
-	m_checkerboardMaterial.texture = GameEngine::Texture2D::Create("./res/textures/checkerboard.png");
-	m_checkerboardMaterial.texture->SetWrapMode(GameEngine::Texture::WrapMode::Repeat);
+	GameEngine::Renderer2D::RectTexture checkerboardTexture;
+	checkerboardTexture.baseTexture = GameEngine::Texture2D::Create("./res/textures/checkerboard.png");
+	checkerboardTexture.baseTexture->SetWrapMode(GameEngine::Texture::WrapMode::Repeat);
+	m_checkerboardMaterial.texture = checkerboardTexture;
 	m_checkerboardTransform.position = { 0.0f, 0.0f };
-	m_checkerboardTransform.size = { 4.0f, 4.0f };
+	m_checkerboardTransform.size = { 2.0f, 2.0f };
+
+	GameEngine::Renderer2D::RectTexture characterTexture;
+	characterTexture.baseTexture = GameEngine::Texture2D::Create("./res/textures/red-hood-character-sheet.png");
+	characterTexture.baseTexture->SetFilter(GameEngine::Texture::Filter::Nearest);
+	m_characterMaterial.texture = characterTexture;
+	m_characterTransform.zIndex = 0.2f;
+	m_characterTransform.size = { 2.0f, 2.0f };
 }
 
 void ExampleLayer2D::ResetScene()
@@ -146,9 +189,15 @@ void ExampleLayer2D::ResetScene()
 	m_squareTransform.size = { 1.0f, 1.0f };
 	m_squareTransform.rotation = m_squareRotationDeg = 0.0f;
 	m_squareTransform.zIndex = 0.1f;
-	m_squareMaterial.color = { 0.3f, 0.2f, 0.8f, 1.0f };
+	m_squareMaterial.color = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-	m_gradientStart = { 1.0f, 0.0f, 0.0f, 1.0f };
-	m_gradientStop = { 0.0f, 0.0f, 1.0f, 1.0f };
+	m_gradientStart = { 1.0f, 1.0f, 1.0f, 1.0f };
+	m_gradientStop = { 0.28f, 0.28f, 0.39f, 1.0f };
 	m_gradientSteps = 100;
+
+	m_characterAnimationIndex = 9;
+	m_characterAnimationFrameIndex = 0;
+	m_characterAnimationSpeed = 30;
+	m_characterAnimationTime = 0.0f;
+	m_characterTransform.position = { 0.0f, 0.0f };
 }

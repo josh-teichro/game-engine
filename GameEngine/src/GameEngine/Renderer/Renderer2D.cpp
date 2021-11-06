@@ -28,12 +28,6 @@ namespace GameEngine {
 			{ 0.5f, -0.5f },
 			{ 0.5f, 0.5f }
 		};
-		static constexpr glm::vec2 textureCoords[] = {
-			{ 0.0f, 0.0f },
-			{ 0.0f, 1.0f },
-			{ 1.0f, 0.0f },
-			{ 1.0f, 1.0f }
-		};
 
 		Ref<VertexArray> quadVertexArray;
 		Ref<VertexBuffer> quadVertexBuffer;
@@ -148,6 +142,8 @@ namespace GameEngine {
 			s_data.textures[i]->Bind(i);
 		}
 
+		s_data.stats.maxTextureSlotsUsed = s_data.stats.maxTextureSlotsUsed > s_data.textureCount ? s_data.stats.maxTextureSlotsUsed : s_data.textureCount;
+
 		s_data.standardShader->Bind();
 		s_data.standardShader->SetUniformMat4f("u_viewProjectionMatrix", s_data.viewProjectionMatrix);
 
@@ -172,11 +168,11 @@ namespace GameEngine {
 		glm::vec2 texOffset = material.textureOffset;
 		glm::vec2 texScaleFactor = 1.0f / material.textureScale;
 
-		if (material.texture)
+		if (material.texture.baseTexture)
 		{
 			for (uint32_t i = 0; i < s_data.textureCount; i++)
 			{
-				if (s_data.textures[i] == material.texture)
+				if (s_data.textures[i] == material.texture.baseTexture)
 				{
 					texIndex = (float)i;
 					break;
@@ -191,16 +187,23 @@ namespace GameEngine {
 					Reset();
 				}
 
-				s_data.textures[s_data.textureCount] = material.texture;
+				s_data.textures[s_data.textureCount] = material.texture.baseTexture;
 				texIndex = (float)s_data.textureCount;
 				s_data.textureCount++;
 			}
 		}
 
+		glm::vec2 texCoords[] = {
+			{material.texture.textureCoords[0][0], material.texture.textureCoords[0][1]},
+			{material.texture.textureCoords[0][0], material.texture.textureCoords[1][1]},
+			{material.texture.textureCoords[1][0], material.texture.textureCoords[0][1]},
+			{material.texture.textureCoords[1][0], material.texture.textureCoords[1][1]}
+		};
+
 		for (uint32_t i = 0; i < 4; i++) {
 
 			if (transform.rotation == 0.0f) {
-				s_data.quadVertexBufferPtr[i].position = glm::vec3( transform.position + s_data.quadVertexPositions[i] * transform.size, transform.zIndex);
+				s_data.quadVertexBufferPtr[i].position = glm::vec3(transform.position + s_data.quadVertexPositions[i] * transform.size, transform.zIndex);
 			}
 			else {
 				s_data.quadVertexBufferPtr[i].position = {
@@ -211,7 +214,7 @@ namespace GameEngine {
 			}
 
 			s_data.quadVertexBufferPtr[i].color = color;
-			s_data.quadVertexBufferPtr[i].texCoord = s_data.textureCoords[i];
+			s_data.quadVertexBufferPtr[i].texCoord = texCoords[i];
 			s_data.quadVertexBufferPtr[i].texIndex = texIndex;
 			s_data.quadVertexBufferPtr[i].texOffset = texOffset;
 			s_data.quadVertexBufferPtr[i].texScaleFactor = texScaleFactor;
@@ -230,6 +233,7 @@ namespace GameEngine {
 		s_data.stats.quadCount = 0;
 		s_data.stats.vertexCount = 0;
 		s_data.stats.indexCount = 0;
+		s_data.stats.maxTextureSlotsUsed = 0;
 	}
 
 	Renderer2D::Statistics Renderer2D::GetStats()

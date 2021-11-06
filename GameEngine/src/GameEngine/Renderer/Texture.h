@@ -17,6 +17,11 @@ namespace GameEngine
 			Clamp,
 			Mirror
 		};
+		enum class Filter
+		{
+			Nearest,
+			Linear
+		};
 
 	public:
 		virtual ~Texture() = default;
@@ -26,6 +31,7 @@ namespace GameEngine
 
 		virtual void SetData(void* data, uint32_t size) = 0;
 		virtual void SetWrapMode(WrapMode mode) = 0;
+		virtual void SetFilter(Filter filter) = 0;
 
 		virtual void Bind(uint32_t slot) const = 0;
 

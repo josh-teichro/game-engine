@@ -32,6 +32,18 @@ private:
 	glm::vec4 m_gradientStart, m_gradientStop;
 	int32_t m_gradientSteps;
 
+	// red hood character
+	const glm::vec2 c_characterSheetSize = { 1344, 1463 };
+	const glm::vec2 c_characterSheetNumCells = { 12.0f, 11.0f };
+	const glm::vec2 c_characterSheetCellSize = c_characterSheetSize / c_characterSheetNumCells;
+
+	GameEngine::Renderer2D::RectTransform m_characterTransform;
+	GameEngine::Renderer2D::RectMaterial m_characterMaterial;
+	int32_t m_characterAnimationIndex;
+	int32_t m_characterAnimationFrameIndex;
+	float m_characterAnimationSpeed;
+	float m_characterAnimationTime;
+
 	bool m_walk = false;
 
 private:

@@ -22,9 +22,18 @@ namespace GameEngine {
 			float zIndex = 0.0f;
 		};
 
+		struct RectTexture
+		{
+			Ref<Texture2D> baseTexture;
+			glm::vec2 textureCoords[2] = {
+				{ 0.0f, 0.0f },
+				{ 1.0f, 1.0f }
+			};
+		};
+
 		struct RectMaterial
 		{
-			Ref<Texture2D> texture;
+			RectTexture texture;
 			glm::vec2 textureOffset = { 0.0f, 0.0f };
 			glm::vec2 textureScale = { 1.0f, 1.0f };
 
@@ -37,6 +46,7 @@ namespace GameEngine {
 			uint32_t quadCount = 0;
 			uint32_t vertexCount = 0;
 			uint32_t indexCount = 0;
+			uint32_t maxTextureSlotsUsed = 0;
 		};
 
 	public:
