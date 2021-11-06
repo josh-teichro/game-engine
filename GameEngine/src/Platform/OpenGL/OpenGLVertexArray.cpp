@@ -28,30 +28,50 @@ namespace GameEngine
     {
         GE_PROFILE_FUNCTION();
 
+        static const uint32_t maxComponentsPerAttrib = 4;
+
         GE_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "VertexBufferLayout has no elements!");
 
         glBindVertexArray(m_id);
         vertexBuffer->Bind();
 
-        const auto& elements = vertexBuffer->GetLayout().GetElements();
+        const auto& layout = vertexBuffer->GetLayout();
 
-        for (int i = 0; i < elements.size(); i++)
+        for (const auto& element : layout)
         {
-            const auto& el = elements[i];
-
-            glEnableVertexAttribArray(m_vertexBufferIndex + i);
-            glVertexAttribPointer(
-                m_vertexBufferIndex + i,
-                el.GetComponentCount(), 
-                ShaderDataTypeToOpenGLBaseType(el.type), 
-                el.normalized ? GL_TRUE : GL_FALSE,
-                vertexBuffer->GetLayout().GetStride(),
-                (const void*)(uintptr_t)el.offset
-            );
+            if (element.GetComponentCount()[1] == 1) {
+                glEnableVertexAttribArray(m_vertexBufferIndex);
+                glVertexAttribPointer(
+                    m_vertexBufferIndex,
+                    element.GetComponentCount()[0],
+                    ShaderDataTypeToOpenGLBaseType(element.type),
+                    element.normalized ? GL_TRUE : GL_FALSE,
+                    layout.GetStride(),
+                    (const void*)(uintptr_t)element.offset
+                );
+                m_vertexBufferIndex++;
+            }
+            else {
+                // not tested (see https://github.com/TheCherno/Hazel/commit/6a93423cd9a1d81a605345afd1b432a34a44da49)
+                int m = element.GetComponentCount()[0], n = element.GetComponentCount()[1];
+                for (int i = 0; i < n; i++)
+                {
+                    glEnableVertexAttribArray(m_vertexBufferIndex);
+                    glVertexAttribPointer(
+                        m_vertexBufferIndex,
+                        m,
+                        ShaderDataTypeToOpenGLBaseType(element.type),
+                        element.normalized ? GL_TRUE : GL_FALSE,
+                        layout.GetStride(),
+                        (const void*)(sizeof(float) * m * i)
+                    );
+                    glVertexAttribDivisor(m_vertexBufferIndex, 1);
+                    m_vertexBufferIndex++;
+                }
+            }
         }
 
         m_vertexBuffers.push_back(vertexBuffer);
-        m_vertexBufferIndex += (uint32_t)elements.size();
     }
 
     void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)

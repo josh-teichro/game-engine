@@ -12,6 +12,8 @@ namespace GameEngine {
 			return "ApplicationEvent";
 		}
 
+		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+
 	protected: 
 		ApplicationEvent() = default;
 	};

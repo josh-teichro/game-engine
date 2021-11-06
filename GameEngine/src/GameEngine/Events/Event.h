@@ -25,12 +25,25 @@ namespace GameEngine {
 		NumEventTypes
 	};
 
+	enum EventCategory
+	{
+		None = 0,
+		EventCategoryApplication = BIT(0),
+		EventCategoryInput = BIT(1),
+		EventCategoryKeyboard = BIT(2),
+		EventCategoryMouse = BIT(3),
+		EventCategoryMouseButton = BIT(4)
+	};
+
 /**
 * Define class type for an event class
 */
-#define EVENT_CLASS_TYPE(x) \
-	static EventType GetStaticEventType() { return EventType::x; }\
+#define EVENT_CLASS_TYPE(type) \
+	static EventType GetStaticEventType() { return EventType::type; }\
 	virtual EventType GetEventType() const override { return GetStaticEventType(); }
+
+#define EVENT_CLASS_CATEGORY(category) \
+	virtual int GetCategoryFlags() const override { return category; }
 
 	/**
 	* Event base class.
@@ -40,6 +53,12 @@ namespace GameEngine {
 		virtual std::string ToString() const { return "Event"; }
 
 		virtual EventType GetEventType() const = 0;
+		virtual int GetCategoryFlags() const = 0;
+
+		bool IsInCategory(EventCategory category) const
+		{
+			return GetCategoryFlags() & category;
+		}
 	};
 
 	/**

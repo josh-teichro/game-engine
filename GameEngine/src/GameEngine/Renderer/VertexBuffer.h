@@ -22,7 +22,7 @@ namespace GameEngine
 
 		VertexBufferElement(ShaderDataType type, const std::string& name, bool normalized = false);
 
-		uint32_t GetComponentCount() const;
+		glm::uvec2 GetComponentCount() const;
 	};
 
 

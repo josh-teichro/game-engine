@@ -44,9 +44,25 @@
     #error "Unknown platform!"
 #endif // End of platform detection
 
+
+// debugbreak
+#ifdef GE_DEBUG
+    #if defined(GE_PLATFORM_WINDOWS)
+        #define GE_DEBUGBREAK() __debugbreak()
+    #elif defined(GE_PLATFORM_LINUX)
+        #include <signal.h>
+        #define GE_DEBUGBREAK() raise(SIGTRAP)
+    #else
+        #error "Platform doesn't support debugbreak yet!"
+    #endif
+#else
+    #define GE_DEBUGBREAK()
+#endif
+
+// asserts
 #ifdef GE_ENABLE_ASSERTS
-    #define GE_ASSERT(x, ...) { if(!(x)) { GE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
-    #define GE_CORE_ASSERT(x, ...) { if(!(x)) { GE_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+    #define GE_ASSERT(x, ...) { if(!(x)) { GE_ERROR("Assertion Failed: {0}", __VA_ARGS__); GE_DEBUGBREAK(); } }
+    #define GE_CORE_ASSERT(x, ...) { if(!(x)) { GE_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); GE_DEBUGBREAK(); } }
 #else
     #define GE_ASSERT(x, ...)
     #define GE_CORE_ASSERT(x, ...)

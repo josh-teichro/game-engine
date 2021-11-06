@@ -8,4 +8,7 @@ https://github.com/TheCherno/Hazel/commit/52ff54ca80ff426e42176482444b2874280c0a
 
 My shaders are parsed with my own code.
 
+My 2D standard shader does not branch for different textures.
+(see https://github.com/TheCherno/Hazel/commit/18abce3c28db4e8384ad21cf64b6d36bee003215)
+
 And more.

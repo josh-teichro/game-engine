@@ -97,4 +97,12 @@ namespace GameEngine {
 			glfwMakeContextCurrent(backup_current_context);
 		}
 	}
+	bool ImGuiLayer::OnEvent(const Event& e)
+	{
+		bool handled = false;
+		ImGuiIO& io = ImGui::GetIO();
+		handled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+		handled |= e.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+		return handled;
+	}
 }

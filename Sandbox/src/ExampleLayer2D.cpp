@@ -42,7 +42,7 @@ void ExampleLayer2D::OnUpdate()
 	GameEngine::Renderer2D::RectMaterial material;
 	float minX = -10.0f, maxX = 10.0f, minY = -10.0f, maxY = 10.0f;
 	transform.size = { (maxX - minX) / m_gradientSteps, (maxY - minY) / m_gradientSteps }; 
-	transform.zIndex = -0.1;
+	transform.zIndex = -0.1f;
 
 	for (int32_t i = 0; i < m_gradientSteps; i++)
 	{

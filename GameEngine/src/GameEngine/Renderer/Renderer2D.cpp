@@ -22,6 +22,19 @@ namespace GameEngine {
 		static const uint32_t maxIndices = maxQuads * 6;
 		static const uint32_t maxTextureSlots = 32; // TODO: RenderCaps
 
+		static constexpr glm::vec2 quadVertexPositions[] = {
+			{ -0.5f, -0.5f },
+			{ -0.5f, 0.5f },
+			{ 0.5f, -0.5f },
+			{ 0.5f, 0.5f }
+		};
+		static constexpr glm::vec2 textureCoords[] = {
+			{ 0.0f, 0.0f },
+			{ 0.0f, 1.0f },
+			{ 1.0f, 0.0f },
+			{ 1.0f, 1.0f }
+		};
+
 		Ref<VertexArray> quadVertexArray;
 		Ref<VertexBuffer> quadVertexBuffer;
 		Ref<Shader> standardShader;
@@ -124,6 +137,9 @@ namespace GameEngine {
 
 	void Renderer2D::Flush()
 	{
+		if (s_data.quadIndexCount == 0)
+			return;
+
 		uint32_t dataSize = (uint32_t)((uint8_t*)s_data.quadVertexBufferPtr - (uint8_t*)s_data.quadVertexBufferBase);
 		s_data.quadVertexBuffer->SetData(s_data.quadVertexBufferBase, dataSize);
 
@@ -181,58 +197,25 @@ namespace GameEngine {
 			}
 		}
 
-		if (transform.rotation == 0.0f) {
-			s_data.quadVertexBufferPtr[0].position = { transform.position.x - 0.5f * transform.size.x, transform.position.y - 0.5f * transform.size.y, transform.zIndex };
-			s_data.quadVertexBufferPtr[1].position = { transform.position.x - 0.5f * transform.size.x, transform.position.y + 0.5f * transform.size.y, transform.zIndex };
-			s_data.quadVertexBufferPtr[2].position = { transform.position.x + 0.5f * transform.size.x, transform.position.y - 0.5f * transform.size.y, transform.zIndex };
-			s_data.quadVertexBufferPtr[3].position = { transform.position.x + 0.5f * transform.size.x, transform.position.y + 0.5f * transform.size.y, transform.zIndex };
+		for (uint32_t i = 0; i < 4; i++) {
+
+			if (transform.rotation == 0.0f) {
+				s_data.quadVertexBufferPtr[i].position = glm::vec3( transform.position + s_data.quadVertexPositions[i] * transform.size, transform.zIndex);
+			}
+			else {
+				s_data.quadVertexBufferPtr[i].position = {
+					transform.position.x + (s_data.quadVertexPositions[i].x * transform.size.x * cos(transform.rotation) - (s_data.quadVertexPositions[i].y * transform.size.y) * sin(transform.rotation)),
+					transform.position.y + (s_data.quadVertexPositions[i].x * transform.size.x * sin(transform.rotation) + (s_data.quadVertexPositions[i].y * transform.size.y) * cos(transform.rotation)),
+					transform.zIndex
+				};
+			}
+
+			s_data.quadVertexBufferPtr[i].color = color;
+			s_data.quadVertexBufferPtr[i].texCoord = s_data.textureCoords[i];
+			s_data.quadVertexBufferPtr[i].texIndex = texIndex;
+			s_data.quadVertexBufferPtr[i].texOffset = texOffset;
+			s_data.quadVertexBufferPtr[i].texScaleFactor = texScaleFactor;
 		}
-		else {
-			s_data.quadVertexBufferPtr[0].position = { 
-				transform.position.x + ((-0.5f) * transform.size.x * cos(transform.rotation) - (-0.5f * transform.size.y) * sin(transform.rotation)),
-				transform.position.y + ((-0.5f) * transform.size.x * sin(transform.rotation) + (-0.5f * transform.size.y) * cos(transform.rotation)),
-				transform.zIndex 
-			};
-			s_data.quadVertexBufferPtr[1].position = {
-				transform.position.x + ((-0.5f) * transform.size.x * cos(transform.rotation) - (0.5f) * transform.size.y * sin(transform.rotation)),
-				transform.position.y + ((-0.5f) * transform.size.x * sin(transform.rotation) + (0.5f) * transform.size.y * cos(transform.rotation)),
-				transform.zIndex
-			};
-			s_data.quadVertexBufferPtr[2].position = {
-				transform.position.x + ((0.5f) * transform.size.x * cos(transform.rotation) - (-0.5f) * transform.size.y * sin(transform.rotation)),
-				transform.position.y + ((0.5f) * transform.size.x * sin(transform.rotation) + (-0.5f) * transform.size.y * cos(transform.rotation)),
-				transform.zIndex
-			};
-			s_data.quadVertexBufferPtr[3].position = {
-				transform.position.x + ((0.5f) * transform.size.x * cos(transform.rotation) - (0.5f) * transform.size.y * sin(transform.rotation)),
-				transform.position.y + ((0.5f) * transform.size.x * sin(transform.rotation) + (0.5f) * transform.size.y * cos(transform.rotation)),
-				transform.zIndex
-			};
-		}
-
-		s_data.quadVertexBufferPtr[0].color = color;
-		s_data.quadVertexBufferPtr[0].texCoord = { 0.0f, 0.0f };
-		s_data.quadVertexBufferPtr[0].texIndex = texIndex;
-		s_data.quadVertexBufferPtr[0].texOffset = texOffset;
-		s_data.quadVertexBufferPtr[0].texScaleFactor = texScaleFactor;
-
-		s_data.quadVertexBufferPtr[1].color = color;
-		s_data.quadVertexBufferPtr[1].texCoord = { 0.0f, 1.0f };
-		s_data.quadVertexBufferPtr[1].texIndex = texIndex;
-		s_data.quadVertexBufferPtr[1].texOffset = texOffset;
-		s_data.quadVertexBufferPtr[1].texScaleFactor = texScaleFactor;
-
-		s_data.quadVertexBufferPtr[2].color = color;
-		s_data.quadVertexBufferPtr[2].texCoord = { 1.0f, 0.0f };
-		s_data.quadVertexBufferPtr[2].texIndex = texIndex;
-		s_data.quadVertexBufferPtr[2].texOffset = texOffset;
-		s_data.quadVertexBufferPtr[2].texScaleFactor = texScaleFactor;
-
-		s_data.quadVertexBufferPtr[3].color = color;
-		s_data.quadVertexBufferPtr[3].texCoord = { 1.0f, 1.0f };
-		s_data.quadVertexBufferPtr[3].texIndex = texIndex;
-		s_data.quadVertexBufferPtr[3].texOffset = texOffset;
-		s_data.quadVertexBufferPtr[3].texScaleFactor = texScaleFactor;
 
 		s_data.quadVertexBufferPtr += 4;
 		s_data.quadIndexCount += 6;

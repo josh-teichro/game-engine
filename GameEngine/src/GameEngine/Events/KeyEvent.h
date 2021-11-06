@@ -16,6 +16,8 @@ namespace GameEngine {
 			return "KeyEvent";
 		}
 
+		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
+
 	protected:
 		KeyEvent(KeyCode keyCode) :
 			keyCode(keyCode) {}
@@ -71,6 +73,7 @@ namespace GameEngine {
 		}
 
 		EVENT_CLASS_TYPE(CharTypedEvent)
+		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 	};
 
 }

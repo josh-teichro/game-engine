@@ -41,25 +41,25 @@ namespace GameEngine
 	{
 	}
 
-	uint32_t VertexBufferElement::GetComponentCount() const
+	glm::uvec2 VertexBufferElement::GetComponentCount() const
 	{
 		switch (type)
 		{
-			case ShaderDataType::Float:   return 1;
-			case ShaderDataType::Vec2:    return 2;
-			case ShaderDataType::Vec3:    return 3;
-			case ShaderDataType::Vec4:    return 4;
-			case ShaderDataType::Mat3:    return 3 * 3;
-			case ShaderDataType::Mat4:    return 4 * 4;
-			case ShaderDataType::Int:     return 1;
-			case ShaderDataType::Int2:    return 2;
-			case ShaderDataType::Int3:    return 3;
-			case ShaderDataType::Int4:    return 4;
-			case ShaderDataType::Bool:    return 1;
+			case ShaderDataType::Float:   return {1, 1};
+			case ShaderDataType::Vec2:    return {2, 1};
+			case ShaderDataType::Vec3:    return {3, 1};
+			case ShaderDataType::Vec4:    return {4, 1};
+			case ShaderDataType::Mat3:    return {3, 3};
+			case ShaderDataType::Mat4:    return {4, 4};
+			case ShaderDataType::Int:     return {1, 1};
+			case ShaderDataType::Int2:    return {2, 1};
+			case ShaderDataType::Int3:    return {3, 1};
+			case ShaderDataType::Int4:    return {4, 1};
+			case ShaderDataType::Bool:    return {1, 1};
 		}
 
 		GE_CORE_ASSERT(false, "Unknown ShaderDataType!");
-		return 0;
+		return { 0, 0 };
 	}
 
 	// -----------------------------------------------------------------

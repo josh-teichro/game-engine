@@ -23,6 +23,8 @@ namespace GameEngine {
 			ss << "MouseEvent: " << x << ", " << y;
 			return ss.str();
 		}
+
+		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	};
 
 	class MouseMoveEvent : public MouseEvent {

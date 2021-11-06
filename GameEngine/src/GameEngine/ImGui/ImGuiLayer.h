@@ -16,6 +16,8 @@ namespace GameEngine {
 
 		void BeginFrame();
 		void EndFrame();
+
+		virtual bool OnEvent(const Event& e) override;
 	};
 
 }
