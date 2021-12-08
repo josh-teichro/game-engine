@@ -83,6 +83,11 @@ namespace GameEngine {
 		}
 	}
 
+	void Application::Close()
+	{
+		m_isRunning = false;
+	}
+
 	/**
 	* Called on event.
 	*/

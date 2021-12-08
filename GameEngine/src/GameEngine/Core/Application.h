@@ -20,6 +20,7 @@ namespace GameEngine {
 		virtual ~Application();
 
 		void Run();
+		void Close();
 
 		void EventCallback(const Event& e);
 
