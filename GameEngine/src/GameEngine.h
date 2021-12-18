@@ -26,6 +26,7 @@
 #include "GameEngine/Components/Transform.h"
 #include "GameEngine/Renderer/Camera.h"
 
+#include "GameEngine/Renderer/FrameBuffer.h"
 #include "GameEngine/Renderer/VertexBuffer.h"
 #include "GameEngine/Renderer/IndexBuffer.h"
 #include "GameEngine/Renderer/VertexArray.h"

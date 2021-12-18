@@ -117,7 +117,7 @@ bool ExampleLayer::OnEvent(const GameEngine::Event& e)
 	else
 		result = m_cameraController3D.OnEvent(e);
 
-	result |= HandlesEvents::OnEvent(e);
+	result = result || HandlesEvents::OnEvent(e);
 	return result;
 }
 

@@ -2,11 +2,16 @@
 
 #include <GameEngine.h>
 
-/**
-* Game Engine Editor application.
-*/
-class Editor : public GameEngine::Application {
-public:
-	Editor();
-	virtual ~Editor();
-};
+namespace GameEngine
+{
+
+	/**
+	* Game Engine Editor application.
+	*/
+	class Editor : public Application {
+	public:
+		Editor();
+		virtual ~Editor();
+	};
+
+}

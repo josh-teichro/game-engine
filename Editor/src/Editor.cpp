@@ -3,18 +3,23 @@
 
 #include <GameEngine/Core/EntryPoint.h>
 
-/**
-* Editor.
-*/
-Editor::Editor()
+namespace GameEngine
 {
-	PushLayer(new EditorLayer());
-}
 
-Editor::~Editor()
-{
-}
+	/**
+	* Editor.
+	*/
+	Editor::Editor()
+	{
+		PushLayer(new EditorLayer());
+	}
 
-GameEngine::Application* GameEngine::CreateApplication() {
-	return new Editor();
+	Editor::~Editor()
+	{
+	}
+
+	GameEngine::Application* GameEngine::CreateApplication() {
+		return new Editor();
+	}
+
 }

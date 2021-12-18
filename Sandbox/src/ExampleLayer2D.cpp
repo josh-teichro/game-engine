@@ -138,8 +138,8 @@ bool ExampleLayer2D::OnEvent(const GameEngine::Event& e)
 	GE_PROFILE_FUNCTION();
 
 	bool result = false;
-	result |= m_cameraController.OnEvent(e);
-	result |= HandlesEvents::OnEvent(e);
+	result = result || m_cameraController.OnEvent(e);
+	result = result || HandlesEvents::OnEvent(e);
 	return result;
 }
 
