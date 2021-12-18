@@ -78,6 +78,9 @@ void ExampleLayer2D::OnImGuiUpdate()
 {
 	GE_PROFILE_FUNCTION();
 
+	//bool showDemoWIndow = true;
+	//ImGui::ShowDemoWindow(&showDemoWIndow);
+
 	ImGui::Text("Square");
 	ImGui::DragFloat2("Square Position", glm::value_ptr(m_squareTransform.position), 0.1f);
 	ImGui::DragFloat("Square Rotation", &m_squareRotationDeg, 1.0f, 0.0f, 360.0f);
